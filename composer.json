@@ -1,0 +1,22 @@
+{
+    "name": "stamp/components",
+    "description": "Set of components for easier wordpress development",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Maciej Ładoś",
+            "email": "macieklad@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ink\\": "src/Ink"
+        }
+    },
+    "require": {
+        "php-di/php-di": "^6.0"
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.5"
+    }
+}
