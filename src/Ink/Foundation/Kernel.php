@@ -3,7 +3,7 @@
 namespace Ink\Foundation;
 
 use Ink\Foundation\Theme;
-use Stamp\Providers\AliasProvider;
+use Ink\Container\ContainerProxy as Container;
 
 class Kernel 
 {
@@ -14,22 +14,29 @@ class Kernel
      */
     protected $theme;
 
+    /**
+     * Initialize the kernel
+     *
+     * @param Theme $theme
+     */
     public function __construct(Theme $theme)
     {
         $this->theme = $theme;
     }
 
     /**
-     * Read service providers list, and initalize each of them
+     * Execute kernel commands
      *
+     * @param array $commandSet
      * @return void
      */
-    public function loadServices() 
+    public function executeCommands(array $commandSet)
     {
-        $providers = $this->theme->get('providers');
+        $container = Container::getInstance();
 
-        foreach($providers as $provider) {
-            $this->theme->call([$provider, 'boot']);
+        foreach ($commandSet as $command)
+        {
+            $container->call([$command, 'fire']);
         }
     }
 }
