@@ -21,7 +21,6 @@ class ContainerProxy
      * Singleton instance of container
      */
     protected static $instance;
-
     
     /**
      * Container instance 
