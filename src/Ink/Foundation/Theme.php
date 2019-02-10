@@ -2,35 +2,53 @@
 
 namespace Ink\Foundation;
 
-use DI\Container;
-use DI\ContainerBuilder;
+use function DI\create;
+use Ink\Routing\Router;
 use Ink\Foundation\Kernel;
+use Ink\Foundation\Bootstrap\LoadServices;
+use Ink\Container\ContainerProxy as Container;
+use Ink\Foundation\Bootstrap\LoadConfiguration;
 
 class Theme
 {
+
     /**
-     * Container Instance
+     * Container instance
      *
-     * @var DI\Container
+     * @var Ink\Container\ContainerProxy
      */
-    protected static $container;
+    protected $container;
 
     /**
      * Theme kernel
      *
-     * @var Stamp\Kernel
+     * @var Ink\Foundation\Kernel
      */
     protected $kernel;
 
     /**
-     * Create a new theme class
+     * Base path of the theme directory
      * 
+     * @var string
      */
-    public function __construct()
+    protected $basePath;
+
+    /**
+     * Create a new theme class with root directory
+     * 
+     * @param string $basePath
+     */
+    public function __construct(string $basePath = null)
     {
+        $this->prepareContainer();
+
+        if ($basePath) {
+            $this->setBasePaths($basePath);
+        }
+
         $this->createBaseAliases();
         $this->loadKernel();
-        $this->startServices();
+        $this->bootstrap();
     }
 
     /**
@@ -39,16 +57,20 @@ class Theme
      * @return void
      */
     public function loadKernel() {
-        $this->kernel = static::getContainer()->get(Kernel::class);
+        $this->kernel = $this->container->get(Kernel::class);
     }
-    
+
     /**
-     * Load needed services for the theme
+     * Bootstrap the theme core components
      *
      * @return void
      */
-    public function startServices() {
-        $this->kernel->loadServices();
+    public function bootstrap() 
+    {
+        $this->kernel->executeCommands([
+            LoadConfiguration::class,
+            LoadServices::class
+        ]);
     }
 
     /**
@@ -58,73 +80,64 @@ class Theme
      */
     public function createBaseAliases()
     {
-        $container = static::getContainer();
+        $container = $this->container;
 
-        $this->instance('theme', $this);
-        $this->instance(Theme::class, $this);
-        $this->instance('container', $container);
-        $this->instance(Container::class, $container);
+        $container->set('theme', $this);
+        $container->set(Theme::class, $this);
+        $container->set('container', $container);
+        $container->set(Container::class, $container);
     }
 
     /**
-     * Return a class from theme container
+     * Register application base paths
      *
-     * @param string $instance
+     * @param string $path
      * @return void
      */
-    public function get(string $instance)
+    protected function setBasePaths(string $path)
     {
-        return static::getContainer()->get($instance);
+        $container = $this->container;
+
+        $this->basePath = rtrim($path, '\/');
+
+        $container->set('path.base', $this->basePath());
+        $container->set('path.config', $this->configPath());
     }
 
     /**
-     * Register an entry in container
+     * Return path from application root to the pointed path
      *
-     * @param string $namespace
-     * @param string $instance
+     * @param string $path
      * @return void
      */
-    public function instance(string $namespace, $instance)
+    public function basePath(string $path = '')
     {
-        static::getContainer()->set($namespace, $instance);
+        return $this->basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
-     * Invoke container object and call a function on it
+     * Return path to the path inside config directory
      *
-     * @param [type] $callable
-     * @param array $params
+     * @param string $path
      * @return void
      */
-    public function call($callable, array $params = [])
+    public function configPath(string $path = '')
     {
-        static::getContainer()->call($callable, $params);
+        return $this->basePath . DIRECTORY_SEPARATOR . "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
     /**
-     * Get container singleton for the theme
-     *
-     * @return DI\Container
-     */
-    public static function getContainer() 
-    {
-        if (is_null(static::$container)) {
-            static::makeContainer();
-        }
-
-        return static::$container;
-    }
-
-    /**
-     * Create and initialize container signleton
+     * Get the container for the application
      *
      * @return void
      */
-    protected static function makeContainer() {
-        $builder = new ContainerBuilder();
-        $builder->addDefinitions(join_paths(__DIR__, "../config/theme.php"));
+    protected function prepareContainer()
+    {
+        Container::addDefinitions([
+            'router' => create(Router::class)
+        ]);
 
-        static::$container = $builder->build();
+        $this->container = Container::getInstance();
     }
 
 }
