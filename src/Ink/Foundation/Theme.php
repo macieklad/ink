@@ -40,6 +40,7 @@ class Theme
      */
     public function __construct(string $basePath = null)
     {
+        $this->beautifyErrors();
         $this->prepareContainer();
 
         if ($basePath) {
@@ -52,6 +53,35 @@ class Theme
     }
 
     /**
+     * Use whoops for error handling in dev mode
+     *
+     * @return void
+     */
+    protected function beautifyErrors()
+    {
+        if (WP_DEBUG === true) {
+            $whoops = new \Whoops\Run;
+            $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+            $whoops->register();
+        }
+    }
+
+    /**
+     * Get the container for the application
+     *
+     * @return void
+     */
+    protected function prepareContainer()
+    {
+        Container::addDefinitions([
+            'router' => create(Router::class)
+        ]);
+
+        $this->container = Container::getInstance();
+    }
+
+    /**
+   
      * Create kernel class and assign it to the theme
      *
      * @return void
@@ -126,18 +156,5 @@ class Theme
         return $this->basePath . DIRECTORY_SEPARATOR . "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
-    /**
-     * Get the container for the application
-     *
-     * @return void
-     */
-    protected function prepareContainer()
-    {
-        Container::addDefinitions([
-            'router' => create(Router::class)
-        ]);
-
-        $this->container = Container::getInstance();
-    }
 
 }
