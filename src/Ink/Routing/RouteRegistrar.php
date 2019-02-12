@@ -26,7 +26,7 @@ class RouteRegistrar
      *
      * @var array
      */
-    protected $allowedAttributes = ['prefix'];
+    protected $allowedAttributes = ['prefix', 'module'];
 
     /**
      * Attributes passed to routes registered by registrar
@@ -93,8 +93,8 @@ class RouteRegistrar
 
         if (in_array($method, $this->allowedAttributes)) {
             return $this->attribute($method, $parameters[0]);
-        }
+        } 
 
-        throw new InvalidArgumentException("Method {$method} is not allowed on registrar method, maybe you mistyped them or they are not allowed by registrar ?");
+        throw new \InvalidArgumentException("Method {$method} is not allowed on registrar method, maybe you mistyped them or they are not allowed by registrar ?");
     }
 }
