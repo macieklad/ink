@@ -12,9 +12,28 @@ class RepositoryTest extends TestCase
      */
     protected $repository = null;
 
+    /**
+     * Default repository state
+     * 
+     * @var array
+     */
+    protected static $defaults = [
+        'x' => 'one',
+        'assoc' => [
+            'x' => 'one',
+            'y' => 'two',
+            'z' => 'three',
+            'arr' => [
+                'w' => 'four'
+            ]
+        ]
+    ];
+
     protected function setUp(): void
     {
-        $this->repository = new Repository;
+        $this->repository = new Repository(self::$defaults);
+
+        parent::setUp();
     }
 
     /**
@@ -25,45 +44,95 @@ class RepositoryTest extends TestCase
      */
     public function testReturnFullConfig()
     {
-        $this->assertSame([], $this->repository->get());
+        $this->assertSame(static::$defaults, $this->repository->all());
     }
 
     /**
-     * Check if basic key set inside repository works properly
+     * Test that key exists
      *
      * @return void
      */
-    public function testSimpleKeySet()
+    public function testKeyExists()
+    {
+        $this->assertTrue($this->repository->has('assoc.x'));
+    }
+
+    /**
+     * Test that key does not exist
+     *
+     * @return void
+     */
+    public function testKeyDoesNotExist()
+    {
+        $this->assertFalse($this->repository->has('nill'));
+    }
+
+    /**
+     * Test if repository returns default values when the keys are not present
+     *
+     * @return void
+     */
+    public function testDefaultValueRetrieval()
+    {
+        $defaultValues = [
+            'foo' => 'bar',
+            'baz' => function() {}
+        ];
+
+        $this->assertNull($this->repository->get('none'));
+        $this->assertSame($defaultValues, $this->repository->getMultiple($defaultValues));
+    }
+
+    /**
+     * Test if repository returns signle configuration values 
+     *
+     * @return void
+     */
+    public function testSingleValueRetrieval()
+    {
+        $this->assertSame('one', $this->repository->get('x'));
+        $this->assertSame(static::$defaults['assoc'], $this->repository->get('assoc'));
+        $this->assertSame('two', $this->repository->get('assoc.y'));
+        $this->assertSame('four', $this->repository->get('assoc.arr.w'));
+    }
+
+    /**
+     * Test whether batch retrieval from repository works correctly
+     *
+     * @return void
+     */
+    public function testBatchValueRetrieval()
+    {
+        $this->assertSame([
+            'x' => 'one',
+            'assoc.z' => 'three',
+            'assoc.arr.w' => 'four'
+        ], $this->repository->getMultiple([
+            'x', 'assoc.z', 'assoc.arr.w'
+        ]));
+    }
+
+    /**
+     * Test if key setting works properly
+     *
+     * @return void
+     */
+    public function testKeySet()
     {
         $this->repository->set('foo', 'bar');
-
         $this->assertSame('bar', $this->repository->get('foo'));
-    }
-
-    /**
-     * Test if nested key setting works properly
-     *
-     * @return void
-     */
-    public function testNestedKeySet()
-    {
+     
         $this->repository->set('foo.bar', 'bar');
-
-        $this->assertSame([
-            'foo' => [
-                'bar' => 'bar'
-            ]
-        ], $this->repository->get());
         $this->assertSame('bar', $this->repository->get('foo.bar'));
 
-        $this->repository->set('foo.baz', 'baz');
-
+        $this->repository->setMultiple([
+            'baz' => 'five',
+            'assoc.bazz' => 'six'
+        ]);
         $this->assertSame([
-            'foo' => [
-                'bar' => 'bar',
-                'baz' => 'baz'
-            ]
-        ], $this->repository->get());
+            'baz' => 'five',
+            'assoc.bazz' => 'six'
+        ], $this->repository->getMultiple(['baz', 'assoc.bazz']));
     }
 
     /**
@@ -76,39 +145,11 @@ class RepositoryTest extends TestCase
     public function testNestedKeySetOverwrite()
     {
         $this->repository->set('foo.bar', 'baz');
-
-        $this->assertSame([
-            'foo' => [
-                'bar' => 'baz'
-            ]
-        ], $this->repository->get());
+        $this->assertSame('baz', $this->repository->get('foo.bar'));
 
         $this->repository->set('foo.bar.baz', 'baz');
-
-        $this->assertSame([
-            'foo' => [ 
-                'bar' => [ 
-                    'baz' => 'baz'
-                ]   
-            ]
-        ], $this->repository->get());
+        $this->assertSame([ 'baz' => 'baz' ], $this->repository->get('foo.bar'));
     }
 
-    /**
-     * Check if the test returns assoc array when retrieving
-     * mutiple keys from it.
-     *
-     * @return void
-     */
-    public function testBatchKeyRetrieval()
-    {
-        $this->repository->set('foo.bar', 'baz');
-        $this->repository->set('qux', 'quux');
-        $this->repository->set('quuz', 'coorge');
 
-        $this->assertSame([
-            'foo.bar' => 'baz',
-            'quuz' => 'coorge'
-        ], $this->repository->get(['foo.bar', 'quuz']));
-    }
 }
