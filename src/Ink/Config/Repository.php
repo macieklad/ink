@@ -2,15 +2,56 @@
 
 namespace Ink\Config;
 
-class Repository 
+class Repository implements ConfigRepositoryInterface
 {
     /**
      * Array of repository items
      *
      * @var array
      */
-    protected $items = [];
+    protected $items;
     
+    /**
+     * Create the repository with default values
+     *
+     * @param array $items
+     */
+    public function __construct(array $items = [])
+    {
+        $this->items = $items;
+    }
+
+    /**
+     * Check if a key exists in repository
+     *
+     * @param string $key
+     * @return boolean
+     */
+    public function has(string $key): bool 
+    { 
+        $currentItem = $this->items;
+
+        foreach ($this->parseKey($key) as $part) {
+            if (is_array($currentItem) && array_key_exists($part, $currentItem)) {
+                $currentItem = $currentItem[$part];
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Return all items in repository
+     *
+     * @return void
+     */
+    public function all(): array
+    {
+        return $this->items;
+    }
+
     /**
      * Undocumented function
      *
@@ -18,14 +59,9 @@ class Repository
      * @param mixed $value
      * @return void
      */
-    public function set($key, $value)
+    public function set(string $key, $value): void
     {
-        $keys = is_array($key) ? $key : [$key => $value];
-
-        foreach ($keys as $key => $value) 
-        {
-            $this->setRecursive($key, $value);
-        }
+        $this->setRecursive($key, $value);
     }
 
     /**
@@ -34,13 +70,9 @@ class Repository
      * @param mixed $query
      * @return void
      */
-    public function get($key = '')
+    public function get(string $key, $default = null)
     {
-        if (is_array($key)) {
-            return $this->getMany($key);
-        }
-
-        return $this->retrieveItem($key);
+        return $this->retrieveItem($key, $default);
     }
 
     /**
@@ -49,16 +81,34 @@ class Repository
      * @param array $keys
      * @return void
      */
-    protected function getMany(array $keys)
+    public function getMultiple(array $items): array
     {
         $values = [];
 
-        foreach ($keys as $key)
-        {
-            $values[$key] = $this->retrieveItem($key);
+        if ($this->isAssoc($items)) {
+            foreach ($items as $key => $default) {
+                $values[$key] = $this->retrieveItem($key, $default);
+            }
+        } else {
+            foreach($items as $key) {
+                $values[$key] = $this->retrieveItem($key);
+            }
         }
-
+        
         return $values;
+    }
+
+    /**
+     * Set multiple config items
+     *
+     * @param array $items
+     * @return void
+     */
+    public function setMultiple(array $items): void
+    {
+        foreach ($items as $key => $value) {
+            $this->setRecursive($key, $value);
+        }
     }
 
     /**
@@ -67,7 +117,7 @@ class Repository
      * @param string $key
      * @return void
      */
-    protected function retrieveItem(string $key)
+    protected function retrieveItem(string $key, $default = null)
     {
         $value = $this->items;
 
@@ -75,7 +125,7 @@ class Repository
             if (is_array($value) && array_key_exists($index, $value)) {
                 $value = $value[$index];
             } else {
-                break;
+                return $default;
             }
         }
 
@@ -110,6 +160,11 @@ class Repository
         } 
 
         $currentItem[$finalKey] = $value;
+    }
+
+    protected function isAssoc(array $arr): bool
+    {
+        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
     /** 
