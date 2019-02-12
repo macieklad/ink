@@ -11,28 +11,28 @@ class Route
      * 
      * @var string
      */
-    protected $uri = '';
+    public $uri = '';
 
     /**
      * Wordpress api regex uri format
      * 
      * @var string
      */
-    protected $wpUri = '';
+    public $wpUri = '';
 
     /** 
      * Http methods the route responds to
      * 
      * @var array
     */
-    protected $methods = [];
+    public $methods = [];
 
     /**
      * Keys parsed from uri as data
      * 
      * @var array
      */
-    protected $params;
+    public $params;
 
     /**
      * Create new Route instance
@@ -94,7 +94,7 @@ class Route
      *
      * @return void
      */
-    protected function compile() 
+    public function compile() 
     {
         $this->wpUri = preg_replace('/{([a-zA-Z\d_-]+)}/', '(?P<$1>[a-zA-Z\d_-]+)', $this->uri); 
     }
@@ -107,17 +107,7 @@ class Route
      */
     public function prefix(string $with)
     {
-        $this->uri = $with . '/' . trim($this->uri, '/');
+        $this->uri = '/' . trim($with, '/') . '/' . trim($this->uri, '/');
     }
 
-    /**
-     * Access class property
-     *
-     * @param string $property
-     * @return void
-     */
-    public function __get(string $property)
-    {
-        return $this->$property;
-    }
 }
