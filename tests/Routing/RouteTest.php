@@ -7,16 +7,18 @@ class RouteTest extends MockeryTestCase
 {
 
     /**
-     * Test basic fields in constructor
+     * Test basic fields contents set in constructor
      *
-     * @group dev
      * @return void
      */
     public function testRouteInitialization()
     {
         $methods = ['GET', 'POST'];
         $uri = 'foo';
-        $route = new Route(['GET', 'POST'], $uri, 'Controller@action');
+        $route = $this->makeTestRoute([
+            'methods' => $methods,
+            'uri' => $uri
+        ]);
 
         $this->assertEquals($methods, $route->methods);
         $this->assertEquals($uri, $route->uri);
@@ -25,13 +27,12 @@ class RouteTest extends MockeryTestCase
     /**
      * Chech if params are extracted properly
      *
-     * @group dev
      * @return void
      */
     public function testRouteParamExtraction()
     {
         $uri = "/foo/{bar}/{baz}";
-        $route = new Route(['GET'], $uri, null);
+        $route = $this->makeTestRoute([ 'uri' => $uri ]);
 
         $route->extractParams();
 
@@ -41,14 +42,13 @@ class RouteTest extends MockeryTestCase
     /**
      * Test whether routes are properly compiled
      *
-     * @group dev
      * @return void
      */
     public function testRouteCompilation()
     {
         $uri = "/foo/{bar}/{baz}?query=xxx";
         $exceptation = "/foo/(?P<bar>[a-zA-Z\\d_-]+)/(?P<baz>[a-zA-Z\\d_-]+)?query=xxx";
-        $route = new Route([], $uri, null);
+        $route = $this->makeTestRoute(['uri' => $uri ]);
 
         $route->compile();
         
@@ -56,15 +56,14 @@ class RouteTest extends MockeryTestCase
     }
 
     /**
-     * Tests if attributes passed as array are merged into route
+     * Test if prefix method properly constructs route uri
      *
-     * @group dev
      * @return void
      */
     public function testPrefixSetup()
     {
         $uri = "/foo";
-        $route = new Route([], $uri, null);
+        $route = $this->makeTestRoute(['uri' => $uri]);
 
         $route->prefix('bar');
         $this->assertSame('/bar/foo', $route->uri);
@@ -78,9 +77,10 @@ class RouteTest extends MockeryTestCase
      * @group dev
      * @return void
      */
-    public function testAttributeMergeCall()
+    public function testAttributeMethodCall()
     {
-        $mock = Mockery::mock(Route::class, [['GET'], '/foo', null])
+        $args = array_values($this->defaultRouteArgs());
+        $mock = Mockery::mock(Route::class, $args)
             ->makePartial();
 
         $mock->shouldReceive('prefix')
@@ -98,9 +98,25 @@ class RouteTest extends MockeryTestCase
     }
 
     /**
-     * Undocumented function
+     * Test if passing action as attributes sets route action
      *
-     * @group dev
+     * @return void
+     */
+    public function testMergingActionAttribute()
+    {
+        $route = $this->makeTestRoute();
+        $callback = function() {};
+
+        $route->mergeAttributes([
+            'action' => $callback
+        ]);
+
+        $this->assertSame($callback, $route->action);
+    }
+
+    /**
+     * Test if calling prepare method calls required functions
+     *
      * @return void
      */
     public function testRoutePreparation()
@@ -118,4 +134,32 @@ class RouteTest extends MockeryTestCase
     }
 
 
+    /**
+     * Construct new route with default values
+     *
+     * @param array $params
+     * @return void
+     */
+    protected function makeTestRoute(array $params = [])
+    {
+        $args = array_values(
+           array_merge($this->defaultRouteArgs(), $params)
+        );
+
+        return new Route(...$args);
+    }
+
+    /**
+     * Mock default route args
+     *
+     * @return void
+     */
+    protected function defaultRouteArgs()
+    {
+        return [
+            'methods' => ['GET'],
+            'uri' => '',
+            'action' => []
+        ];
+    }
 }
