@@ -9,7 +9,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Ink\\": "src/Ink/"
+            "Ink\\": "src/Ink/",
+            "Tests\\": "tests/"
         }
     },
     "require": {
