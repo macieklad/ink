@@ -6,6 +6,14 @@ use Ink\Routing\Router;
 
 class Route 
 {
+
+    /**
+     * Route module
+     *
+     * @var string
+     */
+    public $module = 'v1';
+
     /**
      * Uri to which route corresponds
      * 
