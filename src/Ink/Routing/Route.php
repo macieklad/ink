@@ -49,7 +49,7 @@ class Route
      * @param string $uri
      * @return void
      */
-    public function __construct(array $methods, string $uri, $action)
+    public function __construct(array $methods, string $uri)
     {
         $this->uri = $uri;
         $this->wpUri = '';
