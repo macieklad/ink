@@ -1,5 +1,6 @@
 <?php
 
+use Tests\TestHelpers;
 use Ink\Routing\Router;
 use Ink\Routing\RouteRegistrar;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -66,7 +67,7 @@ class RouteRegistrarTest extends MockeryTestCase
         $this->assertSame([
             'prefix' => 'prefix',
             'module' => 'module'
-        ], $this->getProperty($this->registrar, 'attributes'));
+        ], TestHelpers::getProperty($this->registrar, 'attributes'));
     }
 
     /**
@@ -81,18 +82,5 @@ class RouteRegistrarTest extends MockeryTestCase
         $this->registrar->nonExistent();
     }
 
-    /**
-     * Get protected or private property
-     *
-     * @param $object
-     * @param $propertyName
-     * @return mixed
-     */
-    function getProperty($object, $propertyName)
-    {
-        $reflection = new ReflectionClass($object);
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        return $property->getValue($object);
-    }
+    
 }
