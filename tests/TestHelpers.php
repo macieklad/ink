@@ -13,7 +13,7 @@ class TestHelpers
      */
     public static function getProperty($object, $propertyName)
     {
-        $reflection = new ReflectionClass($object);
+        $reflection = new \ReflectionClass($object);
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
         return $property->getValue($object);
