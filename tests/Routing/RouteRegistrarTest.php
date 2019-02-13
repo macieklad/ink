@@ -1,8 +1,8 @@
 <?php
 
+use Ink\Routing\Router;
 use Ink\Routing\RouteRegistrar;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Ink\Routing\Router;
 
 class RouteRegistrarTest extends MockeryTestCase 
 {
