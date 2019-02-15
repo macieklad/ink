@@ -1,8 +1,8 @@
 <?php
 
-namespace Ink\Config;
+namespace Ink\Contracts\Config;
 
-interface ConfigRepositoryInterface
+interface Repository
 {
     /**
      * Return whole configuration from repository

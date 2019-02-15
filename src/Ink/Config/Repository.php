@@ -2,7 +2,9 @@
 
 namespace Ink\Config;
 
-class Repository implements ConfigRepositoryInterface
+use Ink\Contracts\Config\Repository as RepositoryContract;
+
+class Repository implements RepositoryContract
 {
     /**
      * Array of repository items
