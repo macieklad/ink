@@ -3,8 +3,8 @@
 namespace Ink\Routing;
 
 use Closure;
-use DI\Container;
 use Ink\Routing\Route;
+use Psr\Container\ContainerInterface;
 
 class Router 
 {
@@ -37,7 +37,7 @@ class Router
      */
     protected $container;
 
-    public function __construct(Container $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
