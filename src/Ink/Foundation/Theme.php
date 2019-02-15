@@ -59,9 +59,7 @@ class Theme implements ThemeContract
         $builder = new ContainerBuilder;
 
         $builder->addDefinitions([
-            'router' => create(Router::class),
-            'config' => create(Repository::class),
-            RepositoryContract::class => Repository::class
+            RepositoryContract::class => create(Repository::class)
         ]);
 
         $this->container = $builder->build();
@@ -92,7 +90,7 @@ class Theme implements ThemeContract
     }
 
     /**
-     * Add basic aliases useful for the theme 
+     * Add basic aliases needed for the theme 
      *
      * @return void
      */
@@ -107,6 +105,8 @@ class Theme implements ThemeContract
         $container->set(Container::class, $container);
         $container->set(ContainerInterface::class, $container);
         $container->set('kernel', $container->get(Kernel::class));
+        $container->set('router', $container->get(Router::class));
+        $container->set('config', $container->get(RepositoryContract::class));
     }
 
     /**
