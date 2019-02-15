@@ -2,36 +2,34 @@
 
 namespace Ink\Foundation;
 
+use ArrayAccess;
+use DI\Container;
 use function DI\create;
 use Ink\Routing\Router;
+use DI\ContainerBuilder;
+use Ink\Config\Repository;
 use Ink\Foundation\Kernel;
+use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
-use Ink\Container\ContainerProxy as Container;
 use Ink\Foundation\Bootstrap\LoadConfiguration;
 
-class Theme
+
+class Theme implements ArrayAccess
 {
 
     /**
      * Container instance
      *
-     * @var Ink\Container\ContainerProxy
+     * @var DI\Container
      */
     protected $container;
-
-    /**
-     * Theme kernel
-     *
-     * @var Ink\Foundation\Kernel
-     */
-    protected $kernel;
 
     /**
      * Base path of the theme directory
      * 
      * @var string
      */
-    protected $basePath;
+    protected $basePath = '';
 
     /**
      * Create a new theme class with root directory
@@ -39,31 +37,14 @@ class Theme
      * @param string $basePath
      */
     public function __construct(string $basePath = null)
-    {
-        $this->beautifyErrors();
+    {   
         $this->prepareContainer();
-
+        
         if ($basePath) {
             $this->setBasePaths($basePath);
         }
-
+        
         $this->createBaseAliases();
-        $this->loadKernel();
-        $this->bootstrap();
-    }
-
-    /**
-     * Use whoops for error handling in dev mode
-     *
-     * @return void
-     */
-    protected function beautifyErrors()
-    {
-        if (WP_DEBUG === true) {
-            $whoops = new \Whoops\Run;
-            $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-            $whoops->register();
-        }
     }
 
     /**
@@ -73,21 +54,24 @@ class Theme
      */
     protected function prepareContainer()
     {
-        Container::addDefinitions([
-            'router' => create(Router::class)
+        $builder = new ContainerBuilder;
+
+        $builder->addDefinitions([
+            'router' => create(Router::class),
+            'config' => create(Repository::class)
         ]);
 
-        $this->container = Container::getInstance();
+        $this->container = $builder->build();
     }
 
     /**
-   
-     * Create kernel class and assign it to the theme
+     * Theme container Accessor
      *
      * @return void
      */
-    public function loadKernel() {
-        $this->kernel = $this->container->get(Kernel::class);
+    public function container()
+    {
+        return $this->container;
     }
 
     /**
@@ -97,8 +81,9 @@ class Theme
      */
     public function bootstrap() 
     {
-        $this->kernel->executeCommands([
+        $this['kernel']->executeCommands([
             LoadConfiguration::class,
+            HandleErrors::class,
             LoadServices::class
         ]);
     }
@@ -110,12 +95,13 @@ class Theme
      */
     public function createBaseAliases()
     {
-        $container = $this->container;
+        $container = $this->container();
 
         $container->set('theme', $this);
         $container->set(Theme::class, $this);
         $container->set('container', $container);
         $container->set(Container::class, $container);
+        $container->set('kernel', $container->get(Kernel::class));
     }
 
     /**
@@ -126,7 +112,7 @@ class Theme
      */
     protected function setBasePaths(string $path)
     {
-        $container = $this->container;
+        $container = $this->container();
 
         $this->basePath = rtrim($path, '\/');
 
@@ -156,5 +142,24 @@ class Theme
         return $this->basePath . DIRECTORY_SEPARATOR . "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
+    public function offsetExists($offset)
+    {
+        return $this->container->has($offset);
+    }
 
+    public function offsetGet($offset)
+    {
+        return $this->container->get($offset);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        
+        $this->container->set($offset, $value);
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->container->set($offset, null);
+    }
 }
