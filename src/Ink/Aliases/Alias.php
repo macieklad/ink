@@ -10,7 +10,7 @@ abstract class Alias
     /**
      * The container instance being for holding aliases.
      *
-     * @var \DI\Container
+     * @var \Psr\Container\ContainerInterface
      */
     protected static $container;
 
@@ -26,11 +26,11 @@ abstract class Alias
      *
      * @return string|null
      */
-    protected static function getMockableClass()
+    public static function getMockableClass()
     {
-        if ($root = static::getAliasRoot()) {
-            return get_class($root);
-        }
+        $root = static::getAliasRoot();
+        
+        return $root ? get_class($root) : null;
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class Alias
     /**
      * Get the theme instance behind the alias.
      *
-     * @return \DI\Container
+     * @return \Psr\Container\ContainerInterface
      */
     public static function getAliasContainer()
     {
@@ -97,7 +97,7 @@ abstract class Alias
     /**
      * Set the alias container.
      *
-     * @param  \DI\Container  $container
+     * @param  \Psr\Container\ContainerInterface  $container
      * @return void
      */
     public static function setAliasContainer($container)

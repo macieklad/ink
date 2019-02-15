@@ -10,18 +10,21 @@ class AliasLoader
      * @var array
      */
     protected $aliases;
+
     /**
      * Indicates if a loader has been registered.
      *
      * @var bool
      */
     protected $registered = false;
+
     /**
      * The singleton instance of the loader.
      *
      * @var \Stamp\Aliases\AliasLoader
      */
     protected static $instance;
+    
     /**
      * Create a new AliasLoader instance.
      *
@@ -31,6 +34,7 @@ class AliasLoader
     {
         $this->aliases = $aliases;
     }
+
     /**
      * Get or create the singleton alias loader instance.
      *
@@ -109,42 +113,5 @@ class AliasLoader
     {
         $this->aliases = $aliases;
     }
-    /**
-     * Indicates if the loader has been registered.
-     *
-     * @return bool
-     */
-    public function isRegistered()
-    {
-        return $this->registered;
-    }
-    /**
-     * Set the "registered" state of the loader.
-     *
-     * @param  bool  $value
-     * @return void
-     */
-    public function setRegistered($value)
-    {
-        $this->registered = $value;
-    }
-    /**
-     * Set the value of the singleton alias loader.
-     *
-     * @param  \Stamp\Aliases\AliasLoader  $loader
-     * @return void
-     */
-    public static function setInstance($loader)
-    {
-        static::$instance = $loader; 
-    }
-    /**
-     * Clone method.
-     *
-     * @return void
-     */
-    private function __clone()
-    {
-        //
-    }
+    
 }
