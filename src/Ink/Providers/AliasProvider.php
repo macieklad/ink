@@ -3,11 +3,11 @@
 namespace Ink\Providers;
 
 use Ink\Support;
-use DI\Container;
 use Ink\Aliases\Alias;
-use Ink\Config\Repository;
 use Ink\Aliases\AliasLoader;
 use Ink\Foundation\ServiceProvider;
+use Ink\Contracts\Config\Repository;
+use Psr\Container\ContainerInterface as Container;
 
 class AliasProvider extends ServiceProvider
 {

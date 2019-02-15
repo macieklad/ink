@@ -2,7 +2,7 @@
 
 namespace Ink\Foundation;
 
-use Ink\Foundation\Theme;
+use Ink\Contracts\Foundation\Theme;
 
 abstract class ServiceProvider
 {
@@ -10,7 +10,7 @@ abstract class ServiceProvider
     /**
      * Theme instance with helpful methods
      *
-     * @var Stamp\Theme
+     * @var Ink\Contracts\Foundation\Theme
      */
     protected $theme;
 
