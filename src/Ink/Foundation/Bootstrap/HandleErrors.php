@@ -2,10 +2,10 @@
 
 namespace Ink\Foundation\Bootstrap;
 
-use Ink\Foundation\Bootstrap\KernelCommand;
 use Whoops\Run;
+use Ink\Contracts\Config\Repository;
 use Whoops\Handler\PrettyPageHandler;
-use Ink\Config\Repository;
+use Ink\Foundation\Bootstrap\KernelCommand;
 
 class HandleErrors implements KernelCommand 
 {
@@ -19,7 +19,7 @@ class HandleErrors implements KernelCommand
 
     public function __construct(Repository $config, Run $whoops, PrettyPageHandler $handler)
     {
-        $this->whoops = $run;
+        $this->whoops = $whoops;
         $this->config = $config;
         $this->exceptionHandler = $handler;
     }

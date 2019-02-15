@@ -9,12 +9,14 @@ use Ink\Routing\Router;
 use DI\ContainerBuilder;
 use Ink\Config\Repository;
 use Ink\Foundation\Kernel;
+use Psr\Container\ContainerInterface;
 use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
 use Ink\Foundation\Bootstrap\LoadConfiguration;
+use Ink\Contracts\Foundation\Theme as ThemeContract;
+use Ink\Contracts\Config\Repository as RepositoryContract;
 
-
-class Theme implements ArrayAccess
+class Theme implements ThemeContract
 {
 
     /**
@@ -58,7 +60,8 @@ class Theme implements ArrayAccess
 
         $builder->addDefinitions([
             'router' => create(Router::class),
-            'config' => create(Repository::class)
+            'config' => create(Repository::class),
+            RepositoryContract::class => Repository::class
         ]);
 
         $this->container = $builder->build();
@@ -69,7 +72,7 @@ class Theme implements ArrayAccess
      *
      * @return void
      */
-    public function container()
+    public function container(): ContainerInterface
     {
         return $this->container;
     }
@@ -79,7 +82,7 @@ class Theme implements ArrayAccess
      *
      * @return void
      */
-    public function bootstrap() 
+    public function bootstrap(): void 
     {
         $this['kernel']->executeCommands([
             LoadConfiguration::class,
@@ -99,8 +102,10 @@ class Theme implements ArrayAccess
 
         $container->set('theme', $this);
         $container->set(Theme::class, $this);
+        $container->set(ThemeContract::class, $this);
         $container->set('container', $container);
         $container->set(Container::class, $container);
+        $container->set(ContainerInterface::class, $container);
         $container->set('kernel', $container->get(Kernel::class));
     }
 
@@ -110,7 +115,7 @@ class Theme implements ArrayAccess
      * @param string $path
      * @return void
      */
-    protected function setBasePaths(string $path)
+    protected function setBasePaths(string $path): void
     {
         $container = $this->container();
 
@@ -126,7 +131,7 @@ class Theme implements ArrayAccess
      * @param string $path
      * @return void
      */
-    public function basePath(string $path = '')
+    public function basePath(string $path = ''): string
     {
         return $this->basePath . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
@@ -137,7 +142,7 @@ class Theme implements ArrayAccess
      * @param string $path
      * @return void
      */
-    public function configPath(string $path = '')
+    public function configPath(string $path = ''): string
     {
         return $this->basePath . DIRECTORY_SEPARATOR . "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }

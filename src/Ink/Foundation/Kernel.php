@@ -3,7 +3,7 @@
 namespace Ink\Foundation;
 
 use Ink\Foundation\Theme;
-use DI\Container;
+use Psr\Container\ContainerInterface as Container;
 
 class Kernel 
 {

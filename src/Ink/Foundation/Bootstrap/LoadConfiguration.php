@@ -2,8 +2,8 @@
 
 namespace Ink\Foundation\Bootstrap;
 
-use Ink\Foundation\Theme;
 use Ink\Config\Repository;
+use Ink\Contracts\Foundation\Theme;
 
 class LoadConfiguration implements KernelCommand
 {
@@ -12,10 +12,10 @@ class LoadConfiguration implements KernelCommand
      *
      * @param Container $container
      */
-    public function __construct(Theme $theme, Repository $config)
+    public function __construct(Theme $theme)
     {
         $this->theme = $theme;
-        $this->config = $config;
+        $this->config = $theme[Repository::class];
     }
 
     /**
@@ -25,6 +25,7 @@ class LoadConfiguration implements KernelCommand
      */
     public function fire()
     {
+        $this->theme['config'] = $this->config;
         $configDir = $this->theme->configPath();
 
         $this->loadFromDirectory($configDir);

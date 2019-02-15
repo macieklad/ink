@@ -2,7 +2,7 @@
 
 namespace Ink\Foundation\Bootstrap;
 
-use DI\Container;
+use Psr\Container\ContainerInterface as Container;
 
 class LoadServices implements KernelCommand
 {
