@@ -19,6 +19,9 @@
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
+            <exclude>
+                <file>./src/Ink/Foundation/ServiceProvider.php</file>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
