@@ -4,7 +4,7 @@ namespace Ink\Foundation;
 
 use ArrayAccess;
 use DI\Container;
-use function DI\create;
+use function DI\get;
 use Ink\Routing\Router;
 use DI\ContainerBuilder;
 use Ink\Config\Repository;
@@ -59,7 +59,7 @@ class Theme implements ThemeContract
         $builder = new ContainerBuilder;
 
         $builder->addDefinitions([
-            RepositoryContract::class => create(Repository::class)
+            RepositoryContract::class => get(Repository::class)
         ]);
 
         $this->container = $builder->build();

@@ -43,11 +43,14 @@ class ProvidersTest extends MockeryTestCase
             ->with('src/routes.php')
             ->once();
 
+        $router->shouldReceive('listen')
+            ->once();
+
         $provider->boot($router);
     }
 
     /**
-     * Assure aliases are registerd by the provider
+     * Assure aliases are registered by the provider
      *
      * @return void
      */

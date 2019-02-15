@@ -23,7 +23,7 @@ class LoadServices implements KernelCommand
      */
     public function fire()
     {
-        $providers = $this->container->get('config')->get('theme.providers');
+        $providers = $this->container->get('config')->get('theme.providers', []);
 
         foreach ($providers as $provider) {
            $this->container->call([$provider, 'boot']);

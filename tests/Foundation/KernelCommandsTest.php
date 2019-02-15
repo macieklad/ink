@@ -93,7 +93,7 @@ class KernelCommandsTest extends MockeryTestCase
             ->andReturn($repository);
 
         $repository->shouldReceive('get')
-            ->with('theme.providers')
+            ->with('theme.providers', [])
             ->once()
             ->andReturn($services);
             

@@ -18,5 +18,7 @@ class RoutingProvider extends ServiceProvider
         $router->loadRoutes(
             $this->theme->basePath('src/routes.php')
         );
+
+        $router->listen();
     }
 }
