@@ -31,7 +31,7 @@ class HandleErrors implements KernelCommand
      */
     public function fire()
     {
-        if ($this->config->get('devMode', true)) {
+        if ($this->config->get('theme.devMode', true)) {
             $this->whoops->pushHandler($this->exceptionHandler);
             $this->whoops->register();
         }

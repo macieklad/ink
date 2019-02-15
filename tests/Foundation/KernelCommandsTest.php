@@ -21,7 +21,9 @@ class KernelCommandsTest extends MockeryTestCase
         $this->whoops = \Mockery::mock('overload:' . Run::class);
         $this->whoopsHandler = \Mockery::mock(PrettyPageHandler::class);
         $this->repository = new Repository([
-            'devMode' => true
+            'theme' => [
+                'devMode' => true
+            ]
         ]);
     }
 
@@ -42,7 +44,7 @@ class KernelCommandsTest extends MockeryTestCase
     public function testHandleErrorCommandIsNotFiringInProduction()
     {
         $command = $this->makeHandleErrorCommand();
-        $this->repository->set('devMode', false);
+        $this->repository->set('theme.devMode', false);
 
         $this->whoops
             ->shouldNotReceive('register');
