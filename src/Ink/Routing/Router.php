@@ -3,8 +3,8 @@
 namespace Ink\Routing;
 
 use Closure;
+use DI\Container;
 use Ink\Routing\Route;
-use Ink\Container\ContainerProxy as Container;
 
 class Router 
 {
@@ -29,6 +29,18 @@ class Router
      * @var string
      */
     protected $controllerNamespace = '';
+
+    /**
+     * Container which will call router actions and prepare them
+     *
+     * @var DI\Container
+     */
+    protected $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Register GET request route
@@ -60,9 +72,9 @@ class Router
      * @param mixed $action
      * @return void
      */
-    public function patch(string $uri, $attributes)
+    public function put(string $uri, $attributes)
     {
-        $route = $this->createRoute(['PATCH'], $uri, $attributes);
+        $route = $this->createRoute(['PUT'], $uri, $attributes);
     }
 
     /**
@@ -210,7 +222,7 @@ class Router
         $method = $actionParts[1];
         
         return function ($req = null) use ($controller, $method) {
-            return Container::getInstance()->call([$controller, $method], [
+            return $this->container->call([$controller, $method], [
                 'req' => $req
             ]);
         };
@@ -225,7 +237,7 @@ class Router
     protected function compileCallbackAction(Closure $action): Closure
     {
         return function ($req = null) use ($action) {
-            return Container::getInstance()->call($action, [
+            return $this->container->call($action, [
                 'req' => $req
             ]);
         };

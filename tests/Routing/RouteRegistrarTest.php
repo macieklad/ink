@@ -22,7 +22,7 @@ class RouteRegistrarTest extends MockeryTestCase
     public function testRequestMethodCallMap()
     {
         $params = ['uri', 'action'];
-        $methods = ['get', 'post', 'patch', 'delete'];
+        $methods = ['get', 'post', 'put', 'delete'];
 
 
         foreach ($methods as $method) {

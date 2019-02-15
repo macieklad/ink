@@ -1,12 +1,11 @@
 <?php
 
+use DI\Container;
 use Tests\TestHelpers;
 use Ink\Routing\Route;
 use Ink\Routing\Router;
 use Tests\Routing\StubController;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Ink\Container\ContainerProxy as Container;
-use function DI\create;
 
 function add_action()
 {
@@ -56,7 +55,7 @@ class RouterTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->router = new Router;
+        $this->router = new Router(new Container());
     }
 
     /**
@@ -68,7 +67,7 @@ class RouterTest extends MockeryTestCase
      */
     public function testBasicRoutingFunctionCreateRoutes()
     {
-        $methods = ['get', 'post', 'patch', 'delete'];
+        $methods = ['get', 'post', 'put', 'delete'];
         $uri = 'foo';
         $action = static::mockedController() . '@' . static::$controllerTestMethod;
 
