@@ -66,27 +66,13 @@ class Theme implements ThemeContract
     }
 
     /**
-     * Theme container Accessor
+     * Theme container accessor
      *
      * @return void
      */
     public function container(): ContainerInterface
     {
         return $this->container;
-    }
-
-    /**
-     * Bootstrap the theme core components
-     *
-     * @return void
-     */
-    public function bootstrap(): void 
-    {
-        $this['kernel']->executeCommands([
-            LoadConfiguration::class,
-            HandleErrors::class,
-            LoadServices::class
-        ]);
     }
 
     /**
@@ -125,6 +111,7 @@ class Theme implements ThemeContract
         $container->set('path.config', $this->configPath());
     }
 
+
     /**
      * Return path from application root to the pointed path
      *
@@ -147,22 +134,61 @@ class Theme implements ThemeContract
         return $this->basePath . DIRECTORY_SEPARATOR . "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
-    public function offsetExists($offset)
+
+    /**
+     * Bootstrap the theme core components
+     *
+     * @return void
+     */
+    public function bootstrap(): void
+    {
+        $this['kernel']->executeCommands([
+            LoadConfiguration::class,
+            HandleErrors::class,
+            LoadServices::class
+        ]);
+    }
+
+    /**
+     * Check if item exists inside container
+     *
+     * @param integer|string $offset
+     * @return void
+     */
+    public function offsetExists($offset): bool
     {
         return $this->container->has($offset);
     }
 
-    public function offsetGet($offset)
+    /**
+     * Get item by its key
+     *
+     * @param integer|string $offset
+     * @return void
+     */
+    public function offsetGet($offset) 
     {
         return $this->container->get($offset);
     }
 
+    /**
+     * Set item at given key inside container
+     *
+     * @param string $offset
+     * @param mixed $value
+     * @return void
+     */
     public function offsetSet($offset, $value)
     {
-        
         $this->container->set($offset, $value);
     }
 
+    /**
+     * Set item to null inside container
+     *
+     * @param string $offset
+     * @return void
+     */
     public function offsetUnset($offset)
     {
         $this->container->set($offset, null);
