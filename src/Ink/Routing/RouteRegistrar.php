@@ -19,7 +19,7 @@ class RouteRegistrar
      *
      * @var array
      */
-    protected $passthru = ['get', 'post', 'patch', 'delete'];
+    protected $passthru = ['get', 'post', 'put', 'delete'];
 
     /**
      * Allowed prefixes to set

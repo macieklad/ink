@@ -4,7 +4,7 @@ namespace Ink\Foundation;
 
 use Ink\Foundation\Theme;
 
-class ServiceProvider
+abstract class ServiceProvider
 {
 
     /**
@@ -23,4 +23,5 @@ class ServiceProvider
     {
         $this->theme = $theme;
     }
+
 }

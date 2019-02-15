@@ -3,24 +3,24 @@
 namespace Ink\Providers;
 
 use Ink\Support;
+use DI\Container;
 use Ink\Aliases\Alias;
+use Ink\Config\Repository;
 use Ink\Aliases\AliasLoader;
 use Ink\Foundation\ServiceProvider;
-use Ink\Container\ContainerProxy as Container;
 
 class AliasProvider extends ServiceProvider
 {
     /**
      * Boots the service provider
      *
-     * @param Router $router
      * @return void
      */
-    public function boot(Container $container)
+    public function boot(Container $container, Repository $config)
     {
-        $aliases = Support::config('aliases');
+        $aliases = $config->get('aliases', []);
 
-        Alias::setAliasContainer(Container::getInstance());
+        Alias::setAliasContainer($container);
         AliasLoader::getInstance($aliases)->register();
     }
 }

@@ -3,25 +3,25 @@
 namespace Ink\Foundation;
 
 use Ink\Foundation\Theme;
-use Ink\Container\ContainerProxy as Container;
+use DI\Container;
 
 class Kernel 
 {
     /**
-     * Global theme instance
+     * Container instance
      *
      * @var Stamp\Theme
      */
-    protected $theme;
+    protected $container;
 
     /**
      * Initialize the kernel
      *
-     * @param Theme $theme
+     * @param Container $theme
      */
-    public function __construct(Theme $theme)
+    public function __construct(Container $container)
     {
-        $this->theme = $theme;
+        $this->container = $container;
     }
 
     /**
@@ -32,11 +32,9 @@ class Kernel
      */
     public function executeCommands(array $commandSet)
     {
-        $container = Container::getInstance();
-
         foreach ($commandSet as $command)
         {
-            $container->call([$command, 'fire']);
+            $this->container->call([$command, 'fire']);
         }
     }
 }

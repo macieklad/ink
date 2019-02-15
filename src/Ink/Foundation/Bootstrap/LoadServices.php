@@ -2,7 +2,7 @@
 
 namespace Ink\Foundation\Bootstrap;
 
-use Ink\Container\ContainerProxy as Container;
+use DI\Container;
 
 class LoadServices implements KernelCommand
 {
