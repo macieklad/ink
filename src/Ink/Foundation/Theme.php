@@ -13,6 +13,7 @@ use Psr\Container\ContainerInterface;
 use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
 use Ink\Foundation\Bootstrap\LoadConfiguration;
+use Ink\Contracts\Router\Router as RouterContract;
 use Ink\Contracts\Foundation\Theme as ThemeContract;
 use Ink\Contracts\Config\Repository as RepositoryContract;
 
@@ -59,7 +60,8 @@ class Theme implements ThemeContract
         $builder = new ContainerBuilder;
 
         $builder->addDefinitions([
-            RepositoryContract::class => get(Repository::class)
+            RepositoryContract::class => get(Repository::class),
+            RouterContract::class => get(Router::class)
         ]);
 
         $this->container = $builder->build();
@@ -91,7 +93,7 @@ class Theme implements ThemeContract
         $container->set(Container::class, $container);
         $container->set(ContainerInterface::class, $container);
         $container->set('kernel', $container->get(Kernel::class));
-        $container->set('router', $container->get(Router::class));
+        $container->set('router', $container->get(RouterContract::class));
         $container->set('config', $container->get(RepositoryContract::class));
     }
 

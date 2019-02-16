@@ -3,8 +3,8 @@
 namespace Tests\Providers;
 
 use Ink\Aliases\Alias;
-use Ink\Routing\Router;
 use Ink\Providers\AliasProvider;
+use Ink\Contracts\Routing\Router;
 use Ink\Providers\RoutingProvider;
 use Ink\Contracts\Foundation\Theme;
 use Ink\Contracts\Config\Repository;
