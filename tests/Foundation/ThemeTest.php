@@ -4,10 +4,12 @@ use DI\Container;
 use Ink\Routing\Router;
 use Ink\Foundation\Theme;
 use Ink\Foundation\Kernel;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 use Ink\Foundation\Bootstrap\HandleErrors;
-use Ink\Foundation\Bootstrap\LoadConfiguration;
 use Ink\Foundation\Bootstrap\LoadServices;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Ink\Foundation\Bootstrap\LoadConfiguration;
+use Ink\Contracts\Foundation\Theme as ThemeContract;
 
 class ThemeTest extends MockeryTestCase
 {
@@ -20,8 +22,8 @@ class ThemeTest extends MockeryTestCase
     {
         $theme = new Theme;
         
-        $this->assertSame($theme, $theme->container()->get(Theme::class));
-        $this->assertSame($theme->container(), $theme->container()->get(Container::class));
+        $this->assertSame($theme, $theme->container()->get(ThemeContract::class));
+        $this->assertSame($theme->container(), $theme->container()->get(ContainerInterface::class));
         $this->assertTrue($theme['kernel'] instanceof Kernel);
     } 
 

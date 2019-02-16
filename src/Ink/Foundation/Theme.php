@@ -5,6 +5,7 @@ namespace Ink\Foundation;
 use ArrayAccess;
 use DI\Container;
 use function DI\get;
+use function DI\create;
 use Ink\Routing\Router;
 use DI\ContainerBuilder;
 use Ink\Config\Repository;
@@ -13,7 +14,7 @@ use Psr\Container\ContainerInterface;
 use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
 use Ink\Foundation\Bootstrap\LoadConfiguration;
-use Ink\Contracts\Router\Router as RouterContract;
+use Ink\Contracts\Routing\Router as RouterContract;
 use Ink\Contracts\Foundation\Theme as ThemeContract;
 use Ink\Contracts\Config\Repository as RepositoryContract;
 
@@ -60,7 +61,9 @@ class Theme implements ThemeContract
         $builder = new ContainerBuilder;
 
         $builder->addDefinitions([
+            ContainerInterface::class => get(Container::class),
             RepositoryContract::class => get(Repository::class),
+            ThemeContract::class => get(Theme::class),
             RouterContract::class => get(Router::class)
         ]);
 
@@ -87,10 +90,8 @@ class Theme implements ThemeContract
         $container = $this->container();
 
         $container->set('theme', $this);
-        $container->set(Theme::class, $this);
-        $container->set(ThemeContract::class, $this);
         $container->set('container', $container);
-        $container->set(Container::class, $container);
+        $container->set(ThemeContract::class, $this);
         $container->set(ContainerInterface::class, $container);
         $container->set('kernel', $container->get(Kernel::class));
         $container->set('router', $container->get(RouterContract::class));
