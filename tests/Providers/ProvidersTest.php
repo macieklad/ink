@@ -30,23 +30,39 @@ class ProvidersTest extends MockeryTestCase
      */
     public function testRoutingProviderRegistersRoutesProperly()
     {
-        $routesRelDir = 'src/routes.php';
+        $routesRelDir = 'src/Api/routes.php';
+        $controllersNamespace = 'Theme\Api\Controllers';
         $router = \Mockery::mock(Router::class);
+        $repository = \Mockery::mock(Repository::class);
         $provider = new RoutingProvider($this->theme);
 
         $this->theme->shouldReceive('basePath')
-            ->with('src/routes.php')
+            ->with($routesRelDir)
             ->once()
-            ->andReturn('src/routes.php');
+            ->andReturn($routesRelDir);
+
+        $repository->shouldReceive('get')
+            ->with('routing.routes', $routesRelDir)
+            ->andReturn($routesRelDir)
+            ->once();
+
+        $repository->shouldReceive('get')
+            ->with('routing.controllerNamespace', $controllersNamespace)
+            ->andReturn($controllersNamespace)
+            ->once();
 
         $router->shouldReceive('loadRoutes')
-            ->with('src/routes.php')
+            ->with($routesRelDir)
+            ->once();
+
+        $router->shouldReceive('setControllerNamespace')
+            ->with($controllersNamespace)
             ->once();
 
         $router->shouldReceive('listen')
             ->once();
 
-        $provider->boot($router);
+        $provider->boot($router, $repository);
     }
 
     /**
