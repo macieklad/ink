@@ -170,7 +170,7 @@ class Router
             foreach ($this->routes() as $route) {
                 register_rest_route($route->module, $route->wpUri, [
                     'methods' => $route->methods,
-                    'callback' => $this->compileAction($route->action)
+                    'callback' => $this->compileAction($route)
                 ]);
             }
         });           
@@ -184,17 +184,17 @@ class Router
      * @throws InvalidArgumentException
      * @return Closure
      */
-    public function compileAction($action): Closure
+    public function compileAction(Route $route): Closure
     {
-        if (is_string($action)) {
-            return $this->compileStringAction($action);
+        if (is_string($route->action)) {
+            return $this->compileStringAction($route);
         }
 
-        if ($action instanceof Closure) {
-            return $this->compileCallbackAction($action);
+        if ($route->action instanceof Closure) {
+            return $this->compileCallbackAction($route);
         }
 
-        throw new \InvalidArgumentException('Route action could not be compiled, as it is not string or callback, please fix it');
+        throw new \InvalidArgumentException("Route {$route->uri} action could not be compiled, as it is not string or callback, please fix it");
     }
 
     /**
@@ -204,19 +204,19 @@ class Router
      * @throws InvalidArgumentException
      * @return void
      */
-    protected function compileStringAction(string $action): Closure 
+    protected function compileStringAction(Route $route): Closure 
     {
-        $actionParts = explode('@', $action);
+        $actionParts = explode('@', $route->action);
 
 
         if (count($actionParts) < 2) {
-            throw new \InvalidArgumentException("Provided action {$action} is not valid, we couldn't extract controller and method parts from it. Ensure it is in Controller@action format");
+            throw new \InvalidArgumentException("Provided action {$route->action} for route {$route->uri} is not valid, we couldn't extract controller and method parts from it. Ensure it is in Controller@action format");
         }
 
         $controller = $this->controllerNamespace . '\\' . $actionParts[0];
 
         if (! \class_exists($controller)) {
-            throw new \InvalidArgumentException("Class {$controller} provided to the action as Controller does not exist ! Specify a valid one, maybe it's a typo");
+            throw new \InvalidArgumentException("Class {$controller} provided to the {$route->uri} route does not exist ! Specify a valid one, maybe it's a typo");
         }
 
         $method = $actionParts[1];
@@ -234,10 +234,10 @@ class Router
      * @param Closure $action
      * @return Closure
      */
-    protected function compileCallbackAction(Closure $action): Closure
+    protected function compileCallbackAction(Route $route): Closure
     {
-        return function ($req = null) use ($action) {
-            return $this->container->call($action, [
+        return function ($req = null) use ($route) {
+            return $this->container->call($route->action, [
                 'req' => $req
             ]);
         };

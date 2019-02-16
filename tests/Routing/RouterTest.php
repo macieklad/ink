@@ -108,7 +108,9 @@ class RouterTest extends MockeryTestCase
      */
     public function testRouteStringActionCompilation()
     {
-        $callback = $this->router->compileAction(static::mockedController() . '@handler');
+        $route = $this->mockActionRoute(static::mockedController() . '@handler');
+
+        $callback = $this->router->compileAction($route);
 
         $this->assertTrue($callback instanceof Closure);
         $this->assertSame('response', $callback());
@@ -123,9 +125,10 @@ class RouterTest extends MockeryTestCase
      */
     public function testRouteCallbackActionCompilation() 
     {
-        $action = $this->router->compileAction(function() {
+        $route = $this->mockActionRoute(function () {
             return 'callback_response';
         });
+        $action = $this->router->compileAction($route);
 
         $this->assertSame('callback_response', $action());
     }
@@ -136,10 +139,11 @@ class RouterTest extends MockeryTestCase
      * @return void
      */
     public function testRouteActionCompilationWithRequest()
-    {   
-        $action = $this->router->compileAction(function($req) {
+    {
+        $route = $this->mockActionRoute(function ($req) {
             return 'hello_' . $req['world'];
         });
+        $action = $this->router->compileAction($route);
 
         $this->assertSame('hello_world', $action(['world' => 'world']));
     }
@@ -152,7 +156,9 @@ class RouterTest extends MockeryTestCase
     public function testRouteInvalidActionTypeCompilationFail()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->router->compileAction([]);
+        $this->router->compileAction(
+            $this->mockActionRoute([])
+        );
     }
 
     /**
@@ -163,7 +169,9 @@ class RouterTest extends MockeryTestCase
     public function testRouteStringActionCompilationFail()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->router->compileAction('NoneExistentClazz@foo');
+        $this->router->compileAction(
+            $this->mockActionRoute('NoneExistentClazz@foo')
+        );
     }
 
     /**
@@ -175,7 +183,11 @@ class RouterTest extends MockeryTestCase
     public function testRouteActionCompilationFailWithoutAction()
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->router->compileAction(static::mockedController());
+        $this->router->compileAction(
+            $this->mockActionRoute(
+                static::mockedController()
+            )
+        );
     }
 
     /**
@@ -215,7 +227,7 @@ class RouterTest extends MockeryTestCase
             ->once()
             ->with('v1', '', Mockery::on(function($arg) use ($route) {
                 $hasProperMethods = $arg['methods'] === $route->methods;
-                $hasSameCallback = $this->router->compileAction($route->action)() === $arg['callback']();
+                $hasSameCallback = $this->router->compileAction($route)() === $arg['callback']();
 
                 return $hasProperMethods && $hasSameCallback;
             }));
@@ -229,6 +241,20 @@ class RouterTest extends MockeryTestCase
         $this->router->addRoute($route);
         $this->router->listen();
 
+    }
+
+    /**
+     * Mock a route object with action
+     *
+     * @param mixed $action
+     * @return void
+     */
+    protected function mockActionRoute($action) 
+    {
+        $route = Mockery::mock(Route::class);
+        $route->action = $action;
+
+        return $route;
     }
 
 
