@@ -5,8 +5,9 @@ namespace Ink\Routing;
 use Closure;
 use Ink\Routing\Route;
 use Psr\Container\ContainerInterface;
+use Ink\Contracts\Routing\Router as RouterContract;
 
-class Router 
+class Router implements RouterContract
 {
     /**
      * Array of attribute arrays to merge onto routes
@@ -49,10 +50,11 @@ class Router
      * @param mixed $action
      * @return void
      */
-    public function get(string $uri, $attributes)
+    public function get(string $uri, $attributes): void
     {
         $route = $this->createRoute(['GET'], $uri, $attributes);
     }
+
     /**
      * Register POST request route
      *
@@ -60,7 +62,7 @@ class Router
      * @param mixed $action
      * @return void
      */
-    public function post(string $uri, $attributes)
+    public function post(string $uri, $attributes): void
     {
         $route = $this->createRoute(['POST'], $uri, $attributes);
     }
@@ -72,7 +74,7 @@ class Router
      * @param mixed $action
      * @return void
      */
-    public function put(string $uri, $attributes)
+    public function put(string $uri, $attributes): void
     {
         $route = $this->createRoute(['PUT'], $uri, $attributes);
     }
@@ -84,7 +86,7 @@ class Router
      * @param mixed $action
      * @return void
      */
-    public function delete(string $uri, $attributes)
+    public function delete(string $uri, $attributes): void
     {
         $route = $this->createRoute(['DELETE'], $uri, $attributes);
     }
@@ -97,7 +99,7 @@ class Router
      * @param mixed $attributes
      * @return void
      */
-    public function createRoute(array $methods, string $uri, $attributes)
+    public function createRoute(array $methods, string $uri, $attributes): void
     {  
         if (is_string($attributes)) {
             $attributes = ['action' => $attributes];
@@ -117,7 +119,7 @@ class Router
      * @param array $attributes
      * @return void
      */
-    public function loadRoutes($routes, array $attributes = []) 
+    public function loadRoutes($routes, array $attributes = []): void
     {
         $this->updateAttributeStack($attributes);
 
@@ -138,7 +140,7 @@ class Router
      * @param array $attributes
      * @return void
      */
-    public function updateAttributeStack(array $attributes)
+    public function updateAttributeStack(array $attributes): void
     {
         array_push($this->attributeStack, $attributes);
     }
@@ -149,7 +151,7 @@ class Router
      * @param Route $route
      * @return void
      */
-    public function addRoute(Route $route)
+    public function addRoute(Route $route): void
     {
         foreach ($this->attributeStack as $attributeGroup) {
             $route->mergeAttributes($attributeGroup);
@@ -164,7 +166,7 @@ class Router
      *
      * @return void
      */
-    public function listen()
+    public function listen(): void
     {
         add_action('rest_api_init', function () {
             foreach ($this->routes() as $route) {
@@ -247,7 +249,7 @@ class Router
      * Set the base namespace, from where controllers will be loaded
      * 
      */
-    public function setControllerNamespace(string $namespace)
+    public function setControllerNamespace(string $namespace): void
     {
         $this->controllerNamespace = $namespace;
     }
@@ -257,7 +259,7 @@ class Router
      *
      * @return void
      */
-    public function routes()
+    public function routes(): array
     {
         return $this->routes;
     }

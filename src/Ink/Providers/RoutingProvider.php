@@ -2,7 +2,7 @@
 
 namespace Ink\Providers;
 
-use Ink\Routing\Router;
+use Ink\Contracts\Routing\Router;
 use Ink\Foundation\ServiceProvider;
 use Ink\Contracts\Config\Repository;
 
