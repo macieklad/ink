@@ -2,15 +2,15 @@
 
 namespace Ink\Foundation\Bootstrap;
 
-use Ink\Config\Repository;
 use Ink\Contracts\Foundation\Theme;
+use Ink\Contracts\Config\Repository;
 
 class LoadConfiguration implements KernelCommand
 {
     /**
      * Prepare the command
      *
-     * @param Container $container
+     * @param Theme $theme
      */
     public function __construct(Theme $theme)
     {
@@ -34,7 +34,8 @@ class LoadConfiguration implements KernelCommand
     /**
      * Load configuration files from a directory
      *
-     * @param  string $dir
+     * @param string $dir
+     * 
      * @return void
      */
     protected function loadFromDirectory(string $dir)

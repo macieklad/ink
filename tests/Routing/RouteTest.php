@@ -49,13 +49,13 @@ class RouteTest extends MockeryTestCase
     public function testRouteCompilation()
     {
         $uri = "/foo/{bar}/{baz}?query=xxx";
-        $exceptation = "/foo/(?P<bar>[a-zA-Z\\d_-]+)
-                        /(?P<baz>[a-zA-Z\\d_-]+)?query=xxx";
+        $expectation = "/foo/(?P<bar>[a-zA-Z\\d_-]+)" .
+                       "/(?P<baz>[a-zA-Z\\d_-]+)?query=xxx";
         $route = $this->makeTestRoute(['uri' => $uri ]);
 
         $route->compile();
         
-        $this->assertSame($exceptation, $route->wpUri);
+        $this->assertSame($expectation, $route->wpUri);
     }
 
     /**

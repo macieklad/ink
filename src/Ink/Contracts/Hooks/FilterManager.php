@@ -14,7 +14,8 @@ interface FilterManager
     /**
      * Manage filter with the given name
      *
-     * @param  string $name
+     * @param string $name
+     * 
      * @return FilterManager
      */
     public function name(string $name) : FilterManager;
@@ -23,8 +24,9 @@ interface FilterManager
      * Apply the filter to the provided value and pass
      * some arguments to it.
      *
-     * @param  mixed $value
-     * @param  mixed ...$args
+     * @param mixed $value
+     * @param mixed ...$args
+     * 
      * @return void
      */
     public function apply($value, ...$args);
@@ -33,12 +35,17 @@ interface FilterManager
      * Add a handler to the filter, with priority and 
      * maximum allowed arguments.
      *
-     * @param  Closure|string|array $handler
-     * @param  integer              $priority
-     * @param  integer              $acceptedArgs
+     * @param Closure|string|array $handler
+     * @param integer              $priority
+     * @param integer              $acceptedArgs
+     * 
      * @return FilterManager
      */
-    public function add($handler, int $priority = 10, int $acceptedArgs = 1) : FilterManager;
+    public function add(
+        $handler,
+        int $priority = 10,
+        int $acceptedArgs = 1
+    ) : FilterManager;
 
     /**
      * Check if filter with the given name is defined
@@ -53,8 +60,9 @@ interface FilterManager
      * Detach handler or multiple handlers from filter,
      * with given priority.
      *
-     * @param  Closure|string|array $handlers
-     * @param  integer              $priority
+     * @param Closure|string|array $handlers
+     * @param integer              $priority
+     * 
      * @return FilterManager
      */
     public function detach($handlers, int $priority = 10) : FilterManager;
@@ -63,7 +71,8 @@ interface FilterManager
      * Remove all possible handlers of given priority
      * from the filter.
      *
-     * @param  integer $priority
+     * @param integer $priority
+     * 
      * @return FilterManager
      */
     public function flush(int $priority = 10) : FilterManager;

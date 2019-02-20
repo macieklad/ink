@@ -10,14 +10,14 @@ class Kernel
     /**
      * Container instance
      *
-     * @var Stamp\Theme
+     * @var Container
      */
     protected $container;
 
     /**
      * Initialize the kernel
      *
-     * @param Container $theme
+     * @param Container $container
      */
     public function __construct(Container $container)
     {
@@ -27,13 +27,13 @@ class Kernel
     /**
      * Execute kernel commands
      *
-     * @param  array $commandSet
+     * @param array $commandSet
+     * 
      * @return void
      */
     public function executeCommands(array $commandSet)
     {
-        foreach ($commandSet as $command)
-        {
+        foreach ($commandSet as $command) {
             $this->container->call([$command, 'fire']);
         }
     }

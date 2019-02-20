@@ -26,7 +26,8 @@ class Repository implements RepositoryContract
     /**
      * Check if a key exists in repository
      *
-     * @param  string $key
+     * @param string $key
+     * 
      * @return boolean
      */
     public function has(string $key): bool 
@@ -57,8 +58,9 @@ class Repository implements RepositoryContract
     /**
      * Undocumented function
      *
-     * @param  mixed $key
-     * @param  mixed $value
+     * @param mixed $key
+     * @param mixed $value
+     * 
      * @return void
      */
     public function set(string $key, $value): void
@@ -69,7 +71,9 @@ class Repository implements RepositoryContract
     /**
      * Get single or multiple values from the repository
      *
-     * @param  mixed $query
+     * @param string $key
+     * @param mixed  $default
+     * 
      * @return void
      */
     public function get(string $key, $default = null)
@@ -80,7 +84,8 @@ class Repository implements RepositoryContract
     /**
      * Get multiple items from repository as an array
      *
-     * @param  array $keys
+     * @param array $items
+     * 
      * @return void
      */
     public function getMultiple(array $items): array
@@ -92,7 +97,7 @@ class Repository implements RepositoryContract
                 $values[$key] = $this->retrieveItem($key, $default);
             }
         } else {
-            foreach($items as $key) {
+            foreach ($items as $key) {
                 $values[$key] = $this->retrieveItem($key);
             }
         }
@@ -103,7 +108,8 @@ class Repository implements RepositoryContract
     /**
      * Set multiple config items
      *
-     * @param  array $items
+     * @param array $items
+     * 
      * @return void
      */
     public function setMultiple(array $items): void
@@ -116,7 +122,9 @@ class Repository implements RepositoryContract
     /**
      * Retrieve an item from the repository by its key
      *
-     * @param  string $key
+     * @param string $key
+     * @param mixed  $default
+     * 
      * @return void
      */
     protected function retrieveItem(string $key, $default = null)
@@ -137,8 +145,9 @@ class Repository implements RepositoryContract
     /**
      * Set key in the repository by its parts
      *
-     * @param  string $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     * 
      * @return void
      */
     protected function setRecursive(string $key, $value)
@@ -148,8 +157,7 @@ class Repository implements RepositoryContract
 
         $currentItem = &$this->items;
 
-        foreach ($indexes as $index) 
-        {
+        foreach ($indexes as $index) {
             if (isset($currentItem[$index])) {
                 if (! is_array($currentItem[$index])) {
                     $currentItem[$index] = [];
@@ -164,6 +172,13 @@ class Repository implements RepositoryContract
         $currentItem[$finalKey] = $value;
     }
 
+    /**
+     * Check if array is associative
+     *
+     * @param array $arr
+     * 
+     * @return boolean
+     */
     protected function isAssoc(array $arr): bool
     {
         return array_keys($arr) !== range(0, count($arr) - 1);
@@ -171,6 +186,10 @@ class Repository implements RepositoryContract
 
     /** 
      * Parses query for items into value stack
+     * 
+     * @param string $key
+     * 
+     * @return array
      */
     protected function parseKey(string $key)
     {

@@ -19,7 +19,11 @@ class Support
             }
         }
 
-        return preg_replace('#' . DIRECTORY_SEPARATOR . '+#', DIRECTORY_SEPARATOR, join(DIRECTORY_SEPARATOR, $paths));
+        return preg_replace(
+            '#' . DIRECTORY_SEPARATOR . '+#',
+            DIRECTORY_SEPARATOR,
+            join(DIRECTORY_SEPARATOR, $paths)
+        );
     }
 
 }

@@ -45,8 +45,9 @@ class Route
     /**
      * Create new Route instance
      * 
-     * @param  array  $methods
-     * @param  string $uri
+     * @param array  $methods
+     * @param string $uri
+     * 
      * @return void
      */
     public function __construct(array $methods, string $uri)
@@ -83,7 +84,8 @@ class Route
     /**
      * Merge attributes onto route
      *
-     * @param  array $attributes
+     * @param array $attributes
+     * 
      * @return void
      */
     public function mergeAttributes(array $attributes)
@@ -104,13 +106,18 @@ class Route
      */
     public function compile() 
     {
-        $this->wpUri = preg_replace('/{([a-zA-Z\d_-]+)}/', '(?P<$1>[a-zA-Z\d_-]+)', $this->uri); 
+        $this->wpUri = preg_replace(
+            '/{([a-zA-Z\d_-]+)}/',
+            '(?P<$1>[a-zA-Z\d_-]+)',
+            $this->uri
+        );
     }
 
     /**
      * Add prefix to group
      *
-     * @param  string $prefix
+     * @param string $with
+     * 
      * @return void
      */
     public function prefix(string $with)

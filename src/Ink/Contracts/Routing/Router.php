@@ -7,8 +7,9 @@ interface Router
     /**
      * Register get request
      *
-     * @param  string $uri
-     * @param  mixed  $attributes
+     * @param string $uri
+     * @param mixed  $attributes
+     * 
      * @return void
      */
     public function get(string $uri, $attributes): void;
@@ -16,8 +17,9 @@ interface Router
     /**
      * Register post request
      *
-     * @param  string $uri
-     * @param  mixed  $attributes
+     * @param string $uri
+     * @param mixed  $attributes
+     * 
      * @return void
      */
     public function post(string $uri, $attributes): void;
@@ -25,8 +27,9 @@ interface Router
     /**
      * Register put request
      *
-     * @param  string $uri
-     * @param  mixed  $attributes
+     * @param string $uri
+     * @param mixed  $attributes
+     * 
      * @return void
      */
     public function put(string $uri, $attributes): void;
@@ -34,8 +37,9 @@ interface Router
     /**
      * Register delete request
      *
-     * @param  string $uri
-     * @param  mixed  $attributes
+     * @param string $uri
+     * @param mixed  $attributes
+     * 
      * @return void
      */
     public function delete(string $uri, $attributes): void;
@@ -43,8 +47,9 @@ interface Router
     /**
      * Load routes from file or closure and add some attributes to them
      *
-     * @param  mixed $routes
-     * @param  array $attributes
+     * @param mixed $routes
+     * @param array $attributes
+     * 
      * @return void
      */
     public function loadRoutes($routes, array $attributes = []): void;
@@ -60,7 +65,8 @@ interface Router
      * Set the controller namespace from which router should resolve 
      * string actions.
      *
-     * @param  string $namespace
+     * @param string $namespace
+     * 
      * @return void
      */
     public function setControllerNamespace(string $namespace) : void;

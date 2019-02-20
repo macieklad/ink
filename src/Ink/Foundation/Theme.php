@@ -103,7 +103,8 @@ class Theme implements ThemeContract
     /**
      * Register application base paths
      *
-     * @param  string $path
+     * @param string $path
+     * 
      * @return void
      */
     protected function setBasePaths(string $path): void
@@ -120,7 +121,8 @@ class Theme implements ThemeContract
     /**
      * Return path from application root to the pointed path
      *
-     * @param  string $path
+     * @param string $path
+     * 
      * @return void
      */
     public function basePath(string $path = ''): string
@@ -131,12 +133,15 @@ class Theme implements ThemeContract
     /**
      * Return path to the path inside config directory
      *
-     * @param  string $path
+     * @param string $path
+     * 
      * @return void
      */
     public function configPath(string $path = ''): string
     {
-        return $this->basePath . DIRECTORY_SEPARATOR . "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        $config = $this->basePath . DIRECTORY_SEPARATOR . "config";
+
+        return $config . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 
 
@@ -159,7 +164,8 @@ class Theme implements ThemeContract
     /**
      * Check if item exists inside container
      *
-     * @param  integer|string $offset
+     * @param integer|string $offset
+     * 
      * @return void
      */
     public function offsetExists($offset): bool
@@ -170,7 +176,8 @@ class Theme implements ThemeContract
     /**
      * Get item by its key
      *
-     * @param  integer|string $offset
+     * @param integer|string $offset
+     * 
      * @return void
      */
     public function offsetGet($offset) 
@@ -181,8 +188,9 @@ class Theme implements ThemeContract
     /**
      * Set item at given key inside container
      *
-     * @param  string $offset
-     * @param  mixed  $value
+     * @param string $offset
+     * @param mixed  $value
+     * 
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -193,7 +201,8 @@ class Theme implements ThemeContract
     /**
      * Set item to null inside container
      *
-     * @param  string $offset
+     * @param string $offset
+     * 
      * @return void
      */
     public function offsetUnset($offset)

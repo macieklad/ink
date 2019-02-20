@@ -11,16 +11,22 @@ class RoutingProvider extends ServiceProvider
     /**
      * Boots the service provider
      *
-     * @param  Router $router
+     * @param Router     $router
+     * @param Repository $config
+     * 
      * @return void
      */
     public function boot(Router $router, Repository $config)
     {
         $router->loadRoutes(
-            $this->theme->basePath($config->get('routing.routes', 'src/Api/routes.php'))
+            $this->theme->basePath(
+                $config->get('routing.routes', 'src/Api/routes.php')
+            )
         );
 
-        $router->setControllerNamespace($config->get('routing.controllerNamespace', 'Theme\Api\Controllers'));
+        $router->setControllerNamespace(
+            $config->get('routing.controllerNamespace', 'Theme\Api\Controllers')
+        );
 
         $router->listen();
     }

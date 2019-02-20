@@ -9,14 +9,15 @@ interface Theme extends \ArrayAccess
     /**
      * Create new theme with base path
      *
-     * @param string $base
+     * @param string $basePath
      */
     public function __construct(string $basePath = null);
 
     /**
      * Return path relative to theme root directory
      *
-     * @param  string $path
+     * @param string $path
+     * 
      * @return string
      */
     public function basePath(string $path = ''): string;
@@ -25,7 +26,8 @@ interface Theme extends \ArrayAccess
      * Return path relative to the config directory 
      * inside the root directory
      *
-     * @param  string $path
+     * @param string $path
+     * 
      * @return string
      */
     public function configPath(string $path = ''): string;
@@ -39,6 +41,8 @@ interface Theme extends \ArrayAccess
 
     /**
      * Return container that provides the theme with dependencies
+     * 
+     * @return ContainerInterface
      */
     public function container(): ContainerInterface;
 }

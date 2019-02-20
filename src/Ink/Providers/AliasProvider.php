@@ -14,6 +14,9 @@ class AliasProvider extends ServiceProvider
     /**
      * Boots the service provider
      *
+     * @param Container  $container
+     * @param Repository $config
+     * 
      * @return void
      */
     public function boot(Container $container, Repository $config)
