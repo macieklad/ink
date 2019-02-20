@@ -80,11 +80,13 @@ class ThemeTest extends MockeryTestCase
         $theme['kernel'] = $kernel;
 
         $kernel->shouldReceive('executeCommands')
-            ->with([
-                LoadConfiguration::class,
-                HandleErrors::class,
-                LoadServices::class
-            ])
+            ->with(
+                [
+                    LoadConfiguration::class,
+                    HandleErrors::class,
+                    LoadServices::class
+                ]
+            )
             ->once();
 
         $theme->bootstrap();

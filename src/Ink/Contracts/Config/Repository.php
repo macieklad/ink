@@ -21,8 +21,8 @@ interface Repository
     /**
      * Set a key inside the repository
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  string $key
+     * @param  mixed  $value
      * @return void
      */
     public function set(string $key, $value): void;
@@ -30,7 +30,7 @@ interface Repository
     /**
      * Get multiple values from repository
      *
-     * @param array $keys
+     * @param  array $keys
      * @return void
      */
     public function getMultiple(array $items): array;
@@ -38,7 +38,7 @@ interface Repository
     /**
      * Set multiple keys passed as an array
      *
-     * @param array $key
+     * @param  array $key
      * @return void
      */
     public function setMultiple(array $items): void;

@@ -34,7 +34,7 @@ class LoadConfiguration implements KernelCommand
     /**
      * Load configuration files from a directory
      *
-     * @param string $dir
+     * @param  string $dir
      * @return void
      */
     protected function loadFromDirectory(string $dir)
@@ -45,7 +45,7 @@ class LoadConfiguration implements KernelCommand
             $path = $dir . DIRECTORY_SEPARATOR . $object;
 
             if (is_file($path)) {
-                $config = require_once $path;
+                $config = include_once $path;
                 $this->config->set(basename($object, ".php"), $config);
             }
         }

@@ -7,7 +7,7 @@ use Ink\Contracts\Config\Repository;
 use Whoops\Handler\PrettyPageHandler;
 use Ink\Foundation\Bootstrap\KernelCommand;
 
-class HandleErrors implements KernelCommand 
+class HandleErrors implements KernelCommand
 {
     protected $config;
 

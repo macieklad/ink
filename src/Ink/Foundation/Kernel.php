@@ -5,7 +5,7 @@ namespace Ink\Foundation;
 use Ink\Foundation\Theme;
 use Psr\Container\ContainerInterface as Container;
 
-class Kernel 
+class Kernel
 {
     /**
      * Container instance
@@ -27,7 +27,7 @@ class Kernel
     /**
      * Execute kernel commands
      *
-     * @param array $commandSet
+     * @param  array $commandSet
      * @return void
      */
     public function executeCommands(array $commandSet)

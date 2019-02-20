@@ -76,7 +76,8 @@ class RepositoryTest extends TestCase
     {
         $defaultValues = [
             'foo' => 'bar',
-            'baz' => function() {}
+            'baz' => function () {
+            }
         ];
 
         $this->assertNull($this->repository->get('none'));
@@ -103,13 +104,18 @@ class RepositoryTest extends TestCase
      */
     public function testBatchValueRetrieval()
     {
-        $this->assertSame([
-            'x' => 'one',
-            'assoc.z' => 'three',
-            'assoc.arr.w' => 'four'
-        ], $this->repository->getMultiple([
-            'x', 'assoc.z', 'assoc.arr.w'
-        ]));
+        $this->assertSame(
+            [
+                'x' => 'one',
+                'assoc.z' => 'three',
+                'assoc.arr.w' => 'four'
+            ], 
+            $this->repository->getMultiple(
+                [
+                    'x', 'assoc.z', 'assoc.arr.w'
+                ]
+            )
+        );
     }
 
     /**
@@ -125,14 +131,19 @@ class RepositoryTest extends TestCase
         $this->repository->set('foo.bar', 'bar');
         $this->assertSame('bar', $this->repository->get('foo.bar'));
 
-        $this->repository->setMultiple([
-            'baz' => 'five',
-            'assoc.bazz' => 'six'
-        ]);
-        $this->assertSame([
-            'baz' => 'five',
-            'assoc.bazz' => 'six'
-        ], $this->repository->getMultiple(['baz', 'assoc.bazz']));
+        $this->repository->setMultiple(
+            [
+                'baz' => 'five',
+                'assoc.bazz' => 'six'
+            ]
+        );
+        $this->assertSame(
+            [
+                'baz' => 'five',
+                'assoc.bazz' => 'six'
+            ], 
+            $this->repository->getMultiple(['baz', 'assoc.bazz'])
+        );
     }
 
     /**

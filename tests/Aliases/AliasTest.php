@@ -8,7 +8,8 @@ use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class AliasTest extends MockeryTestCase
-{   
+{
+   
     public function setUp() : void
     {
         StubAlias::clearResolvedInstances();
@@ -87,13 +88,17 @@ class AliasTest extends MockeryTestCase
      */
     public function testAliasResolvesProperlyAfterLoading()
     {
-        AliasLoader::getInstance([
-            'StubClass' => get_class($this->container),
-        ])->register();
+        AliasLoader::getInstance(
+            [
+                'StubClass' => get_class($this->container),
+            ]
+        )->register();
 
-        AliasLoader::getInstance([
-            'StubBetaClass' => get_class($this->mock)
-        ])->register();
+        AliasLoader::getInstance(
+            [
+                'StubBetaClass' => get_class($this->mock)
+            ]
+        )->register();
 
         AliasLoader::getInstance()->alias('StubClass', get_class($this->mock));
 
@@ -123,7 +128,7 @@ class StubAliasBeta extends Alias
     }
 }
 
-class ObjectAlias extends Alias 
+class ObjectAlias extends Alias
 {
     public static function getAliasAccessor()
     {
@@ -139,7 +144,8 @@ class ObjectAccessor
     }
 }
 
-class BadStub extends Alias {
+class BadStub extends Alias
+{
 
 }
 

@@ -5,7 +5,7 @@ use Ink\Routing\Router;
 use Ink\Routing\RouteRegistrar;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class RouteRegistrarTest extends MockeryTestCase 
+class RouteRegistrarTest extends MockeryTestCase
 {
     public function setUp(): void
     {
@@ -64,17 +64,20 @@ class RouteRegistrarTest extends MockeryTestCase
         foreach ($allowed as $attribute) {
             $this->registrar->$attribute($attribute);
         }
-        $this->assertSame([
-            'prefix' => 'prefix',
-            'module' => 'module'
-        ], TestHelpers::getProperty($this->registrar, 'attributes'));
+        $this->assertSame(
+            [
+                'prefix' => 'prefix',
+                'module' => 'module'
+            ], 
+            TestHelpers::getProperty($this->registrar, 'attributes')
+        );
     }
 
     /**
      * Check if calling non existent method on registrar fails
      * 
      * @expectException \InvalidArgumentException
-     * @return void
+     * @return          void
      */
     public function testInvalidMethodCall()
     {

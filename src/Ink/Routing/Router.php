@@ -46,8 +46,8 @@ class Router implements RouterContract
     /**
      * Register GET request route
      *
-     * @param string $uri
-     * @param mixed $action
+     * @param  string $uri
+     * @param  mixed  $action
      * @return void
      */
     public function get(string $uri, $attributes): void
@@ -58,8 +58,8 @@ class Router implements RouterContract
     /**
      * Register POST request route
      *
-     * @param string $uri
-     * @param mixed $action
+     * @param  string $uri
+     * @param  mixed  $action
      * @return void
      */
     public function post(string $uri, $attributes): void
@@ -70,8 +70,8 @@ class Router implements RouterContract
     /**
      * Register PATCH request route
      *
-     * @param string $uri
-     * @param mixed $action
+     * @param  string $uri
+     * @param  mixed  $action
      * @return void
      */
     public function put(string $uri, $attributes): void
@@ -82,8 +82,8 @@ class Router implements RouterContract
     /**
      * Register DELETE request route
      *
-     * @param string $uri
-     * @param mixed $action
+     * @param  string $uri
+     * @param  mixed  $action
      * @return void
      */
     public function delete(string $uri, $attributes): void
@@ -94,9 +94,9 @@ class Router implements RouterContract
     /**
      * Create new route and add it to the register
      *
-     * @param array $methods
-     * @param string $uri
-     * @param mixed $attributes
+     * @param  array  $methods
+     * @param  string $uri
+     * @param  mixed  $attributes
      * @return void
      */
     public function createRoute(array $methods, string $uri, $attributes): void
@@ -115,8 +115,8 @@ class Router implements RouterContract
      * Load routes into router, they can be files
      * or single route object
      *
-     * @param mixed $routes
-     * @param array $attributes
+     * @param  mixed $routes
+     * @param  array $attributes
      * @return void
      */
     public function loadRoutes($routes, array $attributes = []): void
@@ -128,7 +128,7 @@ class Router implements RouterContract
         } else {
             $router = $this;
 
-            require $routes;
+            include $routes;
         }
 
         array_pop($this->attributeStack);
@@ -137,7 +137,7 @@ class Router implements RouterContract
     /**
      * Add attributes to the stack
      *
-     * @param array $attributes
+     * @param  array $attributes
      * @return void
      */
     public function updateAttributeStack(array $attributes): void
@@ -148,7 +148,7 @@ class Router implements RouterContract
     /**
      * Prepare the route and register it
      *
-     * @param Route $route
+     * @param  Route $route
      * @return void
      */
     public function addRoute(Route $route): void
@@ -168,10 +168,12 @@ class Router implements RouterContract
      */
     public function listen(): void
     {
-        \add_action('rest_api_init', [
+        \add_action(
+            'rest_api_init', [
             $this,
             'addWordpressRoutes'
-        ]);           
+            ]
+        );           
     }
 
     /**
@@ -182,10 +184,12 @@ class Router implements RouterContract
     public function addWordpressRoutes()
     {
         foreach ($this->routes() as $route) {
-            register_rest_route($route->module, $route->wpUri, [
+            register_rest_route(
+                $route->module, $route->wpUri, [
                 'methods' => $route->methods,
                 'callback' => $this->compileAction($route)
-            ]);
+                ]
+            );
         }
     }
 
@@ -193,7 +197,7 @@ class Router implements RouterContract
      * Compile action used in route into a callback
      * which can be executed by wordpress
      *
-     * @param Closure|string $action
+     * @param  Closure|string $action
      * @throws InvalidArgumentException
      * @return Closure
      */
@@ -213,7 +217,7 @@ class Router implements RouterContract
     /**
      * Compile action passed as string into a callback
      *
-     * @param string $action
+     * @param  string $action
      * @throws InvalidArgumentException
      * @return void
      */
@@ -235,30 +239,33 @@ class Router implements RouterContract
         $method = $actionParts[1];
         
         return function ($req = null) use ($controller, $method) {
-            return $this->container->call([$controller, $method], [
+            return $this->container->call(
+                [$controller, $method], [
                 'req' => $req
-            ]);
+                ]
+            );
         };
     }
 
     /**
      * Compile action passed as callback
      *
-     * @param Closure $action
+     * @param  Closure $action
      * @return Closure
      */
     protected function compileCallbackAction(Route $route): Closure
     {
         return function ($req = null) use ($route) {
-            return $this->container->call($route->action, [
+            return $this->container->call(
+                $route->action, [
                 'req' => $req
-            ]);
+                ]
+            );
         };
     }
 
     /**
      * Set the base namespace, from where controllers will be loaded
-     * 
      */
     public function setControllerNamespace(string $namespace): void
     {
@@ -278,8 +285,8 @@ class Router implements RouterContract
     /**
      * Call the registrar method if it is not present on router
      *
-     * @param string $name
-     * @param array $arguments
+     * @param  string $name
+     * @param  array  $arguments
      * @return void
      */
     public function __call(string $name, array $arguments)

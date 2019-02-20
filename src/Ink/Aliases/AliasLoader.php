@@ -28,7 +28,7 @@ class AliasLoader
     /**
      * Create a new AliasLoader instance.
      *
-     * @param  array  $aliases
+     * @param array $aliases
      */
     private function __construct($aliases)
     {
@@ -38,7 +38,7 @@ class AliasLoader
     /**
      * Get or create the singleton alias loader instance.
      *
-     * @param  array  $aliases
+     * @param  array $aliases
      * @return \Stamp\Aliases\AliasLoader
      */
     public static function getInstance(array $aliases = [])
@@ -53,7 +53,7 @@ class AliasLoader
     /**
      * Load a class alias if it is registered.
      *
-     * @param  string  $alias
+     * @param  string $alias
      * @return bool|null
      */
     public function load($alias)
@@ -65,8 +65,8 @@ class AliasLoader
     /**
      * Add an alias to the loader.
      *
-     * @param  string  $class
-     * @param  string  $alias
+     * @param  string $class
+     * @param  string $alias
      * @return void
      */
     public function alias($class, $alias)
@@ -106,7 +106,7 @@ class AliasLoader
     /**
      * Set the registered aliases.
      *
-     * @param  array  $aliases
+     * @param  array $aliases
      * @return void
      */
     public function setAliases(array $aliases)

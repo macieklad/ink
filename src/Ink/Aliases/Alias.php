@@ -58,7 +58,7 @@ abstract class Alias
     /**
      * Resolve the alias root instance from the container.
      *
-     * @param  string|object  $name
+     * @param  string|object $name
      * @return mixed
      */
     protected static function resolveAliasedInstance($name)
@@ -97,7 +97,7 @@ abstract class Alias
     /**
      * Set the alias container.
      *
-     * @param  \Psr\Container\ContainerInterface  $container
+     * @param  \Psr\Container\ContainerInterface $container
      * @return void
      */
     public static function setAliasContainer($container)
@@ -108,8 +108,8 @@ abstract class Alias
     /**
      * Handle dynamic, static calls to the object.
      *
-     * @param  string  $method
-     * @param  array   $args
+     * @param  string $method
+     * @param  array  $args
      * @return mixed
      *
      * @throws \RuntimeException

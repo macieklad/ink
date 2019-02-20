@@ -43,9 +43,9 @@ class RouteRegistrar
     /**
      * Register route on the router instance
      *
-     * @param string $method
-     * @param string $uri
-     * @param mixed $action
+     * @param  string $method
+     * @param  string $uri
+     * @param  mixed  $action
      * @return void
      */
     public function registerRoute(string $method, string $uri, $action)
@@ -56,7 +56,7 @@ class RouteRegistrar
     /**
      * Group multiple routes with the same attributes
      *
-     * @param mixed $routes
+     * @param  mixed $routes
      * @return void
      */
     public function group($routes) 
@@ -67,8 +67,8 @@ class RouteRegistrar
     /**
      * Set the route or group attribute
      *
-     * @param string $name
-     * @param string $value
+     * @param  string $name
+     * @param  string $value
      * @return void
      */
     public function attribute(string $name, string $value)
@@ -81,8 +81,8 @@ class RouteRegistrar
     /**
      * Dynamically call methods that set new route attributes
      *
-     * @param string $method
-     * @param array $parameters
+     * @param  string $method
+     * @param  array  $parameters
      * @return void
      */
     public function __call(string $method, array $parameters)

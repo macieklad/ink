@@ -20,11 +20,13 @@ class KernelCommandsTest extends MockeryTestCase
     {
         $this->whoops = \Mockery::mock('overload:' . Run::class);
         $this->whoopsHandler = \Mockery::mock(PrettyPageHandler::class);
-        $this->repository = new Repository([
-            'theme' => [
-                'devMode' => true
+        $this->repository = new Repository(
+            [
+                'theme' => [
+                    'devMode' => true
+                ]
             ]
-        ]);
+        );
     }
 
     public function testHandleErrorCommandFiresInDevMode()
@@ -74,7 +76,6 @@ class KernelCommandsTest extends MockeryTestCase
     /**
      * Undocumented function
      *
-     * @preserveGlobalState disabled
      * @return void
      */
     public function testLoadServicesCommandCallsEachOfProvidedServices()
@@ -99,9 +100,11 @@ class KernelCommandsTest extends MockeryTestCase
             
 
         $container->shouldReceive('call')
-            ->withArgs(function ($service) use ($services) {
-                return in_array($service[0], $services);
-            })
+            ->withArgs(
+                function ($service) use ($services) {
+                    return in_array($service[0], $services);
+                }
+            )
             ->times(count($services));
 
         $command->fire();

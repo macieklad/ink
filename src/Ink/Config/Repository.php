@@ -26,7 +26,7 @@ class Repository implements RepositoryContract
     /**
      * Check if a key exists in repository
      *
-     * @param string $key
+     * @param  string $key
      * @return boolean
      */
     public function has(string $key): bool 
@@ -57,8 +57,8 @@ class Repository implements RepositoryContract
     /**
      * Undocumented function
      *
-     * @param mixed $key
-     * @param mixed $value
+     * @param  mixed $key
+     * @param  mixed $value
      * @return void
      */
     public function set(string $key, $value): void
@@ -69,7 +69,7 @@ class Repository implements RepositoryContract
     /**
      * Get single or multiple values from the repository
      *
-     * @param mixed $query
+     * @param  mixed $query
      * @return void
      */
     public function get(string $key, $default = null)
@@ -80,7 +80,7 @@ class Repository implements RepositoryContract
     /**
      * Get multiple items from repository as an array
      *
-     * @param array $keys
+     * @param  array $keys
      * @return void
      */
     public function getMultiple(array $items): array
@@ -103,7 +103,7 @@ class Repository implements RepositoryContract
     /**
      * Set multiple config items
      *
-     * @param array $items
+     * @param  array $items
      * @return void
      */
     public function setMultiple(array $items): void
@@ -116,7 +116,7 @@ class Repository implements RepositoryContract
     /**
      * Retrieve an item from the repository by its key
      *
-     * @param string $key
+     * @param  string $key
      * @return void
      */
     protected function retrieveItem(string $key, $default = null)
@@ -137,8 +137,8 @@ class Repository implements RepositoryContract
     /**
      * Set key in the repository by its parts
      *
-     * @param string $key
-     * @param mixed $value
+     * @param  string $key
+     * @param  mixed  $value
      * @return void
      */
     protected function setRecursive(string $key, $value)

@@ -18,9 +18,11 @@ class KernelTest extends MockeryTestCase
 
         $kernel = new Kernel($container);
 
-        $kernel->executeCommands([
-            'Foo',
-            'Foo'
-        ]);
+        $kernel->executeCommands(
+            [
+                'Foo',
+                'Foo'
+            ]
+        );
     }
 }

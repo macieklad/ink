@@ -4,7 +4,7 @@ namespace Ink\Routing;
 
 use Ink\Routing\Router;
 
-class Route 
+class Route
 {
 
     /**
@@ -32,7 +32,7 @@ class Route
      * Http methods the route responds to
      * 
      * @var array
-    */
+     */
     public $methods = [];
 
     /**
@@ -45,8 +45,8 @@ class Route
     /**
      * Create new Route instance
      * 
-     * @param array $methods
-     * @param string $uri
+     * @param  array  $methods
+     * @param  string $uri
      * @return void
      */
     public function __construct(array $methods, string $uri)
@@ -72,7 +72,7 @@ class Route
      * Extract route params from it's uri
      * 
      * @return void
-    */
+     */
     public function extractParams()
     {
         preg_match_all('/\{(.*?)\}/', $this->uri, $matches);
@@ -83,7 +83,7 @@ class Route
     /**
      * Merge attributes onto route
      *
-     * @param array $attributes
+     * @param  array $attributes
      * @return void
      */
     public function mergeAttributes(array $attributes)
@@ -110,7 +110,7 @@ class Route
     /**
      * Add prefix to group
      *
-     * @param string $prefix
+     * @param  string $prefix
      * @return void
      */
     public function prefix(string $with)

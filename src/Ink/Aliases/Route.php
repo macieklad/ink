@@ -4,7 +4,7 @@ namespace Ink\Aliases;
 
 use Ink\Aliases\Alias;
 
-class Route extends Alias 
+class Route extends Alias
 {
     public static function getAliasAccessor() 
     {

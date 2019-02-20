@@ -100,7 +100,8 @@ class ProvidersTest extends MockeryTestCase
     }
 }
 
-class StubAlias extends Alias {
+class StubAlias extends Alias
+{
     public static function getAliasAccessor()
     {
         return 'stub';

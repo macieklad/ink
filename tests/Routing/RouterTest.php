@@ -114,9 +114,11 @@ class RouterTest extends TestCase
      */
     public function testRouteCallbackActionCompilation() 
     {
-        $route = $this->mockActionRoute(function () {
-            return 'callback_response';
-        });
+        $route = $this->mockActionRoute(
+            function () {
+                return 'callback_response';
+            }
+        );
         $action = $this->router->compileAction($route);
 
         $this->assertSame('callback_response', $action());
@@ -129,9 +131,11 @@ class RouterTest extends TestCase
      */
     public function testRouteActionCompilationWithRequest()
     {
-        $route = $this->mockActionRoute(function ($req) {
-            return 'hello_' . $req['world'];
-        });
+        $route = $this->mockActionRoute(
+            function ($req) {
+                return 'hello_' . $req['world'];
+            }
+        );
         $action = $this->router->compileAction($route);
 
         $this->assertSame('hello_world', $action(['world' => 'world']));
@@ -208,26 +212,33 @@ class RouterTest extends TestCase
 
         $route->methods = ['GET'];
         $route->uri = '';
-        $route->action = function () {};
+        $route->action = function () {
+        };
 
-        \WP_Mock::expectActionAdded('rest_api_init', [
-            $this->router,
-            'addWordpressRoutes'
-        ]);
-
-        \WP_Mock::userFunction('register_rest_route', [
-            'times' => 1,
-            'args' => [
-                $route->module,
-                $route->uri,
-                function ($args) use ($route) {
-                    $hasProperMethods = $args['methods'] === $route->methods;
-                    $hasSameCallback = $this->router->compileAction($route)() === $args['callback']();
-
-                    return $hasProperMethods && $hasSameCallback;
-                }
+        \WP_Mock::expectActionAdded(
+            'rest_api_init', 
+            [
+                $this->router,
+                'addWordpressRoutes'
             ]
-        ]);
+        );
+
+        \WP_Mock::userFunction(
+            'register_rest_route', 
+            [
+                'times' => 1,
+                'args' => [
+                    $route->module,
+                    $route->uri,
+                    function ($args) use ($route) {
+                        $hasProperMethods = $args['methods'] === $route->methods;
+                        $hasSameCallback = $this->router->compileAction($route)() === $args['callback']();
+
+                        return $hasProperMethods && $hasSameCallback;
+                    }
+                ]
+            ]
+        );
 
         // Test if action is added
         $this->router->addRoute($route);
@@ -243,7 +254,7 @@ class RouterTest extends TestCase
     /**
      * Mock a route object with action
      *
-     * @param mixed $action
+     * @param  mixed $action
      * @return void
      */
     protected function mockActionRoute($action) 

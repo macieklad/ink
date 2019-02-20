@@ -11,7 +11,7 @@ class RoutingProvider extends ServiceProvider
     /**
      * Boots the service provider
      *
-     * @param Router $router
+     * @param  Router $router
      * @return void
      */
     public function boot(Router $router, Repository $config)

@@ -14,7 +14,7 @@ interface ActionManager
     /**
      * Manage action with given name
      *
-     * @param string $name
+     * @param  string $name
      * @return ActionManager
      */
     public function name(string $name): ActionManager;
@@ -23,9 +23,9 @@ interface ActionManager
      * Add handlers to the action type, intentified by 
      * priority, and accepting max ammount of args.
      * 
-     * @param string|Closure|array $with
-     * @param int $priority
-     * @param int $acceptedArgs
+     * @param  string|Closure|array $with
+     * @param  int                  $priority
+     * @param  int                  $acceptedArgs
      * @return ActionManager 
      */
     public function respond($with, int $priority = 10, int $acceptedArgs = 1): ActionManager;
@@ -33,7 +33,7 @@ interface ActionManager
     /**
      * Dispatch current action with arguments
      *
-     * @param mixed ...$args
+     * @param  mixed ...$args
      * @return void
      */
     public function dispatch(...$args): ActionManager;
@@ -57,8 +57,8 @@ interface ActionManager
      * Detach handler or multiple handlers from action,
      * with given priority; 
      *
-     * @param Closure|string|array $handlers
-     * @param integer $priority
+     * @param  Closure|string|array $handlers
+     * @param  integer              $priority
      * @return ActionManager
      */
     public function detach($handlers, int $priority = 10): ActionManager;
@@ -67,7 +67,7 @@ interface ActionManager
      * Remove all possible handlers from action of given name
      * and priority.
      *
-     * @param integer $priority
+     * @param  integer $priority
      * @return ActionManager
      */
     public function flush(int $priority = 10): ActionManager;

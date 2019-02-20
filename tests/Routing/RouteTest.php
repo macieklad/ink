@@ -15,10 +15,12 @@ class RouteTest extends MockeryTestCase
     {
         $methods = ['GET', 'POST'];
         $uri = 'foo';
-        $route = $this->makeTestRoute([
+        $route = $this->makeTestRoute(
+            [
             'methods' => $methods,
             'uri' => $uri
-        ]);
+            ]
+        );
 
         $this->assertEquals($methods, $route->methods);
         $this->assertEquals($uri, $route->uri);
@@ -74,7 +76,7 @@ class RouteTest extends MockeryTestCase
     /**
      * Tests if attributes passed as array are merged into route
      *
-     * @group dev
+     * @group  dev
      * @return void
      */
     public function testAttributeMethodCall()
@@ -91,10 +93,12 @@ class RouteTest extends MockeryTestCase
             ->with('stamp/v1')
             ->once();
         
-        $mock->mergeAttributes([
+        $mock->mergeAttributes(
+            [
             'prefix' => 'bar',
             'module' => 'stamp/v1'
-        ]);
+            ]
+        );
     }
 
     /**
@@ -105,11 +109,14 @@ class RouteTest extends MockeryTestCase
     public function testMergingActionAttribute()
     {
         $route = $this->makeTestRoute();
-        $callback = function() {};
+        $callback = function () {
+        };
 
-        $route->mergeAttributes([
+        $route->mergeAttributes(
+            [
             'action' => $callback
-        ]);
+            ]
+        );
 
         $this->assertSame($callback, $route->action);
     }
@@ -124,10 +131,12 @@ class RouteTest extends MockeryTestCase
         $mock = Mockery::mock(Route::class)
             ->makePartial();
             
-        $mock->shouldReceive([
+        $mock->shouldReceive(
+            [
                 'extractParams' => null,
                 'compile' => null
-            ])
+            ]
+        )
             ->once();
             
         $mock->prepare();
@@ -137,13 +146,13 @@ class RouteTest extends MockeryTestCase
     /**
      * Construct new route with default values
      *
-     * @param array $params
+     * @param  array $params
      * @return void
      */
     protected function makeTestRoute(array $params = [])
     {
         $args = array_values(
-           array_merge($this->defaultRouteArgs(), $params)
+            array_merge($this->defaultRouteArgs(), $params)
         );
 
         return new Route(...$args);
