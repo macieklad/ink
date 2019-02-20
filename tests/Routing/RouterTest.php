@@ -2,28 +2,13 @@
 
 use DI\Container;
 use Tests\TestHelpers;
+use WP_Mock\Functions;
 use Ink\Routing\Route;
 use Ink\Routing\Router;
+use WP_Mock\Tools\TestCase;
 use Tests\Routing\StubController;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-function add_action()
-{
-    $args = func_get_args();
-
-    call_user_func($args[1]);
-
-    RouterTest::$functions->add_action(...$args);
-}
-
-function register_rest_route()
-{
-    $args = func_get_args();
-
-    RouterTest::$functions->register_rest_route(...$args);
-}
-
-class RouterTest extends MockeryTestCase
+class RouterTest extends TestCase
 {
     /**
      * Controllers test namespace
@@ -46,16 +31,20 @@ class RouterTest extends MockeryTestCase
      */
     protected static $controllerTestMethod = 'handler';
 
-    /**
-     * Undocumented variable
-     *
-     * @var Mockery\MockInterface
-     */
-    public static $functions;
-
     public function setUp(): void
     {
+        \WP_Mock::setUp();
         $this->router = new Router(new Container());
+    }
+
+    /**
+     * Clean up after each test
+     *
+     * @return void
+     */
+    public function tearDown(): void 
+    {
+        \WP_Mock::tearDown();
     }
 
     /**
@@ -216,31 +205,39 @@ class RouterTest extends MockeryTestCase
     public function testRouterWordpressHook()
     {
         $route = Mockery::mock(Route::class)->makePartial();
-        static::$functions = Mockery::mock();
 
         $route->methods = ['GET'];
         $route->uri = '';
         $route->action = function () {};
 
-        static::$functions
-            ->shouldReceive('register_rest_route')
-            ->once()
-            ->with('v1', '', Mockery::on(function($arg) use ($route) {
-                $hasProperMethods = $arg['methods'] === $route->methods;
-                $hasSameCallback = $this->router->compileAction($route)() === $arg['callback']();
+        \WP_Mock::expectActionAdded('rest_api_init', [
+            $this->router,
+            'addWordpressRoutes'
+        ]);
 
-                return $hasProperMethods && $hasSameCallback;
-            }));
+        \WP_Mock::userFunction('register_rest_route', [
+            'times' => 1,
+            'args' => [
+                $route->module,
+                $route->uri,
+                function ($args) use ($route) {
+                    $hasProperMethods = $args['methods'] === $route->methods;
+                    $hasSameCallback = $this->router->compileAction($route)() === $args['callback']();
 
-        static::$functions
-            ->shouldReceive('add_action')
-            ->once()
-            ->with('rest_api_init', Mockery::any());
+                    return $hasProperMethods && $hasSameCallback;
+                }
+            ]
+        ]);
 
-
+        // Test if action is added
         $this->router->addRoute($route);
         $this->router->listen();
+        
+        // Manually fire callback inside action to check route registration
+        $this->router->addWordpressRoutes();
 
+        \do_action('rest_api_init');
+        $this->assertHooksAdded();
     }
 
     /**

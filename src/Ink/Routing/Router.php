@@ -162,20 +162,31 @@ class Router implements RouterContract
     }
 
     /**
-     * Load routes into wordpress
+     * Hook router into wordpress
      *
      * @return void
      */
     public function listen(): void
     {
-        add_action('rest_api_init', function () {
-            foreach ($this->routes() as $route) {
-                register_rest_route($route->module, $route->wpUri, [
-                    'methods' => $route->methods,
-                    'callback' => $this->compileAction($route)
-                ]);
-            }
-        });           
+        \add_action('rest_api_init', [
+            $this,
+            'addWordpressRoutes'
+        ]);           
+    }
+
+    /**
+     * Add registered routes to wordpress
+     *
+     * @return void
+     */
+    public function addWordpressRoutes()
+    {
+        foreach ($this->routes() as $route) {
+            register_rest_route($route->module, $route->wpUri, [
+                'methods' => $route->methods,
+                'callback' => $this->compileAction($route)
+            ]);
+        }
     }
 
     /**
