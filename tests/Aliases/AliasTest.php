@@ -9,7 +9,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class AliasTest extends MockeryTestCase
 {
-   
+    /**
+     * Set up the test
+     *
+     * @return void
+     */
     public function setUp() : void
     {
         StubAlias::clearResolvedInstances();
@@ -21,22 +25,44 @@ class AliasTest extends MockeryTestCase
         $this->mock = \Mockery::mock();
     }
 
+    /**
+     * Make sure that alias throws exception without accessor
+     *
+     * @return void
+     */
     public function testAliasShouldFailWithoutAccessor()
     {
         $this->expectException(\RuntimeException::class);
         BadStub::foo();
     }
 
+    /**
+     * Test alias helper function
+     *
+     * @return void
+     */
     public function testAliasHelperFunctions()
     {
         $this->container->shouldReceive('get')
             ->with('stub')
             ->andReturn($this->mock);
 
-        $this->assertSame($this->container, StubAlias::getAliasContainer());
-        $this->assertSame(get_class($this->mock), StubAlias::getMockableClass());
+        $this->assertSame(
+            $this->container,
+            StubAlias::getAliasContainer()
+        );
+        $this->assertSame(
+            get_class($this->mock),
+            StubAlias::getMockableClass()
+        );
     }
 
+    /**
+     * Make sure that alias fails if no underlaying
+     * container entry is found while resolving.
+     *
+     * @return void
+     */
     public function testAliasShouldFailWithoutImplementation()
     {
         $this->expectException(\RuntimeException::class);
@@ -47,11 +73,23 @@ class AliasTest extends MockeryTestCase
         StubAlias::foo('bar');
     }
 
+    /**
+     * Check if binding object directly as accessor 
+     * resolves alias properly
+     *
+     * @return void
+     */
     public function testAliasShouldResolveObjectTypeAccessorDirectly()
     {
         $this->assertEquals('bar', ObjectAlias::foo());
     }
 
+    /**
+     * Test normal resolving of classes set inside
+     * container by alias
+     *
+     * @return void
+     */
     public function testConcreteAliasCallResolvesProperly()
     {
         $this->container->shouldReceive('get')
@@ -65,6 +103,12 @@ class AliasTest extends MockeryTestCase
         StubAlias::foo('bar');
     }
 
+    /**
+     * Test if multiple aliases do point to the
+     * single implementation correctly
+     *
+     * @return void
+     */
     public function testConcreteAliasCallResolvesForMultipleAliases()
     {
         $this->container->shouldReceive('get')
@@ -114,6 +158,11 @@ class AliasTest extends MockeryTestCase
 
 class StubAlias extends Alias
 {
+    /**
+     * Return stub alias accessor inside container
+     *
+     * @return void
+     */
     public static function getAliasAccessor()
     {
         return 'stub';
@@ -122,6 +171,11 @@ class StubAlias extends Alias
 
 class StubAliasBeta extends Alias
 {
+    /**
+     * Return stub alias accessor inside container
+     *
+     * @return void
+     */   
     public static function getAliasAccessor()
     {
         return 'stub';
@@ -130,6 +184,11 @@ class StubAliasBeta extends Alias
 
 class ObjectAlias extends Alias
 {
+    /**
+     * Return conrecte object as accessor
+     *
+     * @return void
+     */
     public static function getAliasAccessor()
     {
         return new ObjectAccessor;
@@ -138,6 +197,11 @@ class ObjectAlias extends Alias
 
 class ObjectAccessor
 {
+    /**
+     * Example function to test
+     *
+     * @return void
+     */
     public function foo()
     {
         return 'bar';

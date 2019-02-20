@@ -16,6 +16,11 @@ use Ink\Foundation\Bootstrap\LoadConfiguration;
 
 class KernelCommandsTest extends MockeryTestCase
 {
+    /**
+     * Set up the test
+     *
+     * @return void
+     */
     public function setUp(): void
     {
         $this->whoops = \Mockery::mock('overload:' . Run::class);
@@ -29,6 +34,12 @@ class KernelCommandsTest extends MockeryTestCase
         );
     }
 
+    /**
+     * Ensure that custom error handling occurs only in
+     * development mode
+     *
+     * @return void
+     */
     public function testHandleErrorCommandFiresInDevMode()
     {    
         $command = $this->makeHandleErrorCommand();
@@ -43,6 +54,12 @@ class KernelCommandsTest extends MockeryTestCase
         $command->fire();
     }
 
+    /**
+     * Ensure that custom error handling is not used in
+     * production mode
+     *
+     * @return void
+     */
     public function testHandleErrorCommandIsNotFiringInProduction()
     {
         $command = $this->makeHandleErrorCommand();
@@ -110,9 +127,18 @@ class KernelCommandsTest extends MockeryTestCase
         $command->fire();
     }
 
+    /**
+     * Mock concrete HandleErrors kernel command
+     * 
+     * @return HandleErrors
+     */
     protected function makeHandleErrorCommand()
     {
-        return new HandleErrors($this->repository, $this->whoops, $this->whoopsHandler);
+        return new HandleErrors(
+            $this->repository,
+            $this->whoops, 
+            $this->whoopsHandler
+        );
     }
 
 }

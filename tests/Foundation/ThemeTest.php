@@ -22,8 +22,14 @@ class ThemeTest extends MockeryTestCase
     {
         $theme = new Theme;
         
-        $this->assertSame($theme, $theme->container()->get(ThemeContract::class));
-        $this->assertSame($theme->container(), $theme->container()->get(ContainerInterface::class));
+        $this->assertSame(
+            $theme, 
+            $theme->container()->get(ThemeContract::class)
+        );
+        $this->assertSame(
+            $theme->container(),
+            $theme->container()->get(ContainerInterface::class)
+        );
         $this->assertTrue($theme['kernel'] instanceof Kernel);
     } 
 

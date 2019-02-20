@@ -15,11 +15,21 @@ use Ink\Contracts\Foundation\Theme as ThemeContract;
 
 class StampAliasesTest extends MockeryTestCase
 {
+    /**
+     * Set up the test
+     *
+     * @return void
+     */
     public function setUp(): void
     {
         $this->theme = new Theme;
     }
 
+    /**
+     * Ensure that aliases bind correct class implementations
+     *
+     * @return void
+     */
     public function testThemeAliasesResolveToProperClasses()
     {
         Alias::setAliasContainer($this->theme->container());

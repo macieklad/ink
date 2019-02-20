@@ -8,6 +8,11 @@ use Psr\Container\ContainerInterface as Container;
 
 class KernelTest extends MockeryTestCase
 {
+    /**
+     * Expect that kernell passes command calls to container
+     *
+     * @return void
+     */
     public function testCommandExecutionIsDelegatedToContainer()
     {
         $container = \Mockery::mock(Container::class);

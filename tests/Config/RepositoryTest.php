@@ -29,6 +29,11 @@ class RepositoryTest extends TestCase
         ]
     ];
 
+    /**
+     * Set up the test
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->repository = new Repository(self::$defaults);
@@ -81,7 +86,10 @@ class RepositoryTest extends TestCase
         ];
 
         $this->assertNull($this->repository->get('none'));
-        $this->assertSame($defaultValues, $this->repository->getMultiple($defaultValues));
+        $this->assertSame(
+            $defaultValues,
+            $this->repository->getMultiple($defaultValues)
+        );
     }
 
     /**
@@ -91,10 +99,22 @@ class RepositoryTest extends TestCase
      */
     public function testSingleValueRetrieval()
     {
-        $this->assertSame('one', $this->repository->get('x'));
-        $this->assertSame(static::$defaults['assoc'], $this->repository->get('assoc'));
-        $this->assertSame('two', $this->repository->get('assoc.y'));
-        $this->assertSame('four', $this->repository->get('assoc.arr.w'));
+        $this->assertSame(
+            'one',
+            $this->repository->get('x')
+        );
+        $this->assertSame(
+            static::$defaults['assoc'],
+            $this->repository->get('assoc')
+        );
+        $this->assertSame(
+            'two',
+            $this->repository->get('assoc.y')
+        );
+        $this->assertSame(
+            'four',
+            $this->repository->get('assoc.arr.w')
+        );
     }
 
     /**

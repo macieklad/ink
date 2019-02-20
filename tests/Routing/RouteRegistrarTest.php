@@ -7,6 +7,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 class RouteRegistrarTest extends MockeryTestCase
 {
+    /**
+     * Set up the test
+     *
+     * @return void
+     */
     public function setUp(): void
     {
         $this->router = Mockery::mock(Router::class);

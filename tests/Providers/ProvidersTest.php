@@ -102,6 +102,11 @@ class ProvidersTest extends MockeryTestCase
 
 class StubAlias extends Alias
 {
+    /**
+     * Return the container entry behind alias
+     *
+     * @return void
+     */
     public static function getAliasAccessor()
     {
         return 'stub';

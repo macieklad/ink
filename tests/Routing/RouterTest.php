@@ -31,6 +31,11 @@ class RouterTest extends TestCase
      */
     protected static $controllerTestMethod = 'handler';
 
+    /**
+     * Set up the test
+     *
+     * @return void
+     */
     public function setUp(): void
     {
         \WP_Mock::setUp();
@@ -85,9 +90,17 @@ class RouterTest extends TestCase
         $namespace = 'Theme\Http\Controllers';
         $router = Mockery::mock(Router::class);
 
-        $this->assertSame('', TestHelpers::getProperty($this->router, 'controllerNamespace'));
+        $this->assertSame(
+            '', 
+            TestHelpers::getProperty($this->router, 'controllerNamespace')
+        );
+
         $this->router->setControllerNamespace('Theme\Http\Controllers');
-        $this->assertSame($namespace, TestHelpers::getProperty($this->router, 'controllerNamespace'));
+        
+        $this->assertSame(
+            $namespace, 
+            TestHelpers::getProperty($this->router, 'controllerNamespace')
+        );
     }
 
     /**
@@ -231,9 +244,9 @@ class RouterTest extends TestCase
                     $route->module,
                     $route->uri,
                     function ($args) use ($route) {
+                        $actionResponse = $this->router->compileAction($route)();
                         $hasProperMethods = $args['methods'] === $route->methods;
-                        $hasSameCallback = $this->router->compileAction($route)() === $args['callback']();
-
+                        $hasSameCallback =  $actionResponse === $args['callback']();
                         return $hasProperMethods && $hasSameCallback;
                     }
                 ]
@@ -254,7 +267,8 @@ class RouterTest extends TestCase
     /**
      * Mock a route object with action
      *
-     * @param  mixed $action
+     * @param mixed $action
+     * 
      * @return void
      */
     protected function mockActionRoute($action) 

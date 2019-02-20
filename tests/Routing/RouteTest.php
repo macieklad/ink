@@ -49,7 +49,8 @@ class RouteTest extends MockeryTestCase
     public function testRouteCompilation()
     {
         $uri = "/foo/{bar}/{baz}?query=xxx";
-        $exceptation = "/foo/(?P<bar>[a-zA-Z\\d_-]+)/(?P<baz>[a-zA-Z\\d_-]+)?query=xxx";
+        $exceptation = "/foo/(?P<bar>[a-zA-Z\\d_-]+)
+                        /(?P<baz>[a-zA-Z\\d_-]+)?query=xxx";
         $route = $this->makeTestRoute(['uri' => $uri ]);
 
         $route->compile();
@@ -146,7 +147,8 @@ class RouteTest extends MockeryTestCase
     /**
      * Construct new route with default values
      *
-     * @param  array $params
+     * @param array $params
+     * 
      * @return void
      */
     protected function makeTestRoute(array $params = [])
