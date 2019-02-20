@@ -7,8 +7,9 @@ class TestHelpers
     /**
      * Get protected or private property from an object
      *
-     * @param $object
-     * @param $propertyName
+     * @param mixed  $object
+     * @param string $propertyName
+     * 
      * @return mixed
      */
     public static function getProperty($object, $propertyName)
