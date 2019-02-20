@@ -135,8 +135,8 @@ class KernelCommandsTest extends MockeryTestCase
     protected function makeHandleErrorCommand()
     {
         return new HandleErrors(
-            $this->repository,
             $this->whoops, 
+            $this->repository,
             $this->whoopsHandler
         );
     }

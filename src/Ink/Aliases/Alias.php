@@ -100,7 +100,7 @@ abstract class Alias
     /**
      * Set the alias container.
      *
-     * @param ContainerInterface $container
+     * @param \Psr\Container\ContainerInterface $container
      * 
      * @return void
      */
