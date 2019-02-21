@@ -82,7 +82,7 @@ class ActionManagerTest extends MockeryTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->respond('StubController@foo');
+        $this->manager->respond('Tests\Hooks\StubController@foo');
     }
 
     /**
@@ -101,11 +101,13 @@ class ActionManagerTest extends MockeryTestCase
                     function ($callback) {
                         return $callback('foo', 'bar') === 'foobarbaz';
                     }
-                )
+                ),
+                10,
+                1
             )
             ->once();
-
-        $this->manager->respond('StubController@handler');
+            
+        $this->manager->respond('Tests\Hooks\StubController@handler');
     }
 
     /**
@@ -117,17 +119,17 @@ class ActionManagerTest extends MockeryTestCase
     public function testActionIsNotCompiledIfPassedCallable()
     {
         $stub = new StubController;
-        $callable = 'add_action';
+        $callable = 'Ink\Hooks\add_action';
         $callableObject = [$stub, 'handler'];
 
-        static::$function
+        static::$functions
             ->shouldReceive('add_action')
-            ->with($this->action, $callable)
+            ->with($this->action, $callable, 10, 1)
             ->once();
 
-        static::$function
+        static::$functions
             ->shouldReceive('add_action')
-            ->with($this->action, $callableObject)
+            ->with($this->action, $callableObject, 10, 1)
             ->once();
 
         $this->manager
@@ -155,7 +157,9 @@ class ActionManagerTest extends MockeryTestCase
                     function ($callback) {
                         return $callback();
                     }
-                )
+                ),
+                10,
+                1
             );
 
         $this->manager
@@ -171,34 +175,37 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testArrayWithActionsIsCompiledToCallback()
     {
-        $integer = 0;
-
         static::$functions
             ->shouldReceive('add_action')
             ->with(
                 $this->action,
                 Mockery::on(
-                    function ($callback) use ($integer) {
-                        $callback($integer);
+                    function ($callback) use (&$integer) {
+                        $callback();
 
                         return true;
                     }
-                )
+                ),
+                10,
+                1
             )
             ->once();
 
         $this->manager
+            ->forceCompilation()
             ->respond(
                 [
-                    'StubController@increment',
-                    'StubController@increment',
-                    function (&$object) {
-                        $object++;
+                    'Tests\Hooks\StubController@isManager',
+                    'Tests\Hooks\StubController@isManager',
+                    function ($manager) {
+                        if ($manager instanceof ActionManagerContract) {
+                            echo 'Manager';
+                        }
                     }
                 ]
             );
-
-        $this->assertEquals(3, $integer);
+        
+        $this->expectOutputString("Manager" . "Manager" . "Manager");
     }
 
     /**
@@ -337,14 +344,18 @@ class StubController
     }
 
     /**
-     * Increment object passed to handler
+     * If ActionManager is bound correctly by container,
+     * it will be passed as argument, and method will
+     * output the string.
      *
-     * @param int $object
+     * @param mixed $manager
      * 
      * @return void
      */
-    public function increment(&$object)
+    public function isManager($manager)
     {
-        $object++;
+        if ($manager instanceof ActionManagerContract) {
+            echo 'Manager';
+        }
     }
 }

@@ -17,6 +17,18 @@ function has_action()
 }
 
 /**
+ * Mock wordpress add_action
+ *
+ * @return void
+ */
+function add_action()
+{
+    $args = \func_get_args();
+
+    return ActionManagerTest::$functions->add_action(...$args);
+}
+
+/**
  * Mock wordpress do_action
  *
  * @return void

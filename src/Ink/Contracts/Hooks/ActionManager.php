@@ -2,23 +2,25 @@
 
 namespace Ink\Contracts\Hooks;
 
+use Psr\Container\ContainerInterface;
+
 interface ActionManager
 {
     /**
-     * Construct the manager for a named action
+     * Construct the manager for an action
      *
-     * @param string $name
+     * @param string $container
      */
-    public function __construct(string $name);
+    public function __construct(ContainerInterface $container);
 
     /**
      * Manage action with given name
      *
-     * @param string $name
+     * @param string $action
      * 
-     * @return ActionManager
+     * @return Ink\Contracts\Hooks\ActionManager
      */
-    public function name(string $name): ActionManager;
+    public function name(string $action): ActionManager;
 
     /**
      * Add handlers to the action type, intentified by 
@@ -28,7 +30,7 @@ interface ActionManager
      * @param int                  $priority
      * @param int                  $acceptedArgs
      * 
-     * @return ActionManager 
+     * @return Ink\Contracts\Hooks\ActionManager 
      */
     public function respond(
         $with,
@@ -49,9 +51,11 @@ interface ActionManager
      * Check if action with given name is defined with 
      * any listeners.
      *
+     * @param mixed $handler
+     * 
      * @return boolean
      */
-    public function exists(): bool;
+    public function exists($handler): bool;
 
     /**
      * Inform how many times action was already called
@@ -67,7 +71,7 @@ interface ActionManager
      * @param Closure|string|array $handlers
      * @param integer              $priority
      * 
-     * @return ActionManager
+     * @return Ink\Contracts\Hooks\ActionManager
      */
     public function detach($handlers, int $priority = 10): ActionManager;
 
@@ -77,7 +81,25 @@ interface ActionManager
      *
      * @param integer $priority
      * 
-     * @return ActionManager
+     * @return Ink\Contracts\Hooks\ActionManager
      */
     public function flush(int $priority = 10): ActionManager;
+
+    /**
+     * Set the controller namespace, from which they can
+     * be inferred without providing namespace first.
+     *
+     * @param string $namespace
+     * 
+     * @return void
+     */
+    public function setControllerNamespace(string $namespace) : ActionManager;
+
+    /**
+     * Force compilation of callable handlers passed
+     * as arguments to action
+     *
+     * @return Ink\Contracts\Hooks\ActionManager
+     */
+    public function forceCompilation() : ActionManager;
 }
