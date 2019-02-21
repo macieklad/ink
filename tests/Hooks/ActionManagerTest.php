@@ -82,7 +82,9 @@ class ActionManagerTest extends MockeryTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->respond('Tests\Hooks\StubController@foo');
+        $this->manager->respond(
+            $this->mockControllerActionString('foo')
+        );
     }
 
     /**
@@ -93,21 +95,17 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testCreatesCallbackWhenGivenControllerAsAction()
     {
-        static::$functions
-            ->shouldReceive('add_action')
-            ->with(
-                $this->action,
-                Mockery::on(
-                    function ($callback) {
-                        return $callback('foo', 'bar') === 'foobarbaz';
-                    }
-                ),
-                10,
-                1
+        $this->mockAddActionWithHandler(
+            Mockery::on(
+                function ($callback) {
+                    return $callback('foo', 'bar') === 'foobarbaz';
+                }
             )
-            ->once();
-            
-        $this->manager->respond('Tests\Hooks\StubController@handler');
+        );
+
+        $this->manager->respond(
+            $this->mockControllerActionString('handler')
+        );
     }
 
     /**
@@ -122,15 +120,8 @@ class ActionManagerTest extends MockeryTestCase
         $callable = 'Ink\Hooks\add_action';
         $callableObject = [$stub, 'handler'];
 
-        static::$functions
-            ->shouldReceive('add_action')
-            ->with($this->action, $callable, 10, 1)
-            ->once();
-
-        static::$functions
-            ->shouldReceive('add_action')
-            ->with($this->action, $callableObject, 10, 1)
-            ->once();
+        $this->mockAddActionWithHandler($callable);
+        $this->mockAddActionWithHandler($callableObject);
 
         $this->manager
             ->respond($callable)       
@@ -149,18 +140,13 @@ class ActionManagerTest extends MockeryTestCase
             return $manager instanceof ActionManagerContract;
         };
 
-        static::$functions
-            ->shouldReceive('add_action')
-            ->with(
-                $this->action,
-                Mockery::on(
-                    function ($callback) {
-                        return $callback();
-                    }
-                ),
-                10,
-                1
-            );
+        $this->mockAddActionWithHandler(
+            Mockery::on(
+                function ($callback) {
+                    return $callback();
+                }
+            )
+        );
 
         $this->manager
             ->forceCompilation()
@@ -175,28 +161,22 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testArrayWithActionsIsCompiledToCallback()
     {
-        static::$functions
-            ->shouldReceive('add_action')
-            ->with(
-                $this->action,
-                Mockery::on(
-                    function ($callback) use (&$integer) {
-                        $callback();
+        $this->mockAddActionWithHandler(
+            Mockery::on(
+                function ($callback) use (&$integer) {
+                    $callback();
 
-                        return true;
-                    }
-                ),
-                10,
-                1
+                    return true;
+                }
             )
-            ->once();
+        );
 
         $this->manager
             ->forceCompilation()
             ->respond(
                 [
-                    'Tests\Hooks\StubController@isManager',
-                    'Tests\Hooks\StubController@isManager',
+                    $this->mockControllerActionString('isManager'),
+                    $this->mockControllerActionString('isManager'),
                     function ($manager) {
                         if ($manager instanceof ActionManagerContract) {
                             echo 'Manager';
@@ -326,8 +306,42 @@ class ActionManagerTest extends MockeryTestCase
         $this->manager->flush(15);
 
     }
-}
 
+    /**
+     * Mock add_action function for the test with default
+     * params, excluding custom handler parameter,
+     * coming from Mockery
+     *
+     * @param mixed $handler
+     * 
+     * @return void
+     */
+    public function mockAddActionWithHandler($handler)
+    {
+        static::$functions
+            ->shouldReceive('add_action')
+            ->with(
+                $this->action,
+                $handler,
+                10,
+                1
+            )
+            ->once();
+    }
+
+    /**
+     * Mock controller action string, to be passed
+     * inside action manager
+     *
+     * @param string $method
+     * 
+     * @return void
+     */
+    public function mockControllerActionString(string $method = '')
+    {
+        return 'Tests\Hooks\StubController' . ($method != '' ? '@' . $method : '');
+    }
+}
 class StubController
 {
     /**
