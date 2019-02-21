@@ -181,10 +181,11 @@ class Router implements RouterContract
      */
     public function listen(): void
     {
-        \add_action(
-            'rest_api_init', [
-            $this,
-            'addWordpressRoutes'
+        add_action(
+            'rest_api_init', 
+            [
+                $this,
+                'addWordpressRoutes'
             ]
         );           
     }
