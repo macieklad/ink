@@ -316,7 +316,7 @@ class TestName extends MockeryTestCase
      * Mock wordpress add_filter function with correct arguments,
      * except custom function that transforms the passed value.
      *
-     * @param mixed $transfomer
+     * @param mixed $transformer
      * 
      * @return void
      */

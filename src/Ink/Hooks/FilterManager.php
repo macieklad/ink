@@ -110,7 +110,9 @@ class FilterManager implements FilterManagerContract
      */
     protected function compileTransformer($transformer)
     {
-        $transformerIsFunction = (is_string($transformer) && \function_exists($transformer));
+        $transformerIsFunction = (
+            is_string($transformer) && \function_exists($transformer)
+        );
 
         if (\is_callable($transformer) || $transformerIsFunction) {
             return $this->forceCompilation ? 
@@ -171,9 +173,9 @@ class FilterManager implements FilterManagerContract
     }
 
     /**
-     * Compile handler in form of Controller@handler
+     * Compile transformer in form of Transformer@method
      *
-     * @param string $handler
+     * @param string $transformer
      * 
      * @return void
      */
