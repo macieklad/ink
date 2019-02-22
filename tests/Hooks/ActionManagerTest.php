@@ -11,7 +11,7 @@ use Ink\Hooks\ActionManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Ink\Contracts\Hooks\ActionManager as ActionManagerContract;
 
-require __DIR__ . '/globals.php';
+require_once __DIR__ . '/globals.php';
 
 class ActionManagerTest extends MockeryTestCase
 {
@@ -42,6 +42,7 @@ class ActionManagerTest extends MockeryTestCase
         $this->container = new Container;
         $this->manager = new ActionManager($this->container);
         $this->manager->name($this->action);
+        $this->manager->setControllerNamespace('Tests\Hooks');
     }
 
     /**
@@ -56,6 +57,23 @@ class ActionManagerTest extends MockeryTestCase
         $this->assertSame(
             'baz',
             TestHelpers::getProperty($this->manager, 'action')
+        );
+    }
+
+    
+    /**
+     * Test that controller namespace is settable inside action
+     * manager, from which it can infer their namespaces.
+     *
+     * @return void
+     */
+    public function testControllerNamespaceIsSetCorrectly()
+    {
+        $this->manager->setControllerNamespace('Foo\Bar');
+
+        $this->assertSame(
+            'Foo\Bar', 
+            TestHelpers::getProperty($this->manager, 'controllerNamespace')
         );
     }
 
@@ -85,6 +103,19 @@ class ActionManagerTest extends MockeryTestCase
         $this->manager->respond(
             $this->mockControllerActionString('foo')
         );
+    }
+
+    /**
+     * Test if passing invalid handler, like null, will fail
+     * callback handler compilation.
+     *
+     * @return void
+     */
+    public function testHandlerCompilationFailsIfGivenUnsupportedArgument()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->manager->respond(null);
     }
 
     /**
@@ -124,7 +155,8 @@ class ActionManagerTest extends MockeryTestCase
         $this->mockAddActionWithHandler($callableObject);
 
         $this->manager
-            ->respond($callable)       
+            ->respond($callable);
+        $this->manager
             ->respond($callableObject);
     }
 
@@ -304,7 +336,6 @@ class ActionManagerTest extends MockeryTestCase
 
         $this->manager->flush();
         $this->manager->flush(15);
-
     }
 
     /**
@@ -339,7 +370,7 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function mockControllerActionString(string $method = '')
     {
-        return 'Tests\Hooks\StubController' . ($method != '' ? '@' . $method : '');
+        return 'StubController' . ($method != '' ? '@' . $method : '');
     }
 }
 class StubController
