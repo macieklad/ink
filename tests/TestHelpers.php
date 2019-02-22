@@ -33,7 +33,7 @@ class TestHelpers
      * Call function on global functions mock
      *
      * @param string $func
-     * @param array $args
+     * @param array  $args
      * 
      * @return void
      */
@@ -54,7 +54,7 @@ class TestHelpers
      *
      * @return void
      */
-    public static function functions()
+    public static function functions() : MockInterface
     {
         return static::$functions;
     }
