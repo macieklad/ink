@@ -30,13 +30,13 @@ interface ActionManager
      * @param int                  $priority
      * @param int                  $acceptedArgs
      * 
-     * @return Ink\Contracts\Hooks\ActionManager 
+     * @return mixed
      */
     public function respond(
         $with,
         int $priority = 10,
         int $acceptedArgs = 1
-    ): ActionManager;
+    );
 
     /**
      * Dispatch current action with arguments

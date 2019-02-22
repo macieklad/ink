@@ -69,19 +69,19 @@ class ActionManager implements ActionManagerContract
      * @param int                  $priority
      * @param int                  $acceptedArgs
      * 
-     * @return ActionManager 
+     * @return mixed 
      */
     public function respond(
         $with,
         int $priority = 10,
         int $acceptedArgs = 1
-    ) : ActionManagerContract {
+    ) {
 
         $handler = $this->compileActionHandler($with);
        
         add_action($this->action, $handler, $priority, $acceptedArgs);
 
-        return $this;
+        return $handler;
     }
 
     /**
@@ -108,7 +108,7 @@ class ActionManager implements ActionManagerContract
             return $this->compileControllerHandler($handler);
         }
 
-        throw \InvalidArgumentException(
+        throw new \InvalidArgumentException(
             "Your action handler type is not supported by action manager.
              Please change it, maybe it was a typo ? Passed " . gettype($handler)
         );
