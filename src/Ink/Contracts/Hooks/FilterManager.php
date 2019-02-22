@@ -2,23 +2,25 @@
 
 namespace Ink\Contracts\Hooks;
 
+use Psr\Container\ContainerInterface;
+
 interface FilterManager
 {
     /**
      * Construct the manager for a named filter
      *
-     * @param string $name
+     * @param Psr\Container\ContainerInterface $container
      */
-    public function __construct(string $name);
+    public function __construct(ContainerInterface $container);
 
     /**
      * Manage filter with the given name
      *
-     * @param string $name
+     * @param string $filter
      * 
-     * @return FilterManager
+     * @return Ink\Contracts\Hooks\FilterManager
      */
-    public function name(string $name) : FilterManager;
+    public function name(string $filter) : FilterManager;
 
     /**
      * Apply the filter to the provided value and pass
@@ -32,48 +34,67 @@ interface FilterManager
     public function apply($value, ...$args);
 
     /**
-     * Add a handler to the filter, with priority and 
+     * Add a transformer to the filter, with priority and 
      * maximum allowed arguments.
      *
-     * @param Closure|string|array $handler
+     * @param Closure|string|array $transformer
      * @param integer              $priority
      * @param integer              $acceptedArgs
      * 
-     * @return FilterManager
+     * @return mixed
      */
     public function add(
-        $handler,
+        $transformer,
         int $priority = 10,
         int $acceptedArgs = 1
-    ) : FilterManager;
+    );
 
     /**
      * Check if filter with the given name is defined
-     * with any handlers.
+     * with any transformers.
      *
+     * @param mixed $transformer
+     * 
      * @return boolean
      */
-    public function exists() : bool;
-
+    public function exists($transformer) : bool;
 
     /**
-     * Detach handler or multiple handlers from filter,
-     * with given priority.
+     * Detach single or multiple transformers 
+     * from the filter, with given priority.
      *
-     * @param Closure|string|array $handlers
+     * @param Closure|string|array $transformers
      * @param integer              $priority
      * 
-     * @return FilterManager
+     * @return Ink\Contracts\Hooks\FilterManager
      */
-    public function detach($handlers, int $priority = 10) : FilterManager;
+    public function detach($transformers, int $priority = 10) : FilterManager;
 
     /**
-     * Remove all possible handlers of given priority
-     * from the filter.
+     * Remove all possible transformers of given
+     * priorityfrom the filter.
      *
      * @param integer $priority
      * 
-     * @return FilterManager
+     * @return Ink\Contracts\Hooks\FilterManager
      */
     public function flush(int $priority = 10) : FilterManager;
+
+    /**
+     * Force compilation of callable transformers passed
+     * as arguments to the filter manager
+     *
+     * @return Ink\Contracts\Hooks\FilterManager
+     */
+    public function forceCompilation() : FilterManager;
+
+    /**
+     * Set the namespace from where transformers may be inferred,
+     * instead of passing full namespace each time.
+     *
+     * @param string $namespace
+     * 
+     * @return Ink\Contracts\Hooks\FilterManager
+     */
+    public function setTransformerNamespace(string $namespace) : FilterManager;
 }
