@@ -195,7 +195,7 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testActionIsDispatchedWithArguments()
     {
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('do_action')
             ->with($this->action, 'foo', 'bar')
             ->once();
@@ -219,13 +219,13 @@ class ActionManagerTest extends MockeryTestCase
             return 2;
         };
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('has_action')
             ->with('baz', $bazFunc)
             ->andReturn(true)
             ->once();
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('has_action')
             ->with('bazz', $bazzFunc)
             ->andReturn(false)
@@ -250,7 +250,7 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testManagerReturnsActionCountCorrectly()
     {
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('did_action')
             ->with($this->action)
             ->andReturn(10)
@@ -270,12 +270,12 @@ class ActionManagerTest extends MockeryTestCase
             return 1;
         };
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('remove_action')
             ->with($this->action, $func, 10)
             ->once();
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('remove_action')
             ->with($this->action, $func, 15)
             ->once();
@@ -292,12 +292,12 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testActionIsUnregisteredCorrectly()
     {
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('remove_all_actions')
             ->with($this->action, 10)
             ->once();
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('remove_all_actions')
             ->with($this->action, 15)
             ->once();
@@ -318,7 +318,7 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function mockAddActionWithHandler($handler)
     {
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('add_action')
             ->with(
                 $this->action,

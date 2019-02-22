@@ -4,9 +4,10 @@ namespace Tests\Routing;
 
 use Mockery;
 use DI\Container;
-use Tests\TestHelpers;
 use Ink\Routing\Route;
+use Tests\TestHelpers;
 use Ink\Routing\Router;
+use Tests\MocksGlobals;
 use Tests\Routing\StubController;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -14,6 +15,8 @@ require_once __DIR__ . '/globals.php';
 
 class RouterTest extends MockeryTestCase
 {
+    use MocksGlobals;
+
     /**
      * Controllers test namespace
      *
@@ -221,15 +224,15 @@ class RouterTest extends MockeryTestCase
      */
     public function testRouterWordpressHook()
     {
+        $this->clearGlobals();
         $route = Mockery::mock(Route::class)->makePartial();
-        static::$functions = Mockery::mock();
 
         $route->methods = ['GET'];
         $route->uri = '';
         $route->action = function () {
         };
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('register_rest_route')
             ->once()
             ->with(
@@ -244,7 +247,7 @@ class RouterTest extends MockeryTestCase
                 )
             );
 
-        static::$functions
+        TestHelpers::functions()
             ->shouldReceive('add_action')
             ->once()
             ->with('rest_api_init', Mockery::any());

@@ -2,6 +2,7 @@
 
 namespace Ink\Hooks;
 
+use Tests\TestHelpers;
 use Tests\Hooks\ActionManagerTest;
 
 /**
@@ -13,7 +14,7 @@ function has_action()
 {
     $args = \func_get_args();
 
-    return ActionManagerTest::$functions->has_action(...$args);
+    return TestHelpers::passGlobalCall('has_action', $args);
 }
 
 /**
@@ -25,7 +26,7 @@ function add_action()
 {
     $args = \func_get_args();
 
-    return ActionManagerTest::$functions->add_action(...$args);
+    return TestHelpers::passGlobalCall('add_action', $args);
 }
 
 /**
@@ -37,7 +38,7 @@ function do_action()
 {
     $args = \func_get_args();
 
-    return ActionManagerTest::$functions->do_action(...$args);
+    return TestHelpers::passGlobalCall('do_action', $args);
 }
 
 /**
@@ -49,7 +50,7 @@ function did_action()
 {
     $args = \func_get_args();
 
-    return ActionManagerTest::$functions->did_action(...$args);
+    return TestHelpers::passGlobalCall('did_action', $args);
 }
 
 /**
@@ -61,7 +62,7 @@ function remove_action()
 {
     $args = \func_get_args();
 
-    return ActionManagerTest::$functions->remove_action(...$args);
+    return TestHelpers::passGlobalCall('remove_action', $args);
 }
 
 /**
@@ -73,6 +74,6 @@ function remove_all_actions()
 {
     $args = \func_get_args();
 
-    return ActionManagerTest::$functions->remove_all_actions(...$args);
+    return TestHelpers::passGlobalCall('remove_all_actions', $args);
 }
 

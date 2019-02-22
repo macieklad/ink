@@ -2,6 +2,7 @@
 
 namespace Ink\Routing;
 
+use Tests\TestHelpers;
 use Tests\Routing\RouterTest;
 
 /**
@@ -15,7 +16,7 @@ function add_action()
 
     call_user_func($args[1]);
 
-    RouterTest::$functions->add_action(...$args);
+    TestHelpers::passGlobalCall('add_action', $args);
 }
 
 
@@ -28,5 +29,5 @@ function register_rest_route()
 {
     $args = func_get_args();
 
-    RouterTest::$functions->register_rest_route(...$args);
+    TestHelpers::passGlobalCall('register_rest_route', $args);
 }
