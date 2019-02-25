@@ -3,6 +3,9 @@
 use Ink\Hooks\ActionManager;
 use Ink\Contracts\Hooks\FilterManager;
 
-if ($actionManager instanceof ActionManager && $filterManager instanceof FilterManager) {
+$actionManagerLoaded = $actionManager instanceof ActionManager;
+$filterManagerLoaded = $filterManager instanceof FilterManager;
+
+if ($actionManagerLoaded && $filterManagerLoaded) {
     echo 'Hooks loaded !';
 }
