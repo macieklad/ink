@@ -2,14 +2,14 @@
 
 namespace Ink\Foundation;
 
-use ArrayAccess;
 use DI\Container;
 use function DI\get;
-use function DI\create;
 use Ink\Routing\Router;
 use DI\ContainerBuilder;
 use Ink\Config\Repository;
 use Ink\Foundation\Kernel;
+use Ink\Hooks\ActionManager;
+use Ink\Hooks\FilterManager;
 use Psr\Container\ContainerInterface;
 use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
@@ -17,6 +17,8 @@ use Ink\Foundation\Bootstrap\LoadConfiguration;
 use Ink\Contracts\Routing\Router as RouterContract;
 use Ink\Contracts\Foundation\Theme as ThemeContract;
 use Ink\Contracts\Config\Repository as RepositoryContract;
+use Ink\Contracts\Hooks\ActionManager as ActionManagerContract;
+use Ink\Contracts\Hooks\FilterManager as FilterManagerContract;
 
 class Theme implements ThemeContract
 {
@@ -65,7 +67,9 @@ class Theme implements ThemeContract
                 ContainerInterface::class => get(Container::class),
                 RepositoryContract::class => get(Repository::class),
                 ThemeContract::class => get(Theme::class),
-                RouterContract::class => get(Router::class)
+                RouterContract::class => get(Router::class),
+                ActionManagerContract::class => get(ActionManager::class),
+                FilterManagerContract::class => get(FilterManager::class)
             ]
         );
 

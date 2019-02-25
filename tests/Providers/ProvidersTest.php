@@ -3,13 +3,18 @@
 namespace Tests\Providers;
 
 use Ink\Aliases\Alias;
+use Ink\Hooks\ActionManager;
+use Ink\Hooks\FilterManager;
 use Ink\Providers\AliasProvider;
+use Ink\Providers\HooksProvider;
 use Ink\Contracts\Routing\Router;
 use Ink\Providers\RoutingProvider;
 use Ink\Contracts\Foundation\Theme;
 use Ink\Contracts\Config\Repository;
 use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Ink\Contracts\Hooks\ActionManager as ActionManagerContract;
+use Ink\Contracts\Hooks\FilterManager as FilterManagerContract;
 
 class ProvidersTest extends MockeryTestCase
 {
@@ -97,6 +102,51 @@ class ProvidersTest extends MockeryTestCase
 
         \Foo::foo();
         \Bar::foo();
+    }
+
+    /**
+     * Assure hooks are registered by the provider
+     *
+     * @return void
+     */
+    public function testHooksProvidersAddsManagersProperly()
+    {
+        $mock = \Mockery::mock();
+        $repository = \Mockery::mock(Repository::class);
+        $container = \Mockery::mock(ContainerInterface::class);
+        $provider = new HooksProvider($this->theme);
+        $actionManager = new ActionManager($container);
+        $filterManager = new FilterManager($container);
+
+        $repository->shouldReceive('get')
+            ->with('hooks.handlerNamespace', 'Theme\Hooks\Handlers')
+            ->andReturn('Theme\Hooks\Handlers')
+            ->once();
+
+        $repository->shouldReceive('get')
+            ->with('hooks.mutatorNamespace', 'Theme\Hooks\Mutators')
+            ->andReturn('Theme\Hooks\Mutators')
+            ->once();
+
+        $container->shouldReceive('get')
+            ->with(ActionManagerContract::class)
+            ->andReturn($actionManager)
+            ->once();
+
+        $container->shouldReceive('get')
+            ->with(FilterManagerContract::class)
+            ->andReturn($filterManager)
+            ->once();
+
+        $container->shouldReceive('set')
+            ->with(ActionManagerContract::class, $actionManager)
+            ->once();
+
+        $container->shouldReceive('set')
+            ->with(FilterManagerContract::class, $filterManager)
+            ->once();
+
+        $provider->boot($container, $repository);
     }
 }
 
