@@ -4,12 +4,16 @@ namespace Tests\Aliases;
 
 use Ink\Aliases\Alias;
 use Ink\Aliases\Route;
+use Ink\Aliases\Action;
 use Ink\Aliases\Config;
+use Ink\Aliases\Filter;
 use Ink\Routing\Router;
 use Ink\Foundation\Theme;
 use Ink\Config\Repository;
 use Ink\Aliases\AliasLoader;
 use Ink\Aliases\Theme as ThemeAlias;
+use Ink\Hooks\ActionManager;
+use Ink\Hooks\FilterManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Ink\Contracts\Foundation\Theme as ThemeContract;
 
@@ -37,5 +41,7 @@ class StampAliasesTest extends MockeryTestCase
         $this->assertTrue(Route::getAliasRoot() instanceof Router); 
         $this->assertTrue(Config::getAliasRoot() instanceof Repository);
         $this->assertTrue(ThemeAlias::getAliasRoot() instanceof Theme);
+        $this->assertTrue(Action::getAliasRoot() instanceof ActionManager);
+        $this->assertTrue(Filter::getAliasRoot() instanceof FilterManager);
     }
 }

@@ -32,7 +32,7 @@ class TestName extends MockeryTestCase
         $this->clearGlobals();
         $this->manager = new FilterManager(new Container);
         $this->manager->name($this->filter);
-        $this->manager->setTransformerNamespace('Tests\Hooks');
+        $this->manager->setMutatorNamespace('Tests\Hooks');
     }
 
      /**
@@ -52,18 +52,18 @@ class TestName extends MockeryTestCase
 
     
     /**
-     * Test that transformer namespace is settable inside action
+     * Test that mutator namespace is settable inside action
      * manager, from which it can infer their namespaces.
      *
      * @return void
      */
-    public function testTransformerNamespaceIsSetCorrectly()
+    public function testMutatorNamespaceIsSetCorrectly()
     {
-        $this->manager->setTransformerNamespace('Test\Hooks');
+        $this->manager->setMutatorNamespace('Test\Hooks');
 
         $this->assertSame(
             'Test\Hooks', 
-            TestHelpers::getProperty($this->manager, 'transformerNamespace')
+            TestHelpers::getProperty($this->manager, 'mutatorNamespace')
         );
     }
 
@@ -89,15 +89,15 @@ class TestName extends MockeryTestCase
 
     /**
      * Test if manager will fail to compile if given non
-     * existent transformer as responder.
+     * existent mutator as responder.
      *
      * @return void
      */
-    public function testHandlerCompilationFailsIfGivenBadTransformer()
+    public function testHandlerCompilationFailsIfGivenBadMutator()
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->add('NonExistentTransformer@foo');
+        $this->manager->use('NonExistentMutator@foo');
     }
 
     /**
@@ -106,12 +106,12 @@ class TestName extends MockeryTestCase
      *
      * @return void
      */
-    public function testTransformerCompilationFailsIfGivenBadTransfomerMethod()
+    public function testMutatorCompilationFailsIfGivenBadMutatorMethod()
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->add(
-            $this->mockTransfomerString('foo')
+        $this->manager->use(
+            $this->mockMutatorString('foo')
         );
     }
 
@@ -125,7 +125,7 @@ class TestName extends MockeryTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->add(null);
+        $this->manager->use(null);
     }
 
     /**
@@ -134,19 +134,19 @@ class TestName extends MockeryTestCase
      *
      * @return void
      */
-    public function testTransformerIsNotCompiledIfPassedCallable()
+    public function testMutatorIsNotCompiledIfPassedCallable()
     {
-        $stub = new StubTransformer;
+        $stub = new StubMutator;
         $callable = 'Ink\Hooks\add_action';
         $callableObject = [$stub, 'addBar'];
 
-        $this->mockAddFilterWithTransformer($callable);
-        $this->mockAddFilterWithTransformer($callableObject);
+        $this->mockAddFilterWithMutator($callable);
+        $this->mockAddFilterWithMutator($callableObject);
 
         $this->manager
-            ->add($callable);
+            ->use($callable);
         $this->manager
-            ->add($callableObject);
+            ->use($callableObject);
     }
 
     /**
@@ -155,13 +155,13 @@ class TestName extends MockeryTestCase
      *
      * @return void
      */
-    public function testCallableTransformerIsCompiledIfForced()
+    public function testCallableMutatorIsCompiledIfForced()
     {
-        $callable = function ($value, StubTransformer $stub) {
-            return $stub instanceof StubTransformer;
+        $callable = function ($value, StubMutator $stub) {
+            return $stub instanceof StubMutator;
         };
 
-        $this->mockAddFilterWithTransformer(
+        $this->mockAddFilterWithMutator(
             Mockery::on(
                 function ($callback) {
                     return $callback('foo');
@@ -171,18 +171,18 @@ class TestName extends MockeryTestCase
 
         $this->manager
             ->forceCompilation()
-            ->add($callable);
+            ->use($callable);
     }
 
     /**
-     * Test if passing proper transformer string will compile
+     * Test if passing proper mutator string will compile
      * to correct callback handler.
      *
      * @return void
      */
-    public function testCreatesCallbackWhenGivenTransformerString()
+    public function testCreatesCallbackWhenGivenMutatorString()
     {
-        $this->mockAddFilterWithTransformer(
+        $this->mockAddFilterWithMutator(
             Mockery::on(
                 function ($callback) {
                     return $callback('foo') === 'foobar';
@@ -190,20 +190,20 @@ class TestName extends MockeryTestCase
             )
         );
 
-        $this->manager->add(
-            $this->mockTransfomerString('addBar')
+        $this->manager->use(
+            $this->mockMutatorString('addBar')
         );
     }
 
     /**
-     * Test if manager can handle passing multiple transformers 
+     * Test if manager can handle passing multiple mutators 
      * as array, and creates a closure from them
      *
      * @return void
      */
-    public function testArrayWithTransformersIsCompiledToCallback()
+    public function testArrayWithMutatorsIsCompiledToCallback()
     {
-        $this->mockAddFilterWithTransformer(
+        $this->mockAddFilterWithMutator(
             Mockery::on(
                 function ($callback) {
                     return $callback('foo') == 'foobarbaz';
@@ -213,11 +213,11 @@ class TestName extends MockeryTestCase
 
         $this->manager
             ->forceCompilation()
-            ->add(
+            ->use(
                 [
-                    $this->mockTransfomerString('addBar'),
-                    function ($value, StubTransformer $transfomer) {
-                        if ($transfomer instanceof StubTransformer) {
+                    $this->mockMutatorString('addBar'),
+                    function ($value, StubMutator $mutator) {
+                        if ($mutator instanceof StubMutator) {
                             return $value . 'baz';
                         }
                     }
@@ -227,11 +227,11 @@ class TestName extends MockeryTestCase
     
     /**
      * Test if manager checks filters existence correctly for given
-     * transformer.
+     * mutator.
      *
      * @return void
      */
-    public function testManagerChecksFilterExistanceForTransformer()
+    public function testManagerChecksFilterExistanceForMutator()
     {
         $bazFunc = function () {
             return 1;
@@ -270,7 +270,7 @@ class TestName extends MockeryTestCase
      *
      * @return void
      */
-    public function testTransformerRemovalIsDelegatedCorrectly()
+    public function testMutatorRemovalIsDelegatedCorrectly()
     {   
         $func = function () {
             return 1;
@@ -314,19 +314,19 @@ class TestName extends MockeryTestCase
 
     /**
      * Mock wordpress add_filter function with correct arguments,
-     * except custom function that transforms the passed value.
+     * except custom function that mutates the passed value.
      *
-     * @param mixed $transformer
+     * @param mixed $mutator
      * 
      * @return void
      */
-    protected function mockAddFilterWithTransformer($transformer)
+    protected function mockAddFilterWithMutator($mutator)
     {
         TestHelpers::functions()
             ->shouldReceive('add_filter')
             ->with(
                 $this->filter,
-                $transformer,
+                $mutator,
                 10,
                 1
             )
@@ -334,20 +334,20 @@ class TestName extends MockeryTestCase
     }
 
     /**
-     * Return mock transformer string that can be compiled
+     * Return mock mutator string that can be compiled
      * by action manager.
      *
      * @param string $method
      * 
      * @return string
      */
-    protected function mockTransfomerString(string $method = '')
+    protected function mockMutatorString(string $method = '')
     {
-        return 'StubTransformer' . ($method != '' ? '@' . $method : $method);
+        return 'StubMutator' . ($method != '' ? '@' . $method : $method);
     }
 }
 
-class StubTransformer
+class StubMutator
 {
     /**
      * Add 'bar' string to another one

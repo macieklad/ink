@@ -32,7 +32,7 @@ interface ActionManager
      * 
      * @return mixed
      */
-    public function respond(
+    public function handle(
         $with,
         int $priority = 10,
         int $acceptedArgs = 1
@@ -86,14 +86,14 @@ interface ActionManager
     public function flush(int $priority = 10): ActionManager;
 
     /**
-     * Set the controller namespace, from which they can
+     * Set the namespace of handlers, from which they can
      * be inferred without providing namespace first.
      *
      * @param string $namespace
      * 
      * @return void
      */
-    public function setControllerNamespace(string $namespace) : ActionManager;
+    public function setHandlerNamespace(string $namespace) : ActionManager;
 
     /**
      * Force compilation of callable handlers passed

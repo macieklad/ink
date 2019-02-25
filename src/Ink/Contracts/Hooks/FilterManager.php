@@ -34,44 +34,44 @@ interface FilterManager
     public function apply($value, ...$args);
 
     /**
-     * Add a transformer to the filter, with priority and 
-     * maximum allowed arguments.
+     * Use mutating function while calling filter,
+     * and define its priority and allowed args.
      *
-     * @param Closure|string|array $transformer
+     * @param Closure|string|array $mutator
      * @param integer              $priority
      * @param integer              $acceptedArgs
      * 
      * @return mixed
      */
-    public function add(
-        $transformer,
+    public function use(
+        $mutator,
         int $priority = 10,
         int $acceptedArgs = 1
     );
 
     /**
      * Check if filter with the given name is defined
-     * with any transformers.
+     * with any mutators.
      *
-     * @param mixed $transformer
+     * @param mixed $mutator
      * 
      * @return boolean
      */
-    public function exists($transformer) : bool;
+    public function exists($mutator) : bool;
 
     /**
-     * Detach single or multiple transformers 
+     * Detach single or multiple mutators 
      * from the filter, with given priority.
      *
-     * @param Closure|string|array $transformers
+     * @param Closure|string|array $mutators
      * @param integer              $priority
      * 
      * @return Ink\Contracts\Hooks\FilterManager
      */
-    public function detach($transformers, int $priority = 10) : FilterManager;
+    public function detach($mutators, int $priority = 10) : FilterManager;
 
     /**
-     * Remove all possible transformers of given
+     * Remove all possible mutators of given
      * priorityfrom the filter.
      *
      * @param integer $priority
@@ -81,7 +81,7 @@ interface FilterManager
     public function flush(int $priority = 10) : FilterManager;
 
     /**
-     * Force compilation of callable transformers passed
+     * Force compilation of callable mutators passed
      * as arguments to the filter manager
      *
      * @return Ink\Contracts\Hooks\FilterManager
@@ -89,12 +89,12 @@ interface FilterManager
     public function forceCompilation() : FilterManager;
 
     /**
-     * Set the namespace from where transformers may be inferred,
+     * Set the namespace from where mutators may be inferred,
      * instead of passing full namespace each time.
      *
      * @param string $namespace
      * 
      * @return Ink\Contracts\Hooks\FilterManager
      */
-    public function setTransformerNamespace(string $namespace) : FilterManager;
+    public function setMutatorNamespace(string $namespace) : FilterManager;
 }

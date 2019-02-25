@@ -71,7 +71,7 @@ class ActionManager implements ActionManagerContract
      * 
      * @return mixed 
      */
-    public function respond(
+    public function handle(
         $with,
         int $priority = 10,
         int $acceptedArgs = 1
@@ -105,7 +105,7 @@ class ActionManager implements ActionManagerContract
         }
 
         if (\is_string($handler)) {
-            return $this->compileControllerHandler($handler);
+            return $this->compileClassHandler($handler);
         }
 
         throw new \InvalidArgumentException(
@@ -134,13 +134,13 @@ class ActionManager implements ActionManagerContract
     }
 
     /**
-     * Compile handler in form of Controller@handler
+     * Compile handler in form of Class@handler
      *
      * @param string $handler
      * 
      * @return void
      */
-    public function compileControllerHandler(string $handler)
+    public function compileClassHandler(string $handler)
     {
         $parts = explode('@', $handler);
         $controller = $parts[0];
@@ -263,14 +263,14 @@ class ActionManager implements ActionManagerContract
     }
 
     /**
-     * Set the controller namespace, from which they can
+     * Set the namespace of handlers, from which they can
      * be inferred without providing namespace first.
      *
      * @param string $namespace
      * 
      * @return void
      */
-    public function setControllerNamespace(string $namespace) : ActionManagerContract
+    public function setHandlerNamespace(string $namespace) : ActionManagerContract
     {
         $this->controllerNamespace = $namespace;
 

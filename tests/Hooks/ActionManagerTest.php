@@ -42,7 +42,7 @@ class ActionManagerTest extends MockeryTestCase
         $this->container = new Container;
         $this->manager = new ActionManager($this->container);
         $this->manager->name($this->action);
-        $this->manager->setControllerNamespace('Tests\Hooks');
+        $this->manager->setHandlerNamespace('Tests\Hooks');
     }
 
     /**
@@ -69,7 +69,7 @@ class ActionManagerTest extends MockeryTestCase
      */
     public function testControllerNamespaceIsSetCorrectly()
     {
-        $this->manager->setControllerNamespace('Foo\Bar');
+        $this->manager->setHandlerNamespace('Foo\Bar');
 
         $this->assertSame(
             'Foo\Bar', 
@@ -78,8 +78,8 @@ class ActionManagerTest extends MockeryTestCase
     }
 
     /**
-     * Test if manager will fail to compile if given non
-     * existent controller as responder.
+     * Test if manager will fail to compile if given 
+     * non existent controller as handler.
      *
      * @return void
      */
@@ -87,7 +87,7 @@ class ActionManagerTest extends MockeryTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->respond('NonExistentController@foo');
+        $this->manager->handle('NonExistentController@foo');
     }
 
     /**
@@ -100,7 +100,7 @@ class ActionManagerTest extends MockeryTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->respond(
+        $this->manager->handle(
             $this->mockControllerActionString('foo')
         );
     }
@@ -115,7 +115,7 @@ class ActionManagerTest extends MockeryTestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $this->manager->respond(null);
+        $this->manager->handle(null);
     }
 
     /**
@@ -134,7 +134,7 @@ class ActionManagerTest extends MockeryTestCase
             )
         );
 
-        $this->manager->respond(
+        $this->manager->handle(
             $this->mockControllerActionString('handler')
         );
     }
@@ -155,9 +155,9 @@ class ActionManagerTest extends MockeryTestCase
         $this->mockAddActionWithHandler($callableObject);
 
         $this->manager
-            ->respond($callable);
+            ->handle($callable);
         $this->manager
-            ->respond($callableObject);
+            ->handle($callableObject);
     }
 
     /**
@@ -182,7 +182,7 @@ class ActionManagerTest extends MockeryTestCase
 
         $this->manager
             ->forceCompilation()
-            ->respond($callable);
+            ->handle($callable);
     }
 
     /**
@@ -205,7 +205,7 @@ class ActionManagerTest extends MockeryTestCase
 
         $this->manager
             ->forceCompilation()
-            ->respond(
+            ->handle(
                 [
                     $this->mockControllerActionString('isManager'),
                     $this->mockControllerActionString('isManager'),
