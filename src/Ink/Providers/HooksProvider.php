@@ -21,23 +21,60 @@ class HooksProvider extends ServiceProvider
      */
     public function boot(ContainerInterface $container, Repository $config)
     {
-        $handlerNamespace = $config->get(
+        $this->container = $container;
+        $this->config = $config;
+
+        $this->bootstrapManagers();
+        $this->loadHooks();
+    }
+
+    /**
+     * Create global hook managers and configure them
+     *
+     * @return void
+     */
+    protected function bootstrapManagers()
+    {
+        $handlerNamespace = $this->config->get(
             'hooks.handlerNamespace', 
             'Theme\Hooks\Handlers'
         );
 
-        $mutatorNamespace = $config->get(
+        $mutatorNamespace = $this->config->get(
             'hooks.mutatorNamespace',
             'Theme\Hooks\Mutators'
         );
 
-        $actionManager = $container->get(ActionManager::class);
-        $filterManager = $container->get(FilterManager::class);
+        $this->actionManager = $this->container->get(ActionManager::class);
+        $this->filterManager = $this->container->get(FilterManager::class);
 
-        $actionManager->setHandlerNamespace($handlerNamespace);
-        $filterManager->setMutatorNamespace($mutatorNamespace);
+        $this->actionManager->setHandlerNamespace($handlerNamespace);
+        $this->filterManager->setMutatorNamespace($mutatorNamespace);
 
-        $container->set(ActionManager::class, $actionManager);
-        $container->set(FilterManager::class, $filterManager);
+        $this->container->set(ActionManager::class, $this->actionManager);
+        $this->container->set(FilterManager::class, $this->filterManager);
+    }
+
+    /**
+     * Load hooks registered in files
+     *
+     * @return void
+     */
+    protected function loadHooks()
+    {
+        $hookFiles = $this->config->get(
+            'hooks.files', 
+            [   
+                $this->theme->basePath('src/Hooks/actions.php'),
+                $this->theme->basePath('src/Hooks/filters.php')
+            ]
+        );
+        
+        $actionManager = $this->actionManager;
+        $filterManager = $this->filterManager;
+
+        foreach ($hookFiles as $hookFile) {
+            include_once $hookFile;
+        }
     }
 }

@@ -118,6 +118,16 @@ class ProvidersTest extends MockeryTestCase
         $actionManager = new ActionManager($container);
         $filterManager = new FilterManager($container);
 
+        $this->theme->shouldReceive('basePath')
+            ->with('src/Hooks/filters.php')
+            ->andReturn('src/Hooks/filters.php')
+            ->once();
+
+        $this->theme->shouldReceive('basePath')
+            ->with('src/Hooks/actions.php')
+            ->andReturn('src/Hooks/actions.php')
+            ->once();
+
         $repository->shouldReceive('get')
             ->with('hooks.handlerNamespace', 'Theme\Hooks\Handlers')
             ->andReturn('Theme\Hooks\Handlers')
@@ -126,6 +136,20 @@ class ProvidersTest extends MockeryTestCase
         $repository->shouldReceive('get')
             ->with('hooks.mutatorNamespace', 'Theme\Hooks\Mutators')
             ->andReturn('Theme\Hooks\Mutators')
+            ->once();
+
+        $repository->shouldReceive('get')
+            ->with(
+                'hooks.files', [
+                'src/Hooks/actions.php',
+                'src/Hooks/filters.php'
+                ]
+            )
+            ->andReturn(
+                [
+                    __DIR__ . '/hooks.php'
+                ]
+            )
             ->once();
 
         $container->shouldReceive('get')
@@ -147,6 +171,7 @@ class ProvidersTest extends MockeryTestCase
             ->once();
 
         $provider->boot($container, $repository);
+        $this->expectOutputString('Hooks loaded !');
     }
 }
 
