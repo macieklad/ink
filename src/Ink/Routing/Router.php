@@ -60,7 +60,7 @@ class Router implements RouterContract
     {
         $route = $this->createRoute(['GET'], $uri, $attributes);
     }
-
+    
     /**
      * Register POST request route
      *
