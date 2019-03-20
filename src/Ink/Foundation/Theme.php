@@ -7,7 +7,6 @@ use function DI\get;
 use Ink\Routing\Router;
 use DI\ContainerBuilder;
 use Ink\Config\Repository;
-use Ink\Foundation\Kernel;
 use Ink\Hooks\ActionManager;
 use Ink\Hooks\FilterManager;
 use Psr\Container\ContainerInterface;
@@ -26,7 +25,7 @@ class Theme implements ThemeContract
     /**
      * Container instance
      *
-     * @var DI\Container
+     * @var Container
      */
     protected $container;
 
@@ -79,9 +78,9 @@ class Theme implements ThemeContract
     /**
      * Theme container accessor
      *
-     * @return void
+     * @return Container
      */
-    public function container(): ContainerInterface
+    public function container(): Container
     {
         return $this->container;
     }
@@ -127,7 +126,7 @@ class Theme implements ThemeContract
      *
      * @param string $path
      * 
-     * @return void
+     * @return string
      */
     public function basePath(string $path = ''): string
     {
@@ -139,7 +138,7 @@ class Theme implements ThemeContract
      *
      * @param string $path
      * 
-     * @return void
+     * @return string
      */
     public function configPath(string $path = ''): string
     {
@@ -170,7 +169,7 @@ class Theme implements ThemeContract
      *
      * @param integer|string $offset
      * 
-     * @return void
+     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -182,7 +181,7 @@ class Theme implements ThemeContract
      *
      * @param integer|string $offset
      * 
-     * @return void
+     * @return mixed
      */
     public function offsetGet($offset) 
     {

@@ -2,8 +2,7 @@
 
 namespace Ink\Foundation\Console;
 
-use Ink\Contracts\Config\Repository;
-use Ink\Foundation\Theme;
+use Ink\Contracts\Foundation\Theme;
 use Symfony\Component\Console\Application;
 
 class Cli
@@ -22,18 +21,17 @@ class Cli
      */
     protected $theme;
 
-    public function __construct(string $themeBase)
+    public function __construct(Theme $theme)
     {
         $this->application = new Application();
         $this->application->setName('Stamp Theme Assistant');
-        $this->application->setVersion('0.1.0');
-
-        $this->theme = new Theme($themeBase);
+        $this->application->setVersion('alpha');
+        $this->theme = $theme;
     }
 
     public function prepare()
     {
-        $config = $this->theme->container()->get(Repository::class);
+        $config = $this->theme['config'];
         $commands = array_merge([], $config->get('console.commands', []));
 
         $this->application->addCommands($commands);

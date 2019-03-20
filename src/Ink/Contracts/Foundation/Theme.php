@@ -2,7 +2,7 @@
 
 namespace Ink\Contracts\Foundation;
 
-use Psr\Container\ContainerInterface;
+use DI\Container;
 
 interface Theme extends \ArrayAccess
 {
@@ -42,7 +42,7 @@ interface Theme extends \ArrayAccess
     /**
      * Return container that provides the theme with dependencies
      * 
-     * @return ContainerInterface
+     * @return Container
      */
-    public function container(): ContainerInterface;
+    public function container(): Container;
 }
