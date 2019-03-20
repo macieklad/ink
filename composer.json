@@ -1,5 +1,6 @@
 {
     "name": "stamp/components",
+    "type": "library",
     "description": "Set of components for easier wordpress development",
     "authors": [
         {
