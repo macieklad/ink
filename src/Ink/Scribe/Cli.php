@@ -1,6 +1,6 @@
 <?php
 
-namespace Ink\Foundation\Console;
+namespace Ink\Scribe;
 
 use Ink\Contracts\Foundation\Theme;
 use Symfony\Component\Console\Application;
