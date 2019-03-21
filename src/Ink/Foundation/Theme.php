@@ -142,11 +142,24 @@ class Theme implements ThemeContract
      */
     public function configPath(string $path = ''): string
     {
-        $config = $this->basePath . DIRECTORY_SEPARATOR . "config";
-
-        return $config . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        return $this->basePath(
+            "config" . ($path ? DIRECTORY_SEPARATOR . $path : $path)
+        );
     }
 
+    /**
+     * Return path to the composer vendor folder
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function vendorPath(string $path = ''): string
+    {
+        return $this->basePath(
+            "vendor" . ($path ? DIRECTORY_SEPARATOR . $path : $path)
+        );
+    }
 
     /**
      * Bootstrap the theme core components

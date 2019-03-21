@@ -33,6 +33,16 @@ interface Theme extends \ArrayAccess
     public function configPath(string $path = ''): string;
 
     /**
+     * Return path relative to the vendor composer
+     * directory inside the root directory
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    public function vendorPath(string $path = ''): string;
+
+    /**
      * Bootstrap the theme
      *
      * @return void
