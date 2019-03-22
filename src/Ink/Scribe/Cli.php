@@ -5,6 +5,7 @@ namespace Ink\Scribe;
 use Ink\Contracts\Foundation\Theme;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Ink\Foundation\Console\DiscoverExtensionsCommand;
 
 class Cli
 {
@@ -44,36 +45,36 @@ class Cli
     protected function loadCommands()
     {
         $manifestPath = $this->theme->vendorPath('scribe-manifest.json');
-        $manifest = [];
+        $manifest = $this->theme->container()->get(ExtensionManifest::class);
+
+        $manifest->loadFrom($manifestPath);
 
         $this->addBuiltInCommands();
-
-        if (file_exists($manifestPath)) {
-            $manifest = json_decode(file_get_contents($manifestPath), true);
-        }
-
-        if (array_key_exists("commands", $manifest)) {
-            $this->addExtensionCommands($manifest["commands"]);
-        }
     }
 
     protected function addBuiltInCommands()
     {
-        $this->application->addCommands([]);
+        $this->addCommands([
+            DiscoverExtensionsCommand::class
+        ]);
     }
 
-    protected function addExtensionCommands(array $commands)
+    protected function addCommands(array $commands)
     {
         $safeCommands = [];
 
         foreach ($commands as $command) {
-            if (is_subclass_of($command, Command::class)) {
+            if (is_a($command, Command::class, true)) {
                 array_push($safeCommands, $command);
             } else {
                 echo "WARNING: Class {$command} is not an instance of Symfony's Command class, skipping initialization. \n";
             }
         }
 
-        $this->application->addCommands($safeCommands);
+        $this->application->addCommands(
+            array_map(function ($command) {
+                return $this->theme->container()->get($command);
+            }, $safeCommands)
+        );
     }
 }

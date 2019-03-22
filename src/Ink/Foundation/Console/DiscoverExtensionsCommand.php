@@ -1,7 +1,8 @@
 <?php
 
-namespace Ink\Scribe;
+namespace Ink\Foundation\Console;
 
+use Ink\Scribe\ExtensionManifest;
 use Ink\Contracts\Foundation\Theme;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,7 +65,7 @@ class DiscoverExtensionsCommand extends Command
      *
      * @return void
      */
-    public function discoverExtensions(): void
+    protected function discoverExtensions(): void
     {
         $vendorDir= $this->theme->vendorPath();
         $composerDir = $vendorDir . DIRECTORY_SEPARATOR . "composer";
@@ -87,9 +88,9 @@ class DiscoverExtensionsCommand extends Command
      *
      * @return void
      */
-    protected static function buildExtensionManifest(array $packages, string $location): void
+    protected function buildExtensionManifest(array $packages, string $location): void
     {
-        $manifest = new ExtensionManifest();
+        $manifest = $this->theme->container()->get(ExtensionManifest::class);
 
         foreach ($packages as $package) {
             if (array_key_exists("extra", $package)) {
