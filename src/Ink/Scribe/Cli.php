@@ -3,7 +3,9 @@
 namespace Ink\Scribe;
 
 use Ink\Contracts\Foundation\Theme;
+use Ink\Foundation\Console\PublishResourcesCommand;
 use Symfony\Component\Console\Application;
+use Ink\Contracts\Scribe\ExtensionManifest;
 use Symfony\Component\Console\Command\Command;
 use Ink\Foundation\Console\DiscoverExtensionsCommand;
 
@@ -23,6 +25,13 @@ class Cli
      */
     protected $theme;
 
+    /**
+     * Installed extensions manifest.
+     *
+     * @var \Ink\Contracts\Scribe\ExtensionManifest
+     */
+    protected $manifest;
+
     public function __construct(Theme $theme)
     {
         $this->application = new Application();
@@ -33,6 +42,12 @@ class Cli
 
     public function prepare()
     {
+        $manifestPath = $this->theme->vendorPath('scribe-manifest.json');
+        $this->manifest = $this->theme->container()->get(ExtensionManifest::class);
+        $this->theme->container()->set(ExtensionManifest::class, $this->manifest);
+
+        $this->manifest->loadFrom($manifestPath);
+
         $this->loadCommands();
     }
 
@@ -44,18 +59,15 @@ class Cli
 
     protected function loadCommands()
     {
-        $manifestPath = $this->theme->vendorPath('scribe-manifest.json');
-        $manifest = $this->theme->container()->get(ExtensionManifest::class);
-
-        $manifest->loadFrom($manifestPath);
-
         $this->addBuiltInCommands();
+        $this->addCommands($this->manifest->commands());
     }
 
     protected function addBuiltInCommands()
     {
         $this->addCommands([
-            DiscoverExtensionsCommand::class
+            DiscoverExtensionsCommand::class,
+            PublishResourcesCommand::class
         ]);
     }
 
