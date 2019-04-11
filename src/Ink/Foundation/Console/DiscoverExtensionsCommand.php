@@ -41,15 +41,17 @@ class DiscoverExtensionsCommand extends Command
     {
         $this
             ->setDescription('Generate extension manifest to discover any resources provided by them.')
-            ->setHelp('It will parse all packages in composer installed.json file, 
+            ->setHelp(
+                'It will parse all packages in composer installed.json file, 
                             look for ones that define "stamp" extra field, and create collective list 
-                            of resources that can be used by scribe.');
+                            of resources that can be used by scribe.'
+            );
     }
 
     /**
      * Execute the command.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return void
@@ -84,7 +86,7 @@ class DiscoverExtensionsCommand extends Command
      * Build the stamp extension manifest from array of composer
      * package definition files
      *
-     * @param array $packages
+     * @param array  $packages
      * @param string $location
      *
      * @return void

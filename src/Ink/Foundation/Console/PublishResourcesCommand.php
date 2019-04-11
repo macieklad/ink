@@ -46,8 +46,8 @@ class PublishResourcesCommand extends Command
     public function __construct(
         ContainerInterface $container,
         ThemeAssistant $assistant,
-        ExtensionManifest $manifest)
-    {
+        ExtensionManifest $manifest
+    ) {
         $this->container = $container;
         $this->assistant = $assistant;
         $this->manifest = $manifest;
@@ -64,16 +64,18 @@ class PublishResourcesCommand extends Command
     {
         $this
             ->setDescription('Publish all extension resources')
-            ->setHelp('This command will publish all resources registered by extensions, such as config files.
+            ->setHelp(
+                'This command will publish all resources registered by extensions, such as config files.
                             It should be run only once, as it will overwrite any existing files published by extensions,
                             replacing them with a default clean state. To publish single files, use built in commands
-                            provided by the extension authors.');
+                            provided by the extension authors.'
+            );
     }
 
     /**
      * Execute the command.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return void

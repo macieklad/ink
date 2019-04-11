@@ -65,10 +65,12 @@ class Cli
 
     protected function addBuiltInCommands()
     {
-        $this->addCommands([
-            DiscoverExtensionsCommand::class,
-            PublishResourcesCommand::class
-        ]);
+        $this->addCommands(
+            [
+                DiscoverExtensionsCommand::class,
+                PublishResourcesCommand::class
+            ]
+        );
     }
 
     protected function addCommands(array $commands)
@@ -84,9 +86,11 @@ class Cli
         }
 
         $this->application->addCommands(
-            array_map(function ($command) {
-                return $this->theme->container()->get($command);
-            }, $safeCommands)
+            array_map(
+                function ($command) {
+                    return $this->theme->container()->get($command);
+                }, $safeCommands
+            )
         );
     }
 }

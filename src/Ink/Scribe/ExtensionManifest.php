@@ -127,7 +127,8 @@ class ExtensionManifest implements ManifestContract
      *
      * @return array
      */
-    protected function extractKeys(array $source, array $keysWithDefaults) {
+    protected function extractKeys(array $source, array $keysWithDefaults)
+    {
         foreach ($keysWithDefaults as $key => $default) {
             if (array_key_exists($key, $source)) {
                 $keysWithDefaults[$key] = $source[$key];
