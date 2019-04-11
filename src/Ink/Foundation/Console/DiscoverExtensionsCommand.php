@@ -25,6 +25,11 @@ class DiscoverExtensionsCommand extends Command
      */
     protected $theme;
 
+    /**
+     * Initialize the command.
+     *
+     * @param Theme $theme
+     */
     public function __construct(Theme $theme)
     {
         $this->theme = $theme;
@@ -40,11 +45,16 @@ class DiscoverExtensionsCommand extends Command
     public function configure(): void
     {
         $this
-            ->setDescription('Generate extension manifest to discover any resources provided by them.')
+            ->setDescription(
+                'Generate extension manifest to
+                                discover any resources provided by them.'
+            )
             ->setHelp(
-                'It will parse all packages in composer installed.json file, 
-                            look for ones that define "stamp" extra field, and create collective list 
-                            of resources that can be used by scribe.'
+                'It will parse all packages in composer
+                        installed.json file, look for ones that 
+                        define "stamp" extra field, and create 
+                        collective list of resources that can be 
+                        used by scribe.'
             );
     }
 
@@ -91,8 +101,10 @@ class DiscoverExtensionsCommand extends Command
      *
      * @return void
      */
-    protected function buildExtensionManifest(array $packages, string $location): void
-    {
+    protected function buildExtensionManifest(
+        array $packages,
+        string $location
+    ): void {
         $manifest = $this->theme->container()->get(ExtensionManifest::class);
 
         foreach ($packages as $package) {

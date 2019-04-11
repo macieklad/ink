@@ -23,6 +23,12 @@ class ThemeAssistant implements ThemeAssistantContract
      */
     protected $theme;
 
+    /**
+     * Initialize the theme assistant object
+     *
+     * @param Filesystem $fs
+     * @param Theme      $theme
+     */
     public function __construct(Filesystem $fs, Theme $theme)
     {
         $this->fs = $fs;
@@ -32,8 +38,8 @@ class ThemeAssistant implements ThemeAssistantContract
     /**
      * Copy a config file to the theme config directory
      *
-     * @param $file string
-     * @param $configName string
+     * @param string $file
+     * @param string $configName
      *
      * @throws FileNotFoundException
      *
@@ -53,8 +59,8 @@ class ThemeAssistant implements ThemeAssistantContract
     /**
      * Copy any file to a directory relative to the theme root
      *
-     * @param $file string
-     * @param $path string
+     * @param string $file
+     * @param string $path
      *
      * @return void
      */

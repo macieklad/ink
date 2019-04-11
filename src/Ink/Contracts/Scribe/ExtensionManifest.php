@@ -7,7 +7,7 @@ interface ExtensionManifest
     /**
      * Writes the created manifest to a file
      *
-     * @param $location string
+     * @param string $location
      *
      * @return mixed
      */
@@ -16,7 +16,7 @@ interface ExtensionManifest
     /**
      * Loads contents of manifest file
      *
-     * @param $location string
+     * @param string $location
      *
      * @return void
      */

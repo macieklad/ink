@@ -1,5 +1,4 @@
 <?php
-
 namespace Ink\Scribe;
 
 use Ink\Contracts\Scribe\ExtensionManifest as ManifestContract;

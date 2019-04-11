@@ -43,6 +43,13 @@ class PublishResourcesCommand extends Command
      */
     protected $container;
 
+    /**
+     * Instantiate the command.
+     *
+     * @param ContainerInterface $container
+     * @param ThemeAssistant     $assistant
+     * @param ExtensionManifest  $manifest
+     */
     public function __construct(
         ContainerInterface $container,
         ThemeAssistant $assistant,
@@ -65,10 +72,13 @@ class PublishResourcesCommand extends Command
         $this
             ->setDescription('Publish all extension resources')
             ->setHelp(
-                'This command will publish all resources registered by extensions, such as config files.
-                            It should be run only once, as it will overwrite any existing files published by extensions,
-                            replacing them with a default clean state. To publish single files, use built in commands
-                            provided by the extension authors.'
+                'This command will publish all resources 
+                        registered by extensions, such as config 
+                        files. It should be run only once, as it will 
+                        overwrite any existing files published by extensions,
+                        replacing them with a default clean state. To publish 
+                        single files, use built in commands provided by the 
+                        extension authors.'
             );
     }
 
@@ -93,15 +103,25 @@ class PublishResourcesCommand extends Command
                 $this->container->get($resource)->publish();
                 $successCount++;
             } else {
-                $output->writeln("WARNING: Resource $resource is not implementing Stamp Resource interface, skipping ...");
+                $output->writeln(
+                    "WARNING: Resource $resource 
+                        is not implementing Stamp Resource 
+                        interface, skipping ..."
+                );
                 $failCount++;
             }
         }
 
-        $output->writeln("Finished publishing resources. $successCount published, $failCount failed.");
+        $output->writeln(
+            "Finished publishing resources. 
+                $successCount published, $failCount failed."
+        );
 
         if ($failCount != 0) {
-            $output->writeln("There were some failures, please check the output log above");
+            $output->writeln(
+                "There were some failures,
+                    please check the output log above"
+            );
         }
     }
 }

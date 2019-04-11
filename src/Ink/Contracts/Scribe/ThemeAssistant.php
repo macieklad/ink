@@ -7,8 +7,8 @@ interface ThemeAssistant
     /**
      * Copy a config file to the theme config directory
      *
-     * @param $file string
-     * @param $configName string
+     * @param string $file
+     * @param string $configName
      *
      * @return void
      */
@@ -17,8 +17,8 @@ interface ThemeAssistant
     /**
      * Copy any file to a directory relative to the theme root
      *
-     * @param $file string
-     * @param $path string
+     * @param string $file
+     * @param string $path
      *
      * @return void
      */

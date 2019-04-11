@@ -32,6 +32,11 @@ class Cli
      */
     protected $manifest;
 
+    /**
+     * Initialize new scribe instance, by wrapping symfony application.
+     *
+     * @param Theme $theme
+     */
     public function __construct(Theme $theme)
     {
         $this->application = new Application();
@@ -40,7 +45,15 @@ class Cli
         $this->theme = $theme;
     }
 
-    public function prepare()
+    /**
+     * Prepare the cli to be run.
+     *
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     *
+     * @return void
+     */
+    public function prepare(): void
     {
         $manifestPath = $this->theme->vendorPath('scribe-manifest.json');
         $this->manifest = $this->theme->container()->get(ExtensionManifest::class);
@@ -52,18 +65,36 @@ class Cli
     }
 
 
-    public function run()
+    /**
+     * Fire the CLI
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function run(): void
     {
         $this->application->run();
     }
 
-    protected function loadCommands()
+    /**
+     * Load commands provided to the cli, both the built-ins
+     * and the ones provided by extensions.
+     *
+     * @return void
+     */
+    protected function loadCommands(): void
     {
         $this->addBuiltInCommands();
         $this->addCommands($this->manifest->commands());
     }
 
-    protected function addBuiltInCommands()
+    /**
+     * Add built-in commands of the scribe cli
+     *
+     * @return void
+     */
+    protected function addBuiltInCommands(): void
     {
         $this->addCommands(
             [
@@ -73,7 +104,14 @@ class Cli
         );
     }
 
-    protected function addCommands(array $commands)
+    /**
+     * Add any commands to the cli
+     *
+     * @param array $commands
+     *
+     * @return void
+     */
+    protected function addCommands(array $commands): void
     {
         $safeCommands = [];
 
@@ -81,7 +119,8 @@ class Cli
             if (is_a($command, Command::class, true)) {
                 array_push($safeCommands, $command);
             } else {
-                echo "WARNING: Class {$command} is not an instance of Symfony's Command class, skipping initialization. \n";
+                echo "WARNING: Class {$command} is not an instance of Symfony's 
+                      Command class, skipping initialization. \n";
             }
         }
 
