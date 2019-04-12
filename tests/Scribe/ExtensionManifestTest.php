@@ -5,6 +5,7 @@ namespace Ink\Tests\Scribe;
 use Ink\Foundation\Theme;
 use Ink\Scribe\ExtensionManifest;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ExtensionManifestTest extends TestCase
 {
@@ -24,6 +25,20 @@ class ExtensionManifestTest extends TestCase
     protected $manifest;
 
     /**
+     * Filesystem utility class
+     *
+     * @var Filesystem
+     */
+    protected $fs;
+
+    /**
+     * Manifest location
+     *
+     * @var string
+     */
+    protected $manifestName = "stamp-manifest.json";
+
+    /**
      * Prepare env for the test case
      *
      * @return void
@@ -32,8 +47,25 @@ class ExtensionManifestTest extends TestCase
     {
         $this->theme = new Theme(__DIR__ . "/theme");
         $this->manifest = new ExtensionManifest();
+        $this->fs = new Filesystem();
 
         parent::setUp();
+    }
+
+    /**
+     * Tear down the tests
+     *
+     * @return void
+     */
+    protected function tearDown()
+    {
+        $manifest = __DIR__ . "/{$this->manifestName}";
+
+        if ($this->fs->exists($manifest)) {
+            $this->fs->remove($manifest);
+        }
+
+        parent::tearDown();
     }
 
     /**
@@ -48,6 +80,59 @@ class ExtensionManifestTest extends TestCase
 
         $this->assertCount(2, $this->manifest->commands());
         $this->assertCount(2, $this->manifest->resources());
+    }
+    /**
+     * Test if adding parsed extension array to manifest
+     * resolves to correct fields in the class
+     *
+     * @return void
+     */
+    public function testExtensionsAreAddedToManifest()
+    {
+        $this->manifest->addExtension(
+            [
+            "commands" => [
+                "StubCommand"
+            ],
+            "resources" => [
+                "StubResource"
+            ]
+            ]
+        );
+
+        $this->assertEquals(["StubCommand"], $this->manifest->commands());
+        $this->assertEquals(["StubResource"], $this->manifest->resources());
+    }
+
+    /**
+     * Check if manifest can write itself to a file,
+     * and has correct JSON scheme
+     *
+     * @return void
+     */
+    public function testExtensionManifestWritesFile()
+    {
+        $manifest = __DIR__ . "/{$this->manifestName}";
+        $extension = [
+            "commands" => [
+                "StubCommand"
+            ],
+            "resources" => [
+                "StubResource"
+            ]
+        ];
+
+        $this->manifest->addExtension($extension);
+        $this->manifest->write(__DIR__);
+
+        $this->assertTrue(
+            $this->fs->exists($manifest)
+        );
+
+        $this->assertEquals(
+            json_encode($extension),
+            file_get_contents($manifest)
+        );
     }
 
 }
