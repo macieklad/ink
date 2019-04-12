@@ -1,0 +1,10 @@
+{
+  "commands":[
+    "Ink\\Scribe\\Test",
+    "Ink\\Scribe\\Test"
+  ],
+  "resources":[
+    "Ink\\Resources\\Foo",
+    "Ink\\Resources\\Foo"
+  ]
+}

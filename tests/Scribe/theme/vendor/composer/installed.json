@@ -1,0 +1,30 @@
+[
+  {
+    "extra": {
+      "stamp": {
+        "commands": [
+          "\\Ink\\Tests\\Scribe\\StubCommand",
+          "\\Ink\\Tests\\Scribe\\StubResource"
+        ],
+        "resources": [
+          "\\Ink\\Tests\\Scribe\\StubResource",
+          "\\Ink\\Tests\\Scribe\\StubCommand"
+        ]
+      }
+    }
+  },
+  {
+    "extra": {
+      "stamp": {
+        "commands": [
+          "\\Ink\\Tests\\Scribe\\StubCommand",
+          "\\Ink\\Tests\\Scribe\\StubResource"
+        ],
+        "resources": [
+          "\\Ink\\Tests\\Scribe\\StubCommand",
+          "\\Ink\\Tests\\Scribe\\StubResource"
+        ]
+      }
+    }
+  }
+]
