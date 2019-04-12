@@ -66,8 +66,10 @@ class ThemeAssistant implements ThemeAssistantContract
      */
     public function publishResource(string $file, string $path = ''): void
     {
+        $destPath = $path == '' ? basename($file) : $path . "/" . basename($file);
+
         if ($this->fs->exists($file)) {
-            $this->fs->copy($file, $this->theme->basePath($path), true);
+            $this->fs->copy($file, $this->theme->basePath($destPath), true);
         } else {
             throw new FileNotFoundException($file);
         }
