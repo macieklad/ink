@@ -2,11 +2,10 @@
 
 namespace Tests\Foundation;
 
+use Whoops\Handler\Handler;
 use Whoops\Run;
-use DI\Container;
 use Ink\Foundation\Theme;
 use Ink\Config\Repository;
-use Ink\Foundation\Kernel;
 use Psr\Container\ContainerInterface;
 use Whoops\Handler\PrettyPageHandler;
 use Ink\Foundation\Bootstrap\HandleErrors;
@@ -16,6 +15,26 @@ use Ink\Foundation\Bootstrap\LoadConfiguration;
 
 class KernelCommandsTest extends MockeryTestCase
 {
+    /**
+     * Whoops error handling instance
+     *
+     * @var Run
+     */
+    protected $whoops;
+
+    /**
+     * Whoops error handler
+     *
+     * @var Handler
+     */
+    protected $whoopsHandler;
+
+    /**
+     * Config repository instance
+     *
+     * @var \Ink\Contracts\Config\Repository
+     */
+    protected $repository;
     /**
      * Set up the test
      *

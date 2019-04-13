@@ -43,7 +43,7 @@ class ExtensionManifestTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->theme = new Theme(__DIR__ . "/theme");
         $this->manifest = new ExtensionManifest();
@@ -57,9 +57,9 @@ class ExtensionManifestTest extends TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        $manifest = __DIR__ . "/{$this->manifestName}";
+        $manifest = $this->theme->vendorPath($this->manifestName);
 
         if ($this->fs->exists($manifest)) {
             $this->fs->remove($manifest);
@@ -76,7 +76,20 @@ class ExtensionManifestTest extends TestCase
      */
     public function testManifestLoadsProperly()
     {
-        $this->manifest->loadFrom($this->theme->basePath("stamp-manifest.json"));
+        $manifestPath = $this->theme->vendorPath($this->manifestName);
+        $contents = [
+            "commands" => [
+                "StubCommand",
+                "StubCommand",
+            ],
+            "resources" => [
+                "StubResource",
+                "StubResource"
+            ]
+        ];
+
+        $this->fs->dumpFile($manifestPath, json_encode($contents));
+        $this->manifest->loadFrom($manifestPath);
 
         $this->assertCount(2, $this->manifest->commands());
         $this->assertCount(2, $this->manifest->resources());

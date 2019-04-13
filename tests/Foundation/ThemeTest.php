@@ -1,7 +1,5 @@
 <?php
 
-use DI\Container;
-use Ink\Routing\Router;
 use Ink\Foundation\Theme;
 use Ink\Foundation\Kernel;
 use Psr\Container\ContainerInterface;

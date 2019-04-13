@@ -37,7 +37,7 @@ class ThemeAssistantTest extends TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->theme = new Theme(__DIR__ . "/theme");
         $this->fs = new Filesystem();
@@ -51,7 +51,7 @@ class ThemeAssistantTest extends TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $entities  = [
             "config/foo.php",
@@ -60,9 +60,11 @@ class ThemeAssistantTest extends TestCase
             "custom"
         ];
 
-        $entities = array_map(function ($path) {
-            return $this->theme->basePath($path);
-        }, $entities);
+        $entities = array_map(
+            function ($path) {
+                return $this->theme->basePath($path);
+            }, $entities
+        );
 
         $this->fs->remove($entities);
 
@@ -83,8 +85,12 @@ class ThemeAssistantTest extends TestCase
         $this->assistant->publishConfig($configSource);
         $this->assistant->publishConfig($configSource, $configCustomName);
 
-        $this->assertTrue($this->fs->exists("{$configDest}/{$configCustomName}.php"));
-        $this->assertTrue($this->fs->exists("{$configDest}/fooconfig.php"));
+        $this->assertTrue(
+            $this->fs->exists("{$configDest}/{$configCustomName}.php")
+        );
+        $this->assertTrue(
+            $this->fs->exists("{$configDest}/fooconfig.php")
+        );
 
         $this->expectException(FileNotFoundException::class);
         $this->assistant->publishConfig(__DIR__ . '/nonExistentFile');

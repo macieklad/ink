@@ -1,6 +1,6 @@
 <?php
 
-namespace Ink\Tests\Scribe;
+namespace Tests\Scribe;
 
 use Symfony\Component\Console\Command\Command;
 

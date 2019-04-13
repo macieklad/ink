@@ -1,6 +1,6 @@
 <?php
 
-namespace Ink\Tests\Scribe;
+namespace Tests\Scribe;
 
 use Ink\Contracts\Scribe\Resource;
 

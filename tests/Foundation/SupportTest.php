@@ -2,8 +2,6 @@
 
 namespace Tests\Foundation;
 
-use DI\Container;
-use Ink\Foundation\Kernel;
 use Ink\Foundation\Support;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
