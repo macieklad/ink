@@ -2,22 +2,17 @@
 
 namespace Ink\Scribe;
 
+use Ink\Tests\Scribe\StubCommand;
+use Psr\Log\LoggerInterface;
 use Ink\Contracts\Foundation\Theme;
-use Ink\Foundation\Console\PublishResourcesCommand;
 use Symfony\Component\Console\Application;
 use Ink\Contracts\Scribe\ExtensionManifest;
 use Symfony\Component\Console\Command\Command;
+use Ink\Foundation\Console\PublishResourcesCommand;
 use Ink\Foundation\Console\DiscoverExtensionsCommand;
 
-class Cli
+class Cli extends Application
 {
-    /**
-     * Symfony application instance
-     *
-     * @var Application;
-     */
-    protected $application;
-
     /**
      * Theme instance
      *
@@ -33,16 +28,24 @@ class Cli
     protected $manifest;
 
     /**
-     * Initialize new scribe instance, by wrapping symfony application.
+     * Logger instance
      *
-     * @param Theme $theme
+     * @var LoggerInterface
      */
-    public function __construct(Theme $theme)
+    protected $logger;
+
+    /**
+     * Construct the scribe cli
+     *
+     * @param Theme           $theme
+     * @param LoggerInterface $logger
+     */
+    public function __construct(Theme $theme, LoggerInterface $logger)
     {
-        $this->application = new Application();
-        $this->application->setName('Stamp Theme Assistant');
-        $this->application->setVersion('alpha');
         $this->theme = $theme;
+        $this->logger = $logger;
+
+        parent::__construct('Stamp Theme Assistant', '0.1.0');
     }
 
     /**
@@ -55,26 +58,14 @@ class Cli
      */
     public function prepare(): void
     {
-        $manifestPath = $this->theme->vendorPath('scribe-manifest.json');
+        $manifestPath = $this->theme->vendorPath('stamp-manifest.json');
         $this->manifest = $this->theme->container()->get(ExtensionManifest::class);
         $this->theme->container()->set(ExtensionManifest::class, $this->manifest);
 
         $this->manifest->loadFrom($manifestPath);
 
+
         $this->loadCommands();
-    }
-
-
-    /**
-     * Fire the CLI
-     *
-     * @throws \Exception
-     *
-     * @return void
-     */
-    public function run(): void
-    {
-        $this->application->run();
     }
 
     /**
@@ -86,7 +77,7 @@ class Cli
     protected function loadCommands(): void
     {
         $this->addBuiltInCommands();
-        $this->addCommands($this->manifest->commands());
+        $this->addExtensionCommands($this->manifest->commands());
     }
 
     /**
@@ -96,11 +87,18 @@ class Cli
      */
     protected function addBuiltInCommands(): void
     {
+        $commands = [
+            DiscoverExtensionsCommand::class,
+            PublishResourcesCommand::class
+        ];
+
         $this->addCommands(
-            [
-                DiscoverExtensionsCommand::class,
-                PublishResourcesCommand::class
-            ]
+            array_map(
+                function ($command) {
+                    return $this->theme->container()->get($command);
+                },
+                $commands
+            )
         );
     }
 
@@ -111,24 +109,27 @@ class Cli
      *
      * @return void
      */
-    protected function addCommands(array $commands): void
+    protected function addExtensionCommands(array $commands): void
     {
         $safeCommands = [];
 
         foreach ($commands as $command) {
-            if (is_a($command, Command::class, true)) {
+            if (is_subclass_of($command, Command::class, true)) {
                 array_push($safeCommands, $command);
             } else {
-                echo "WARNING: Class {$command} is not an instance of Symfony's 
-                      Command class, skipping initialization. \n";
+                $this->logger->warning(
+                    "Class {$command} is not an instance " .
+                    "of symfony command interface"
+                );
             }
         }
 
-        $this->application->addCommands(
+        $this->addCommands(
             array_map(
                 function ($command) {
                     return $this->theme->container()->get($command);
-                }, $safeCommands
+                },
+                $safeCommands
             )
         );
     }

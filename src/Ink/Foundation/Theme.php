@@ -9,17 +9,23 @@ use DI\ContainerBuilder;
 use Ink\Config\Repository;
 use Ink\Hooks\ActionManager;
 use Ink\Hooks\FilterManager;
+use Ink\Scribe\ThemeAssistant;
+use Ink\Scribe\ExtensionManifest;
 use Psr\Container\ContainerInterface;
 use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
-use Ink\Contracts\Scribe\ExtensionManifest;
 use Ink\Foundation\Bootstrap\LoadConfiguration;
 use Ink\Contracts\Routing\Router as RouterContract;
 use Ink\Contracts\Foundation\Theme as ThemeContract;
 use Ink\Contracts\Config\Repository as RepositoryContract;
 use Ink\Contracts\Hooks\ActionManager as ActionManagerContract;
 use Ink\Contracts\Hooks\FilterManager as FilterManagerContract;
+use Ink\Contracts\Scribe\ThemeAssistant as ThemeAssistantContract;
 use Ink\Contracts\Scribe\ExtensionManifest as ExtensionManifestContract;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Logger\ConsoleLogger;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Theme implements ThemeContract
 {
@@ -66,6 +72,9 @@ class Theme implements ThemeContract
         $builder->addDefinitions(
             [
                 ContainerInterface::class => get(Container::class),
+                OutputInterface::class => get(ConsoleOutput::class),
+                LoggerInterface::class => get(ConsoleLogger::class),
+                ThemeAssistantContract::class => get(ThemeAssistant::class),
                 ExtensionManifestContract::class => get(ExtensionManifest::class),
                 RepositoryContract::class => get(Repository::class),
                 ThemeContract::class => get(Theme::class),
