@@ -46,15 +46,15 @@ class DiscoverExtensionsCommand extends Command
     {
         $this
             ->setDescription(
-                'Generate extension manifest to
-                                discover any resources provided by them.'
+                'Generate extension manifest to ' .
+                'discover any resources provided by them.'
             )
             ->setHelp(
-                'It will parse all packages in composer
-                        installed.json file, look for ones that 
-                        define "stamp" extra field, and create 
-                        collective list of resources that can be 
-                        used by scribe.'
+                'It will parse all packages in composer ' .
+                'installed.json file, look for ones that ' .
+                'define "stamp" extra field, and create ' .
+                'collective list of resources that can be ' .
+                'used by scribe.'
             );
     }
 

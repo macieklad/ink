@@ -2,15 +2,14 @@
 
 namespace Ink\Foundation\Console;
 
-use Ink\Contracts\Foundation\Theme;
+use Psr\Log\LoggerInterface;
 use Ink\Contracts\Scribe\Resource;
-use Ink\Contracts\Scribe\ThemeAssistant;
-use Ink\Contracts\Scribe\ExtensionManifest;
+use Ink\Contracts\Foundation\Theme;
 use Psr\Container\ContainerInterface;
+use Ink\Contracts\Scribe\ExtensionManifest;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 
 class PublishResourcesCommand extends Command
 {
@@ -44,20 +43,27 @@ class PublishResourcesCommand extends Command
     protected $container;
 
     /**
+     * Logger instance
+     *
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Instantiate the command.
      *
      * @param ContainerInterface $container
-     * @param ThemeAssistant     $assistant
      * @param ExtensionManifest  $manifest
+     * @param LoggerInterface    $logger
      */
     public function __construct(
         ContainerInterface $container,
-        ThemeAssistant $assistant,
-        ExtensionManifest $manifest
+        ExtensionManifest $manifest,
+        LoggerInterface $logger
     ) {
         $this->container = $container;
-        $this->assistant = $assistant;
         $this->manifest = $manifest;
+        $this->logger = $logger;
 
         parent::__construct();
     }
@@ -72,13 +78,13 @@ class PublishResourcesCommand extends Command
         $this
             ->setDescription('Publish all extension resources')
             ->setHelp(
-                'This command will publish all resources 
-                        registered by extensions, such as config 
-                        files. It should be run only once, as it will 
-                        overwrite any existing files published by extensions,
-                        replacing them with a default clean state. To publish 
-                        single files, use built in commands provided by the 
-                        extension authors.'
+                "This command will publish all resources " .
+                "registered by extensions, such as config " .
+                "files. It should be run only once, as it will " .
+                "overwrite any existing files published by extensions, " .
+                "replacing them with a default clean state. To publish " .
+                "single files, use built in commands provided by the " .
+                "extension authors."
             );
     }
 
@@ -103,24 +109,24 @@ class PublishResourcesCommand extends Command
                 $this->container->get($resource)->publish();
                 $successCount++;
             } else {
-                $output->writeln(
-                    "WARNING: Resource $resource 
-                        is not implementing Stamp Resource 
-                        interface, skipping ..."
+                $this->logger->warning(
+                    "Resource $resource " .
+                    "is not implementing Stamp Resource " .
+                    "interface, skipping ..."
                 );
                 $failCount++;
             }
         }
 
         $output->writeln(
-            "Finished publishing resources. 
-                $successCount published, $failCount failed."
+            "Finished publishing resources. " .
+            "$successCount published, $failCount failed."
         );
 
         if ($failCount != 0) {
             $output->writeln(
-                "There were some failures,
-                    please check the output log above"
+                "There were some failures, " .
+                "please check the output log above"
             );
         }
     }
