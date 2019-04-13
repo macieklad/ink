@@ -12,7 +12,7 @@ interface ThemeAssistant
      *
      * @return void
      */
-    public function publishConfig(string $file, string $configName = ''): void;
+    public function publishConfig(string $file, string $configName = ""): void;
 
     /**
      * Copy any file to a directory relative to the theme root
@@ -22,5 +22,5 @@ interface ThemeAssistant
      *
      * @return void
      */
-    public function publishResource(string $file, string $path = ''): void;
+    public function publishResource(string $file, string $path = ""): void;
 }
