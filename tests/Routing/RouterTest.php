@@ -39,11 +39,18 @@ class RouterTest extends MockeryTestCase
     protected static $controllerTestMethod = 'handler';
 
     /**
-     * Undocumented variable
+     * Global mocked functions
      *
      * @var Mockery\MockInterface
      */
     public static $functions;
+
+    /**
+     * Router instance
+     *
+     * @var Router
+     */
+    protected $router;
 
     /**
      * Set up the test
