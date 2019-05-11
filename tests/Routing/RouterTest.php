@@ -218,7 +218,7 @@ class RouterTest extends MockeryTestCase
         $lastRoute = $routes[1];
 
         $this->assertEquals(2, count($routes));
-        $this->assertSame('/foo/{baz}', $lastRoute->uri);
+        $this->assertSame('/foo/bar/{baz}', $lastRoute->uri);
         $this->assertEquals(1, count($lastRoute->params));
     }
 

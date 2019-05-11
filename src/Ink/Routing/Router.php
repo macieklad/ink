@@ -154,7 +154,7 @@ class Router implements RouterContract
      */
     public function updateAttributeStack(array $attributes): void
     {
-        array_push($this->attributeStack, $attributes);
+        array_unshift($this->attributeStack, $attributes);
     }
 
     /**
