@@ -142,7 +142,7 @@ class Router implements RouterContract
             include $routes;
         }
 
-        array_pop($this->attributeStack);
+        array_shift($this->attributeStack);
     }
 
     /**
