@@ -2,6 +2,7 @@
 
 namespace Ink\Hooks;
 
+use Closure;
 use Psr\Container\ContainerInterface;
 use Ink\Contracts\Hooks\FilterManager as FilterManagerContract;
 
@@ -17,7 +18,7 @@ class FilterManager implements FilterManagerContract
     /**
      * Container instance for calling mutator
      *
-     * @var Psr\Container\ContainerInterface;
+     * @var ContainerInterface;
      */
     protected $container;
 
@@ -40,7 +41,7 @@ class FilterManager implements FilterManagerContract
     /**
      * Construct the manager for a named filter
      *
-     * @param Psr\Container\ContainerInterface $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -51,8 +52,8 @@ class FilterManager implements FilterManagerContract
      * Manage filter with the given name
      *
      * @param string $filter
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManagerContract
      */
     public function name(string $filter) : FilterManagerContract
     {
@@ -153,8 +154,8 @@ class FilterManager implements FilterManagerContract
      * inside an array
      *
      * @param array $mutators
-     * 
-     * @return void
+     *
+     * @return Closure
      */
     public function compileArrayMutator(array $mutators)
     {
@@ -175,7 +176,7 @@ class FilterManager implements FilterManagerContract
      *
      * @param string $mutator
      * 
-     * @return void
+     * @return Closure
      */
     public function compileMutatorString(string $mutator)
     {
@@ -223,13 +224,13 @@ class FilterManager implements FilterManagerContract
 
 
     /**
-     * Detach single or multiple mutators 
+     * Detach single or multiple mutators
      * from the filter, with given priority.
      *
      * @param Closure|string|array $mutators
      * @param integer              $priority
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManagerContract
      */
     public function detach($mutators, int $priority = 10) : FilterManagerContract
     {
@@ -240,11 +241,11 @@ class FilterManager implements FilterManagerContract
 
     /**
      * Remove all possible mutators of given
-     * priorityfrom the filter.
+     * priority from the filter.
      *
      * @param integer $priority
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManagerContract
      */
     public function flush(int $priority = 10) : FilterManagerContract
     {
@@ -257,7 +258,7 @@ class FilterManager implements FilterManagerContract
      * Force compilation of callable mutators passed
      * as arguments to the filter manager
      *
-     * @return Ink\Contracts\Hooks\FilterManager
+     * @return FilterManagerContract
      */
     public function forceCompilation() : FilterManagerContract
     {
@@ -271,8 +272,8 @@ class FilterManager implements FilterManagerContract
      * instead of passing full namespace each time.
      *
      * @param string $namespace
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManagerContract
      */
     public function setMutatorNamespace(
         string $namespace

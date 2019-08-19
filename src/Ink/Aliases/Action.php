@@ -7,7 +7,8 @@ use Ink\Contracts\Hooks\ActionManager;
 
 /**
  * ActionManager alias
- * @see ActionManager
+ *
+ * @see    ActionManager
  * @method ActionManager name(string $action)
  * @method ActionManager handle(string|Closure|array $with, int $priority = 10, int $acceptedArgs = 1)
  * @method ActionManager dispatch(mixed ...$args)

@@ -2,6 +2,7 @@
 
 namespace Ink\Contracts\Hooks;
 
+use Closure;
 use Psr\Container\ContainerInterface;
 
 interface FilterManager
@@ -9,7 +10,7 @@ interface FilterManager
     /**
      * Construct the manager for a named filter
      *
-     * @param Psr\Container\ContainerInterface $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container);
 
@@ -17,8 +18,8 @@ interface FilterManager
      * Manage filter with the given name
      *
      * @param string $filter
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManager
      */
     public function name(string $filter) : FilterManager;
 
@@ -60,23 +61,23 @@ interface FilterManager
     public function exists($mutator) : bool;
 
     /**
-     * Detach single or multiple mutators 
+     * Detach single or multiple mutators
      * from the filter, with given priority.
      *
      * @param Closure|string|array $mutators
      * @param integer              $priority
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManager
      */
     public function detach($mutators, int $priority = 10) : FilterManager;
 
     /**
      * Remove all possible mutators of given
-     * priorityfrom the filter.
+     * priority from the filter.
      *
      * @param integer $priority
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManager
      */
     public function flush(int $priority = 10) : FilterManager;
 
@@ -84,7 +85,7 @@ interface FilterManager
      * Force compilation of callable mutators passed
      * as arguments to the filter manager
      *
-     * @return Ink\Contracts\Hooks\FilterManager
+     * @return FilterManager
      */
     public function forceCompilation() : FilterManager;
 
@@ -93,8 +94,8 @@ interface FilterManager
      * instead of passing full namespace each time.
      *
      * @param string $namespace
-     * 
-     * @return Ink\Contracts\Hooks\FilterManager
+     *
+     * @return FilterManager
      */
     public function setMutatorNamespace(string $namespace) : FilterManager;
 }

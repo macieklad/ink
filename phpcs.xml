@@ -13,4 +13,10 @@
     <rule ref="PEAR.NamingConventions.ValidFunctionName.FunctionNameInvalid">
         <exclude-pattern>*/tests/*</exclude-pattern>
     </rule>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="110"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
 </ruleset>
