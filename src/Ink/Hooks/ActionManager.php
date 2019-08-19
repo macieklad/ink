@@ -2,6 +2,7 @@
 
 namespace Ink\Hooks;
 
+use Closure;
 use Psr\Container\ContainerInterface;
 use Ink\Contracts\Hooks\ActionManager as ActionManagerContract;
 
@@ -17,7 +18,7 @@ class ActionManager implements ActionManagerContract
     /**
      * Container instance for calling handlers
      *
-     * @var Psr\Container\ContainerInterface;
+     * @var ContainerInterface;
      */
     protected $container;
 
@@ -40,7 +41,7 @@ class ActionManager implements ActionManagerContract
     /**
      * Construct the manager for an action
      *
-     * @param string $container
+     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -89,7 +90,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param mixed $handler
      * 
-     * @return void
+     * @return callable
      */
     public function compileActionHandler($handler)
     {
@@ -120,7 +121,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param array $handlers
      * 
-     * @return void
+     * @return callable
      */
     public function compileArrayHandler(array $handlers)
     {
@@ -138,7 +139,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param string $handler
      * 
-     * @return void
+     * @return callable
      */
     public function compileClassHandler(string $handler)
     {
@@ -180,7 +181,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param callable $handler
      * 
-     * @return void
+     * @return callable
      */
     public function compileCallableHandler($handler)
     {
@@ -199,7 +200,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param mixed ...$args
      * 
-     * @return void
+     * @return ActionManagerContract
      */
     public function dispatch(...$args) : ActionManagerContract
     {
@@ -238,7 +239,7 @@ class ActionManager implements ActionManagerContract
      * @param Closure|string|array $handler
      * @param integer              $priority
      * 
-     * @return Ink\Contracts\Hooks\ActionManager
+     * @return ActionManagerContract
      */
     public function detach($handler, int $priority = 10) : ActionManagerContract
     {
@@ -253,7 +254,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param integer $priority
      * 
-     * @return Ink\Contracts\Hooks\ActionManager
+     * @return ActionManagerContract
      */
     public function flush(int $priority = 10) : ActionManagerContract
     {
@@ -268,7 +269,7 @@ class ActionManager implements ActionManagerContract
      *
      * @param string $namespace
      * 
-     * @return void
+     * @return ActionManagerContract
      */
     public function setHandlerNamespace(string $namespace) : ActionManagerContract
     {
@@ -281,7 +282,7 @@ class ActionManager implements ActionManagerContract
      * Force compilation of callable handlers passed
      * as arguments to action
      *
-     * @return Ink\Contracts\Hooks\ActionManager
+     * @return ActionManagerContract
      */
     public function forceCompilation() : ActionManagerContract
     {

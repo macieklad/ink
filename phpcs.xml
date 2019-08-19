@@ -3,7 +3,7 @@
     <file>./src</file>
     <file>./tests</file>
     <rule ref="PEAR">
-        <exclude name="PEAR.Commenting.ClassComment.Missing" />
+        <exclude name="PEAR.Commenting.ClassComment" />
         <exclude name="PEAR.Commenting.FileComment.Missing" />
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment" />
     </rule>

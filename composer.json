@@ -15,10 +15,7 @@
         }
     },
     "scripts": {
-        "lint": [
-            "phpcbf",
-            "phpcs"
-        ]
+        "lint": "phpcs"
     },
     "require": {
         "ext-json": "*",
