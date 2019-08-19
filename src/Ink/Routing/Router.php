@@ -3,7 +3,7 @@
 namespace Ink\Routing;
 
 use Closure;
-use Ink\Routing\Route;
+use DI\Container;
 use Psr\Container\ContainerInterface;
 use Ink\Contracts\Routing\Router as RouterContract;
 
@@ -34,7 +34,7 @@ class Router implements RouterContract
     /**
      * Container which will call router actions and prepare them
      *
-     * @var DI\Container
+     * @var Container
      */
     protected $container;
 
@@ -244,10 +244,8 @@ class Router implements RouterContract
      * Compile action passed as string into a callback
      *
      * @param Route $route
-     * 
-     * @throws InvalidArgumentException
-     * 
-     * @return void
+     *
+     * @return Closure
      */
     protected function compileStringAction(Route $route): Closure 
     {
@@ -315,7 +313,7 @@ class Router implements RouterContract
     /**
      * Return registered routes
      *
-     * @return void
+     * @return array
      */
     public function routes(): array
     {
