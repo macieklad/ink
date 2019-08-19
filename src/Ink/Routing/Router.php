@@ -200,8 +200,8 @@ class Router implements RouterContract
         foreach ($this->routes() as $route) {
             register_rest_route(
                 $route->module, $route->wpUri, [
-                'methods' => $route->methods,
-                'callback' => $this->compileAction($route)
+                    'methods' => $route->methods,
+                    'callback' => $this->compileAction($route)
                 ]
             );
         }
@@ -269,7 +269,7 @@ class Router implements RouterContract
         return function ($req = null) use ($controller, $method) {
             return $this->container->call(
                 [$controller, $method], [
-                'req' => $req
+                    'req' => $req
                 ]
             );
         };
@@ -287,7 +287,7 @@ class Router implements RouterContract
         return function ($req = null) use ($route) {
             return $this->container->call(
                 $route->action, [
-                'req' => $req
+                    'req' => $req
                 ]
             );
         };

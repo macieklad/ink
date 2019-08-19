@@ -3,6 +3,7 @@
 namespace Ink\Routing;
 
 use Ink\Routing\Router;
+use InvalidArgumentException;
 
 class RouteRegistrar
 {
@@ -51,7 +52,7 @@ class RouteRegistrar
      * @param string $method
      * @param string $uri
      * @param mixed  $action
-     * 
+     *
      * @return void
      */
     public function registerRoute(string $method, string $uri, $action)
@@ -79,8 +80,8 @@ class RouteRegistrar
      *
      * @param string $name
      * @param string $value
-     * 
-     * @return void
+     *
+     * @return RouteRegistrar
      */
     public function attribute(string $name, string $value)
     {
@@ -95,7 +96,7 @@ class RouteRegistrar
      * @param string $method
      * @param array  $parameters
      * 
-     * @return void
+     * @return mixed
      */
     public function __call(string $method, array $parameters)
     {
@@ -107,7 +108,7 @@ class RouteRegistrar
             return $this->attribute($method, $parameters[0]);
         } 
 
-        throw new \InvalidArgumentException(
+        throw new InvalidArgumentException(
             "Method {$method} is not allowed on registrar method,
              maybe you mistyped them or they are not allowed by registrar ?"
         );

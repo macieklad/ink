@@ -9,7 +9,7 @@ interface Router
      *
      * @param string $uri
      * @param mixed  $attributes
-     * 
+     *
      * @return void
      */
     public function get(string $uri, $attributes): void;

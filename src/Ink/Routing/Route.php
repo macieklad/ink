@@ -2,8 +2,6 @@
 
 namespace Ink\Routing;
 
-use Ink\Routing\Router;
-
 class Route
 {
 
@@ -123,6 +121,18 @@ class Route
     public function prefix(string $with)
     {
         $this->uri = '/' . trim($with, '/') . '/' . trim($this->uri, '/');
+    }
+
+    /**
+     * Change route module
+     *
+     * @param string $name
+     *
+     * @return void
+     */
+    public function module(string $name)
+    {
+        $this->module = $name;
     }
 
 }
