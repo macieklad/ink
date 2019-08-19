@@ -9,14 +9,14 @@ use Ink\Contracts\Hooks\FilterManager;
  * Access to FilterManager class
  *
  * @see    FilterManager
- * @method FilterManager name(string $filter)
- * @method void apply(mixed $value, mixed ...$args)
- * @method void use(Closure|string|array $mutator,int $priority = 10,int $acceptedArgs = 1)
- * @method bool exists(mixed $mutator)
- * @method FilterManager detach(mixed $mutators, int $priority = 10)
- * @method FilterManager flush(int $priority = 10)
- * @method FilterManager forceCompilation()
- * @method FilterManager setMutatorNamespace(string $namespace)
+ * @method static FilterManager name(string $filter)
+ * @method static void apply(mixed $value, mixed ...$args)
+ * @method static void use(Closure|string|array $mutator,int $priority = 10,int $acceptedArgs = 1)
+ * @method static bool exists(mixed $mutator)
+ * @method static FilterManager detach(mixed $mutators, int $priority = 10)
+ * @method static FilterManager flush(int $priority = 10)
+ * @method static FilterManager forceCompilation()
+ * @method static FilterManager setMutatorNamespace(string $namespace)
  */
 class Filter extends Alias
 {

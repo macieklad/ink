@@ -27,7 +27,7 @@ class Repository implements RepositoryContract
      * Check if a key exists in repository
      *
      * @param string $key
-     * 
+     *
      * @return boolean
      */
     public function has(string $key): bool 
@@ -48,7 +48,7 @@ class Repository implements RepositoryContract
     /**
      * Return all items in repository
      *
-     * @return void
+     * @return array
      */
     public function all(): array
     {
@@ -74,7 +74,7 @@ class Repository implements RepositoryContract
      * @param string $key
      * @param mixed  $default
      * 
-     * @return void
+     * @return mixed
      */
     public function get(string $key, $default = null)
     {
@@ -85,8 +85,8 @@ class Repository implements RepositoryContract
      * Get multiple items from repository as an array
      *
      * @param array $items
-     * 
-     * @return void
+     *
+     * @return array
      */
     public function getMultiple(array $items): array
     {
@@ -125,7 +125,7 @@ class Repository implements RepositoryContract
      * @param string $key
      * @param mixed  $default
      * 
-     * @return void
+     * @return mixed
      */
     protected function retrieveItem(string $key, $default = null)
     {

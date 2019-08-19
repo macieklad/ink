@@ -13,10 +13,10 @@ interface Repository
 
     /**
      * Return specific value from repository
-     * 
+     *
      * @param string $key
      * @param mixed  $default
-     * 
+     *
      * @return mixed
      */
     public function get(string $key, $default = null);
@@ -35,8 +35,8 @@ interface Repository
      * Get multiple values from repository
      *
      * @param array $items
-     * 
-     * @return void
+     *
+     * @return array
      */
     public function getMultiple(array $items): array;
 
