@@ -73,6 +73,19 @@ class RouteTest extends MockeryTestCase
         $route->prefix('/baz');
         $this->assertSame('/baz/bar/foo', $route->uri);
     }
+
+    /**
+     * Make sure that route module is changed correctly
+     *
+     * @return void
+     */
+    public function testModuleChange()
+    {
+        $route = $this->makeTestRoute();
+
+        $route->module('foo');
+        $this->assertSame('foo', $route->module);
+    }
     
     /**
      * Tests if attributes passed as array are merged into route
@@ -148,8 +161,8 @@ class RouteTest extends MockeryTestCase
      * Construct new route with default values
      *
      * @param array $params
-     * 
-     * @return void
+     *
+     * @return Route
      */
     protected function makeTestRoute(array $params = [])
     {
@@ -163,7 +176,7 @@ class RouteTest extends MockeryTestCase
     /**
      * Mock default route args
      *
-     * @return void
+     * @return array
      */
     protected function defaultRouteArgs()
     {

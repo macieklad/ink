@@ -64,8 +64,8 @@ class RouterTest extends MockeryTestCase
 
     /**
      * Test if all basic method calls work properly. Route
-     *  should be constructed properly, and its action
-     *  have to be compiled and callable
+     * should be constructed properly, and its action
+     * have to be compiled and callable
      *
      * @return void
      */
@@ -98,7 +98,6 @@ class RouterTest extends MockeryTestCase
     public function testControllerNamespaceSetting()
     {
         $namespace = 'Theme\Http\Controllers';
-        $router = Mockery::mock(Router::class);
 
         $this->assertSame(
             '', 
@@ -215,10 +214,16 @@ class RouterTest extends MockeryTestCase
     {
         $this->router->loadRoutes(__DIR__ . DIRECTORY_SEPARATOR . 'testRoutes.php');
         $routes = $this->router->routes();
-        $lastRoute = $routes[1];
+        $callbackRoute = $routes[0];
+        $lastRoute = $routes[2];
 
-        $this->assertEquals(2, count($routes));
+        // Callable action must be compiled
+        $this->assertSame('bas', ($callbackRoute->action)());
+        // We register 3 routes inside test file
+        $this->assertEquals(3, count($routes));
+        // Deepest defined route must have all prefixes, and not inherit any from others
         $this->assertSame('/foo/bar/{baz}', $lastRoute->uri);
+        // Param passed to route must be recognized for future injecting
         $this->assertEquals(1, count($lastRoute->params));
     }
 
@@ -268,8 +273,8 @@ class RouterTest extends MockeryTestCase
      * Mock a route object with action
      *
      * @param mixed $action
-     * 
-     * @return void
+     *
+     * @return Route|Mockery\LegacyMockInterface|Mockery\MockInterface
      */
     protected function mockActionRoute($action) 
     {
@@ -283,7 +288,7 @@ class RouterTest extends MockeryTestCase
     /**
      * Return mocked controller full namespace with name
      *
-     * @return void
+     * @return string
      */
     public static function mockedController()
     {

@@ -6,6 +6,13 @@ class Route
 {
 
     /**
+     * Route action, callable or string
+     * pointing to a controller method
+     *
+     * @var null
+     */
+    public $action = null;
+    /**
      * Route module
      *
      * @var string

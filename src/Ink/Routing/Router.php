@@ -58,7 +58,7 @@ class Router implements RouterContract
      */
     public function get(string $uri, $attributes): void
     {
-        $route = $this->createRoute(['GET'], $uri, $attributes);
+        $this->createRoute(['GET'], $uri, $attributes);
     }
     
     /**
@@ -71,7 +71,7 @@ class Router implements RouterContract
      */
     public function post(string $uri, $attributes): void
     {
-        $route = $this->createRoute(['POST'], $uri, $attributes);
+        $this->createRoute(['POST'], $uri, $attributes);
     }
 
     /**
@@ -84,7 +84,7 @@ class Router implements RouterContract
      */
     public function put(string $uri, $attributes): void
     {
-        $route = $this->createRoute(['PUT'], $uri, $attributes);
+        $this->createRoute(['PUT'], $uri, $attributes);
     }
 
     /**
@@ -97,7 +97,7 @@ class Router implements RouterContract
      */
     public function delete(string $uri, $attributes): void
     {
-        $route = $this->createRoute(['DELETE'], $uri, $attributes);
+        $this->createRoute(['DELETE'], $uri, $attributes);
     }
     
     /**
@@ -110,12 +110,19 @@ class Router implements RouterContract
      * @return void
      */
     public function createRoute(array $methods, string $uri, $attributes): void
-    {  
+    {
+        // If controller or closure are passed directly
+        // as argument, convert them to an action
+        // attribute for the given route
         if (is_string($attributes)) {
             $attributes = ['action' => $attributes];
         }
 
-        $route = new Route($methods, $uri, $attributes['action']);
+        if (is_callable($attributes)) {
+            $attributes = ['action' => $attributes];
+        }
+
+        $route = new Route($methods, $uri);
         $route->mergeAttributes($attributes);
 
         $this->addRoute($route);
@@ -213,7 +220,7 @@ class Router implements RouterContract
      *
      * @param Route $route
      * 
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      * 
      * @return Closure
      */
@@ -257,7 +264,7 @@ class Router implements RouterContract
 
         $controller = $this->controllerNamespace . '\\' . $actionParts[0];
 
-        if (! \class_exists($controller)) {
+        if (!class_exists($controller)) {
             throw new \InvalidArgumentException(
                 "Class {$controller} handling the {$route->uri} route doesn't exist !
                  Specify a valid one, maybe it's a typo"
