@@ -3,3 +3,8 @@
 /.vscode
 /composer.lock
 /.phpunit.result.cache
+/node_modules
+
+# Editors
+/.vscode
+/.idea

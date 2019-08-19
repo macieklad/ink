@@ -1,0 +1,36 @@
+{
+  "name": "ink",
+  "version": "0.3.0",
+  "description": "<p align=\"center\">     <a href=\"https://travis-ci.com/macieklad/ink\">         <img src=\"https://travis-ci.com/macieklad/ink.svg?token=Lb6bxs2p9nrFZSNVQaLU&branch=dev\" alt=\"Travis build\"/>     </a> </p>",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "^3.0.2",
+    "husky": "^3.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/macieklad/ink.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/macieklad/ink/issues"
+  },
+  "homepage": "https://github.com/macieklad/ink#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "composer lint",
+      "prepare-commit-msg": "exec < /dev/tty && git-cz --hook || true"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
