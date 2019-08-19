@@ -2,7 +2,6 @@
 
 namespace Ink\Routing;
 
-use Ink\Routing\Router;
 use InvalidArgumentException;
 
 class RouteRegistrar
