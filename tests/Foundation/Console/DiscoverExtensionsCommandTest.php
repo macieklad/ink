@@ -74,9 +74,11 @@ class DiscoverExtensionsCommandTest extends TestCase
 
         $this->manifest->loadFrom($this->theme->vendorPath("stamp-manifest.json"));
 
+
+
         $this->assertSame(
-            $this->manifest->commands(),
-            $this->installed->field("commands")
+            $this->installed->field("commands"),
+            $this->manifest->commands()
         );
         $this->assertEquals(0, $tester->getStatusCode());
     }

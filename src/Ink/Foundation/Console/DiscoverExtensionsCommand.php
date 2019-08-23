@@ -100,6 +100,8 @@ class DiscoverExtensionsCommand extends Command
      * @param string $location
      *
      * @return void
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function buildExtensionManifest(
         array $packages,

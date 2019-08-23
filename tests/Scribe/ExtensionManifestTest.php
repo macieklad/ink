@@ -104,17 +104,21 @@ class ExtensionManifestTest extends TestCase
     {
         $this->manifest->addExtension(
             [
-            "commands" => [
-                "StubCommand"
-            ],
-            "resources" => [
-                "StubResource"
-            ]
+                "commands" => [
+                    "StubCommand"
+                ],
+                "resources" => [
+                    "StubResource"
+                ],
+                "hooks" => [
+                    "StubHook"
+                ]
             ]
         );
 
         $this->assertEquals(["StubCommand"], $this->manifest->commands());
         $this->assertEquals(["StubResource"], $this->manifest->resources());
+        $this->assertEquals(["StubHook"], $this->manifest->hooks());
     }
 
     /**
@@ -132,6 +136,9 @@ class ExtensionManifestTest extends TestCase
             ],
             "resources" => [
                 "StubResource"
+            ],
+            "hooks" => [
+                "StubHook"
             ]
         ];
 

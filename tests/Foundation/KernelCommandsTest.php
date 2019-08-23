@@ -2,6 +2,7 @@
 
 namespace Tests\Foundation;
 
+use Ink\Foundation\ServiceProvider;
 use Whoops\Handler\Handler;
 use Whoops\Run;
 use Ink\Foundation\Theme;
@@ -95,6 +96,8 @@ class KernelCommandsTest extends MockeryTestCase
      * repository and aliases it as config inside the theme
      *
      * @return void
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function testConfigurationCommandLoadsConfigProperly()
     {
@@ -120,8 +123,7 @@ class KernelCommandsTest extends MockeryTestCase
         $repository = \Mockery::mock(Repository::class);
         $command = new LoadServices($container);
         $services = [
-            'Foo\Bar',
-            'Baz'
+
         ];
 
         $container->shouldReceive('get')

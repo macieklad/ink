@@ -20,6 +20,13 @@ class ExtensionManifest implements ManifestContract
     protected $resources = [];
 
     /**
+     * List of extension hooks, which add services
+     *
+     * @var array
+     */
+    protected $hooks = [];
+
+    /**
      * Load the manifest from location
      *
      * @param string $location
@@ -48,6 +55,10 @@ class ExtensionManifest implements ManifestContract
             $this->commands = $manifest["commands"];
         }
 
+        if (array_key_exists("hooks", $manifest)) {
+            $this->hooks = $manifest["hooks"];
+        }
+
         if (array_key_exists("resources", $manifest)) {
             $this->resources = $manifest["resources"];
         }
@@ -67,11 +78,13 @@ class ExtensionManifest implements ManifestContract
             $extension,
             [
                 'commands' => [],
+                'hooks' => [],
                 'resources' => []
             ]
         );
 
         $this->commands = array_merge($this->commands, $data['commands']);
+        $this->hooks = array_merge($this->hooks, $data['hooks']);
         $this->resources = array_merge($this->resources, $data['resources']);
     }
 
@@ -86,7 +99,8 @@ class ExtensionManifest implements ManifestContract
     {
         $data = [
             "commands" => $this->commands,
-            "resources" => $this->resources
+            "resources" => $this->resources,
+            "hooks" => $this->hooks
         ];
 
         if (is_writable(dirname($location))) {
@@ -115,6 +129,16 @@ class ExtensionManifest implements ManifestContract
     public function resources(): array
     {
         return $this->resources;
+    }
+
+    /**
+     * Get all hooks registered by extensions
+     *
+     * @return array
+     */
+    public function hooks(): array
+    {
+        return $this->hooks;
     }
 
     /**

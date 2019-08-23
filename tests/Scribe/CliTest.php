@@ -38,6 +38,8 @@ class CliTest extends MockeryTestCase
      * Set up the cli test, by providing all components
      *
      * @return void
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function setUp(): void
     {
@@ -47,10 +49,10 @@ class CliTest extends MockeryTestCase
 
         $manifest->addExtension(
             [
-            "commands" => [
-                "NonExistentCommand",
-                StubCommand::class
-            ]
+                "commands" => [
+                    "NonExistentCommand",
+                    StubCommand::class
+                ]
             ]
         );
 
@@ -81,6 +83,8 @@ class CliTest extends MockeryTestCase
      * Test if the cli starts without problems
      *
      * @return void
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function testCliBootsCorrectly()
     {
@@ -89,6 +93,9 @@ class CliTest extends MockeryTestCase
         $cli = $this->theme->container()->get(Cli::class);
         $tester = new ApplicationTester($cli);
 
+        /**
+         * There is command prepared that does not exists, should warn about it here
+        */
         $logger->shouldReceive('warning')
             ->times(1);
 
