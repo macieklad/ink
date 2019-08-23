@@ -2,6 +2,7 @@
 
 namespace Ink\Tests\Scribe;
 
+use Ink\Contracts\Config\Repository;
 use Ink\Foundation\Theme;
 use Ink\Scribe\ThemeAssistant;
 use PHPUnit\Framework\TestCase;
@@ -36,12 +37,14 @@ class ThemeAssistantTest extends TestCase
      * Prepare env for the test case
      *
      * @return void
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function setUp(): void
     {
         $this->theme = new Theme(__DIR__ . "/theme");
         $this->fs = new Filesystem();
-        $this->assistant = new ThemeAssistant($this->fs, $this->theme);
+        $this->assistant = new ThemeAssistant($this->theme, $this->fs, $this->theme['config']);
 
         parent::setUp();
     }
@@ -119,5 +122,83 @@ class ThemeAssistantTest extends TestCase
 
         $this->expectException(FileNotFoundException::class);
         $this->assistant->publishResource(__DIR__ . '/nonExistentFile');
+    }
+
+    /**
+     * Ensure that theme helper can inject theme aliases
+     *
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     *
+     * @return void
+     */
+    public function testCustomAliasesArePublishedInsideConfig()
+    {
+        $fooMock = \Mockery::mock('foo');
+        $barMock = \Mockery::mock('bar');
+        $overwriteMock = $fooMock;
+
+        $baseAliases = [
+            'Foo' => $fooMock,
+            'Bar' => $barMock,
+            'Overwrite' => $overwriteMock
+        ];
+
+        /**
+         * Theme config
+         *
+         * @var Repository $config
+        */
+        $config = $this->theme->container()->get('config');
+
+        $config->set('aliases', $baseAliases);
+        $this->assistant->registerAliases(
+            [
+            'Overwrite' => $barMock,
+            'Foo' => $barMock
+            ]
+        );
+
+        $this->assertSame($config->get('aliases')['Overwrite'], $barMock);
+        $this->assertSame($config->get('aliases')['Foo'], $barMock);
+    }
+
+    /**
+     * Ensure that theme helper can inject theme providers
+     *
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     *
+     * @return void
+     */
+    public function testCustomProvidersArePublishedInsideConfig()
+    {
+        $fooMock = \Mockery::mock('foo');
+        $barMock = \Mockery::mock('bar');
+        $overwriteMock = $fooMock;
+
+        $baseAliases = [
+            'Foo' => $fooMock,
+            'Bar' => $barMock,
+            'Overwrite' => $overwriteMock
+        ];
+
+        /**
+         * Theme config
+         *
+         * @var Repository $config
+         */
+        $config = $this->theme->container()->get('config');
+
+        $config->set('theme.providers', $baseAliases);
+        $this->assistant->registerProviders(
+            [
+            'Overwrite' => $barMock,
+            'Foo' => $barMock
+            ]
+        );
+
+        $this->assertSame($config->get('theme.providers')['Overwrite'], $barMock);
+        $this->assertSame($config->get('theme.providers')['Foo'], $barMock);
     }
 }

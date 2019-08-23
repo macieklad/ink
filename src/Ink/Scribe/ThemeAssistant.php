@@ -3,9 +3,10 @@
 namespace Ink\Scribe;
 
 use Ink\Contracts\Foundation\Theme;
-use Ink\Contracts\Scribe\ThemeAssistant as ThemeAssistantContract;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Ink\Contracts\Config\Repository;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Ink\Contracts\Scribe\ThemeAssistant as ThemeAssistantContract;
 
 class ThemeAssistant implements ThemeAssistantContract
 {
@@ -24,15 +25,24 @@ class ThemeAssistant implements ThemeAssistantContract
     protected $theme;
 
     /**
+     * Theme config
+     *
+     * @var Repository
+     */
+    protected $config;
+
+    /**
      * Initialize the theme assistant object
      *
-     * @param Filesystem $fs
      * @param Theme      $theme
+     * @param Filesystem $fs
+     * @param Repository $config
      */
-    public function __construct(Filesystem $fs, Theme $theme)
+    public function __construct(Theme $theme, Filesystem $fs, Repository $config)
     {
-        $this->fs = $fs;
         $this->theme = $theme;
+        $this->fs = $fs;
+        $this->config = $config;
     }
 
     /**
@@ -40,8 +50,6 @@ class ThemeAssistant implements ThemeAssistantContract
      *
      * @param string $file
      * @param string $configName
-     *
-     * @throws FileNotFoundException
      *
      * @return void
      */
@@ -73,5 +81,33 @@ class ThemeAssistant implements ThemeAssistantContract
         } else {
             throw new FileNotFoundException($file);
         }
+    }
+
+    /**
+     * Add aliases to theme before initial load
+     *
+     * @param array $aliases
+     *
+     * @return void
+     */
+    public function registerAliases(array $aliases): void
+    {
+        $registeredAliases = $this->config->get('aliases', []);
+
+        $this->config->set('aliases', array_merge($registeredAliases, $aliases));
+    }
+
+    /**
+     * Add providers to theme before initial load
+     *
+     * @param array $providers
+     *
+     * @return void
+     */
+    public function registerProviders(array $providers): void
+    {
+        $registeredProviders = $this->config->get('theme.providers', []);
+
+        $this->config->set('theme.providers', array_merge($registeredProviders, $providers));
     }
 }

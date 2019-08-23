@@ -23,4 +23,22 @@ interface ThemeAssistant
      * @return void
      */
     public function publishResource(string $file, string $path = ""): void;
+
+    /**
+     * Add aliases to theme before initial load
+     *
+     * @param array $aliases
+     *
+     * @return void
+     */
+    public function registerAliases(array $aliases): void;
+
+    /**
+     * Add providers to theme before initial load
+     *
+     * @param array $providers
+     *
+     * @return void
+     */
+    public function registerProviders(array $providers): void;
 }
