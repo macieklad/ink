@@ -1,13 +1,16 @@
 <?php
 
-use Ink\Foundation\Theme;
-use Ink\Foundation\Kernel;
-use Psr\Container\ContainerInterface;
-use Ink\Foundation\Bootstrap\HandleErrors;
-use Ink\Foundation\Bootstrap\LoadServices;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Ink\Foundation\Bootstrap\LoadConfiguration;
+use DI\DependencyException;
+use DI\NotFoundException;
 use Ink\Contracts\Foundation\Theme as ThemeContract;
+use Ink\Foundation\Bootstrap\HandleErrors;
+use Ink\Foundation\Bootstrap\HookExtensions;
+use Ink\Foundation\Bootstrap\LoadConfiguration;
+use Ink\Foundation\Bootstrap\LoadServices;
+use Ink\Foundation\Kernel;
+use Ink\Foundation\Theme;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 
 class ThemeTest extends MockeryTestCase
 {
@@ -15,6 +18,8 @@ class ThemeTest extends MockeryTestCase
      * Ensure that theme registers core class aliases
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testThemeIsRegisteringBaseAliases()
     {
@@ -29,12 +34,14 @@ class ThemeTest extends MockeryTestCase
             $theme->container()->get(ContainerInterface::class)
         );
         $this->assertTrue($theme['kernel'] instanceof Kernel);
-    } 
+    }
 
     /**
      * Test all basic, array like operations on theme object
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testThemeIsArrayLikeStructure()
     {
@@ -51,11 +58,13 @@ class ThemeTest extends MockeryTestCase
         $this->assertTrue(isset($theme['kernel']));
 
     }
-    
+
     /**
      * Test if theme returns correct directory paths
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testBasePathsAreInitializedProperly() 
     {
@@ -75,6 +84,8 @@ class ThemeTest extends MockeryTestCase
      * Ensure that theme executes kernel commands while bootstrapping
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testThemeIsBootstrapingKernelWithCommands()
     {
@@ -88,6 +99,7 @@ class ThemeTest extends MockeryTestCase
                 [
                     LoadConfiguration::class,
                     HandleErrors::class,
+                    HookExtensions::class,
                     LoadServices::class
                 ]
             )
