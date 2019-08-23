@@ -26,7 +26,15 @@ class LoadServices implements KernelCommand
         $providers = $this->container->get('config')->get('theme.providers', []);
 
         foreach ($providers as $provider) {
-            $this->container->call([$provider, 'boot']);
+            if (method_exists($provider, 'boot')) {
+                $this->container->call([$provider, 'boot']);
+            }
+        }
+
+        foreach ($providers as $provider) {
+            if (method_exists($provider, 'start')) {
+                $this->container->call([$provider, 'start']);
+            }
         }
     }
 }

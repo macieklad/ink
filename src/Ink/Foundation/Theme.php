@@ -4,6 +4,7 @@ namespace Ink\Foundation;
 
 use DI\Container;
 use function DI\get;
+use Ink\Foundation\Bootstrap\HookExtensions;
 use Ink\Routing\Router;
 use DI\ContainerBuilder;
 use Ink\Config\Repository;
@@ -46,8 +47,11 @@ class Theme implements ThemeContract
 
     /**
      * Create a new theme class with root directory
-     * 
+     *
      * @param string $basePath
+     *
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct(string $basePath = null)
     {   
@@ -64,6 +68,7 @@ class Theme implements ThemeContract
      * Get the container for the application
      *
      * @return void
+     * @throws \Exception
      */
     protected function prepareContainer()
     {
@@ -98,9 +103,11 @@ class Theme implements ThemeContract
     }
 
     /**
-     * Add basic aliases needed for the theme 
+     * Add basic aliases needed for the theme
      *
      * @return void
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function createBaseAliases()
     {
@@ -184,6 +191,7 @@ class Theme implements ThemeContract
             [
                 LoadConfiguration::class,
                 HandleErrors::class,
+                HookExtensions::class,
                 LoadServices::class
             ]
         );
@@ -205,8 +213,10 @@ class Theme implements ThemeContract
      * Get item by its key
      *
      * @param integer|string $offset
-     * 
+     *
      * @return mixed
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function offsetGet($offset) 
     {
