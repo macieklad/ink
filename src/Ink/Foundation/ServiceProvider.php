@@ -23,5 +23,4 @@ abstract class ServiceProvider
     {
         $this->theme = $theme;
     }
-
 }

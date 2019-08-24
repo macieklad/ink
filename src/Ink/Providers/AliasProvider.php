@@ -2,7 +2,6 @@
 
 namespace Ink\Providers;
 
-use Ink\Support;
 use Ink\Aliases\Alias;
 use Ink\Aliases\AliasLoader;
 use Ink\Foundation\ServiceProvider;
@@ -19,7 +18,7 @@ class AliasProvider extends ServiceProvider
      * 
      * @return void
      */
-    public function boot(Container $container, Repository $config)
+    public function boot(Container $container, Repository $config): void
     {
         $aliases = $config->get('aliases', []);
 

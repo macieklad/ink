@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Ink\Scribe;
 
 use Ink\Contracts\Scribe\Hook as HookContract;

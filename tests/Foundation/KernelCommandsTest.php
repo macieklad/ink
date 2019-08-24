@@ -2,17 +2,23 @@
 
 namespace Tests\Foundation;
 
-use Ink\Foundation\ServiceProvider;
-use Whoops\Handler\Handler;
+
+use Mockery;
 use Whoops\Run;
+use DI\Container;
+use DI\NotFoundException;
 use Ink\Foundation\Theme;
 use Ink\Config\Repository;
-use Psr\Container\ContainerInterface;
+use DI\DependencyException;
+use Whoops\Handler\Handler;
+use Tests\Foundation\Stub\BootStub;
+use Tests\Foundation\Stub\StartStub;
 use Whoops\Handler\PrettyPageHandler;
 use Ink\Foundation\Bootstrap\HandleErrors;
 use Ink\Foundation\Bootstrap\LoadServices;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Ink\Foundation\Bootstrap\LoadConfiguration;
+use Ink\Contracts\Foundation\Theme as ThemeContract;
 
 class KernelCommandsTest extends MockeryTestCase
 {
@@ -43,8 +49,8 @@ class KernelCommandsTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->whoops = \Mockery::mock('overload:' . Run::class);
-        $this->whoopsHandler = \Mockery::mock(PrettyPageHandler::class);
+        $this->whoops = Mockery::mock('overload:' . Run::class);
+        $this->whoopsHandler = Mockery::mock(PrettyPageHandler::class);
         $this->repository = new Repository(
             [
                 'theme' => [
@@ -96,8 +102,8 @@ class KernelCommandsTest extends MockeryTestCase
      * repository and aliases it as config inside the theme
      *
      * @return void
-     * @throws \DI\DependencyException
-     * @throws \DI\NotFoundException
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testConfigurationCommandLoadsConfigProperly()
     {
@@ -113,17 +119,22 @@ class KernelCommandsTest extends MockeryTestCase
     }
 
     /**
-     * Undocumented function
+     * Test if each registered service is called by command loading logic
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testLoadServicesCommandCallsEachOfProvidedServices()
     {
-        $container = \Mockery::mock(ContainerInterface::class);
-        $repository = \Mockery::mock(Repository::class);
+        $theme = Mockery::mock(ThemeContract::class);
+        $container = Mockery::mock(Container::class);
+        $repository = Mockery::mock(Repository::class);
         $command = new LoadServices($container);
-        $services = [
 
+        $services = [
+            new BootStub($theme),
+            new StartStub($theme)
         ];
 
         $container->shouldReceive('get')

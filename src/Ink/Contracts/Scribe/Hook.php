@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Ink\Contracts\Scribe;

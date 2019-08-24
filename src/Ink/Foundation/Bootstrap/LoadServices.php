@@ -2,10 +2,19 @@
 
 namespace Ink\Foundation\Bootstrap;
 
-use Psr\Container\ContainerInterface as Container;
+use Di\Container as Container;
+use DI\DependencyException;
+use DI\NotFoundException;
 
 class LoadServices implements KernelCommand
 {
+    /**
+     * Container instance
+     *
+     * @var Container
+     */
+    protected $container;
+
     /**
      * Prepare the command
      *
@@ -17,9 +26,11 @@ class LoadServices implements KernelCommand
     }
 
     /**
-     * Read service providers list, and initalize each of them
+     * Read service providers list, and initialize each of them
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function fire()
     {
