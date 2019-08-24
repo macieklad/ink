@@ -19,6 +19,8 @@ class Resource implements ResourceContract
      * Resource constructor.
      *
      * @param ThemeAssistant $assistant
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(ThemeAssistant $assistant)
     {
@@ -29,6 +31,8 @@ class Resource implements ResourceContract
      * Publish all data related with the resource
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public function publish(): void
     {
@@ -41,6 +45,8 @@ class Resource implements ResourceContract
      * @param string $file
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public function publishConfig(string $file): void
     {

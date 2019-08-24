@@ -18,6 +18,8 @@ class Hook implements HookContract
      * Hook constructor.
      *
      * @param ThemeAssistant $assistant
+     *
+     * @codeCoverageIgnore
      */
     public function __construct(ThemeAssistant $assistant)
     {
@@ -28,6 +30,8 @@ class Hook implements HookContract
      * Hook some functionality inside the theme
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public function attach(): void
     {
@@ -38,6 +42,8 @@ class Hook implements HookContract
      * Add providers to theme before initial load
      *
      * @param array $providers
+     *
+     * @codeCoverageIgnore
      *
      * @return void
      */
@@ -50,6 +56,8 @@ class Hook implements HookContract
      * Add aliases to theme before initial load
      *
      * @param array $aliases
+     *
+     * @codeCoverageIgnore
      *
      * @return void
      */

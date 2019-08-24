@@ -4,6 +4,7 @@ namespace Tests\Foundation\Console;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Tests\Scribe\StubCommand;
+use Tests\Scribe\StubHook;
 use Tests\Scribe\StubResource;
 
 class InstalledMocker
@@ -30,6 +31,13 @@ class InstalledMocker
     protected $fs;
 
     /**
+     * Location of installation
+     *
+     * @var string
+     */
+    protected $location;
+
+    /**
      * Path to installed.json file
      *
      * @var string
@@ -38,11 +46,13 @@ class InstalledMocker
 
     /**
      * Prepare the mocker for usage, set the contents of installed file.
+     *
+     * @param string $location
      */
-    public function __construct()
+    public function __construct(string $location = '')
     {
         $this->fs = new Filesystem();
-        $this->path = __DIR__ . "/vendor/composer/installed.json";
+        $this->location = $location === '' ? __DIR__ : $location;
 
         $this->stampFields = [
             "commands" => [
@@ -51,6 +61,9 @@ class InstalledMocker
             "resources" => [
                 "NotExistentResource",
                 StubResource::class
+            ],
+            "hooks" => [
+                StubHook::class
             ]
         ];
 
@@ -71,8 +84,22 @@ class InstalledMocker
     public function write(): void
     {
         $this->fs->dumpFile(
-            $this->path,
+            $this->location . '/vendor/composer/installed.json',
             json_encode($this->contents)
+        );
+    }
+
+    /**
+     * Write the stamp manifest,
+     * skipping installed step.
+     *
+     * @return void
+     */
+    public function writeManifest(): void
+    {
+        $this->fs->dumpFile(
+            $this->location . '/vendor/stamp-manifest.json',
+            json_encode($this->stampFields)
         );
     }
 
@@ -84,7 +111,7 @@ class InstalledMocker
     public function clean(): void
     {
         $this->fs->remove(
-            __DIR__ . '/vendor'
+            $this->location . '/vendor'
         );
     }
 

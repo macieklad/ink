@@ -2,9 +2,10 @@
 
 namespace Tests\Scribe;
 
-use Ink\Contracts\Scribe\Hook;
+use Ink\Scribe\Hook;
+use Tests\Foundation\Stub\BootStub;
 
-class StubHook implements Hook
+class StubHook extends Hook
 {
     /**
      * Attach the hook inside theme
@@ -13,6 +14,16 @@ class StubHook implements Hook
      */
     public function attach(): void
     {
-        // Silence is golden
+        $this->registerProviders(
+            [
+            BootStub::class
+            ]
+        );
+
+        $this->registerAliases(
+            [
+            'Foo' => StubAlias::class
+            ]
+        );
     }
 }

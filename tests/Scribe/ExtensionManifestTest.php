@@ -2,6 +2,8 @@
 
 namespace Ink\Tests\Scribe;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Ink\Foundation\Theme;
 use Ink\Scribe\ExtensionManifest;
 use PHPUnit\Framework\TestCase;
@@ -9,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class ExtensionManifestTest extends TestCase
 {
+    const MANIFEST_LOCATION = __DIR__ . '/stamp-manifest.json';
 
     /**
      * Stamp theme instance
@@ -42,6 +45,8 @@ class ExtensionManifestTest extends TestCase
      * Prepare env for the test case
      *
      * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     protected function setUp(): void
     {
@@ -59,10 +64,8 @@ class ExtensionManifestTest extends TestCase
      */
     protected function tearDown(): void
     {
-        $manifest = $this->theme->vendorPath($this->manifestName);
-
-        if ($this->fs->exists($manifest)) {
-            $this->fs->remove($manifest);
+        if ($this->fs->exists(self::MANIFEST_LOCATION)) {
+            $this->fs->remove(self::MANIFEST_LOCATION);
         }
 
         parent::tearDown();
@@ -129,7 +132,7 @@ class ExtensionManifestTest extends TestCase
      */
     public function testExtensionManifestWritesFile()
     {
-        $manifest = __DIR__ . "/{$this->manifestName}";
+        $manifest = self::MANIFEST_LOCATION;
         $extension = [
             "commands" => [
                 "StubCommand"
