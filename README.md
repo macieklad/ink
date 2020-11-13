@@ -6,4 +6,4 @@
     </a>
 </p>
 
-The work is currently in progress, altough the project is fully usable. Feel free to explore the code.
+The project is fully usable, but the development was dropped. If you want to see how to wrap wordpress components in Laravel'ish way, this is a good repository for that. Feel free to explore the code.
